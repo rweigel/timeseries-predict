@@ -17,7 +17,7 @@ def summary(tag, results_dir=None):
   with open(config_path, 'r') as f:
     kwargs = json.load(f)
 
-  directory = os.path.join(kwargs['results_dir'], tag)
+  directory = os.path.join(results_dir, tag)
 
   _stats = {}
 
@@ -29,7 +29,7 @@ def summary(tag, results_dir=None):
     removed_input_dir = os.path.join(directory, removed_input)
 
     if not os.path.isdir(removed_input_dir):
-      print("    Removed input dir '{removed_input_dir}' not found. Skipping.")
+      print(f"    Removed input dir '{removed_input_dir}' not found. Skipping.")
       continue
 
     print(f"    Processing removed input dir: {removed_input_dir}")

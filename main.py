@@ -1,5 +1,8 @@
-test_run = False # For debugging code
-parallel_jobs = True # Do jobs in parallel
+test_run = True # For debugging code
+parallel_jobs = False # Do jobs in parallel
+
+results_dir = "./results-3"
+results_desc = ""
 
 conf = {
     "data": { # Passed to user-defined _data_load function
@@ -28,18 +31,18 @@ conf = {
     },
 
     "tag": None,
-    "results_dir": None,
+    "results_dir": results_dir,
+    "results_desc": results_desc,
 
     "device": None,   # Parallelize using CPU or GPU in PyTorch. (Not implemented.)
 
-    "num_epochs": 1,
+    "num_epochs": 50,
     "num_boot_reps": 1,
     "batch_size": 256,
-    "hidden_size": 32,
+    "hidden_size": 16,
     "activation": "Tanh",
     "optimizer": "Adam",
     "optimizer_kwargs": {"lr": 0.01},
-    "lr": 0.001,
 
     # True => [None, **outputs]; None or no attribute => # Only use all inputs
     "removed_inputs": True,
@@ -51,6 +54,8 @@ conf = {
 }
 
 if test_run:
+  conf['results_dir'] = "./results-0"
+  conf['results_desc'] = "Test run"
   conf['data']['satellites'] = conf['data']['satellites'][0:2]
   conf['data']['n_df'] = 2
   conf['num_epochs'] = 3
@@ -58,9 +63,9 @@ if test_run:
   conf['removed_inputs'] = [None, "r"]
 
 if False:
-  # If only summary code modified
-  from satellite_predict.summary import summary
-  summary("cluster1", results_dir=conf['results_dir'])
+  # Update summary, plot, stats, and table without running the rest of the code.
+  from timeseries_predict.summary import summary
+  summary("cluster1", results_dir="./results-1")
   exit()
 
 def _data_load(**config):
@@ -141,7 +146,7 @@ else:
   job_dfs = _data_load(**conf['data'])
   job_confs = [conf]
 
-from satellite_predict.train_and_test import train_and_test
+from timeseries_predict.train_and_test import train_and_test
 
 def job(combined_dfs, conf):
   try:

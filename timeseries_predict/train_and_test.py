@@ -76,6 +76,15 @@ def _prep_config(conf):
     'num_boot_reps': 1
   }
 
+  if not os.path.exists(conf['results_dir']):
+    os.makedirs(conf['results_dir'])
+
+  desc_file = os.path.join(conf['results_dir'], 'description.txt')
+  if not os.path.exists(desc_file):
+    print(f"Writing: {desc_file}")
+    with open(desc_file, 'w') as f:
+      f.write(conf['results_desc'])
+
   for key in defaults.keys():
     if key not in conf or conf[key] is None:
       conf[key] = defaults[key]
@@ -257,6 +266,7 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     # Single-output neural networks, one for each output
     print(f"{indent}Training {num_inputs} single-output neural networks w/ input '{removed_input}' removed")
     test_preds = {}
+    arvs = []
     for i, output in enumerate(outputs):
       print(f"{indent}  Training single-output neural network for {output}")
       model = _NeuralNetwork(num_inputs, 1, hidden_size=hidden_size).to(device)
@@ -264,14 +274,20 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       train_target = train_targets[:, i:i + 1]
 
       for epoch in range(num_epochs):
-          print(f"{indent}    Epoch {epoch + 1}/{num_epochs}", end='')
-          arvs, losses = _train_and_test_single_epoch(model, optimizer, train_inputs, train_target, device, batch_size)
-          _print_metrics(output, arvs, losses)
-          results['nn_miso']['epochs'].append(arvs)
+        print(f"{indent}    Epoch {epoch + 1}/{num_epochs}", end='')
+        _arv, loss = _train_and_test_single_epoch(model, optimizer, train_inputs, train_target, device, batch_size)
+        _print_metrics(output, _arv, loss)
+        arvs.append(_arv)
 
       model.eval()
       with torch.no_grad():
         test_preds[output] = model(test_inputs).cpu().numpy()
+
+    # arvs is in form
+    # [ out1_arv_epoch1, out1_arv_epoch2, ..., out2_arv_epoch1, out2_arv_epoch2, ... ]
+    # Convert to form of mimo
+    # [ [out1_arv_epoch1, out2_arv_epoch1, ...], [out1_arv_epoch2, out2_arv_epoch2, ...], ... ]
+    results['nn_miso']['epochs'] = list(np.reshape(arvs, (-1, len(outputs))))
 
     # Combine outputs results
     test_preds = np.column_stack([test_preds[output] for output in outputs])
