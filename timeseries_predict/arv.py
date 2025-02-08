@@ -11,9 +11,11 @@ def arv(A, P):
         A, P = np.expand_dims(A, axis=1), np.expand_dims(P, axis=1)
 
     arvs = []
+    # TODO: Outer loop not needed.
     for i in range(A.shape[1]):
         var_A = np.var(A[:, i])
-        arv = np.var(A[:, i] - P[:, i]) / var_A if var_A > 0 else 0
+        numerator = np.mean(np.power(A[:, i] - P[:, i], 2), axis=0)
+        arv = numerator / var_A if var_A > 0 else np.nan
         arvs.append(arv)
 
     return arvs if len(arvs) > 1 else arvs[0]
