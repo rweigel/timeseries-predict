@@ -1,8 +1,8 @@
-test_run = True # For debugging code
-parallel_jobs = False # Do jobs in parallel
+test_run = False      # For debugging code
+parallel_jobs = True  # Do jobs in parallel
 
-results_dir = "./results-0"
-results_desc = ""
+results_dir = "./results-4"
+results_desc = "Same as results-1 but using new code structure and computing _resid models"
 
 conf = {
     "data": { # Passed to user-defined _data_load function
@@ -40,8 +40,8 @@ conf = {
 
     "num_epochs": 50,
     "num_boot_reps": 1,
-    "batch_size": 128,
-    "hidden_size": 16,
+    "batch_size": 256,
+    "hidden_size": 32,
     "activation": "Tanh",
     "optimizer": "Adam",
     "optimizer_kwargs": {"lr": 0.01},
@@ -50,7 +50,7 @@ conf = {
     "removed_inputs": True,
 
     #"models": ["ols", "nn_mimo", "nn_miso", "nn_mimo_resid"],
-    "models": ["ols", "nn_mimo", "nn_mimo_resid"],
+    "models": ["ols", "nn_mimo", "nn_mimo_resid", "nn_miso", "nn_miso_resid"],
 
     "inputs": ["r", "theta", "phi", "imfby", "imfbz", "vsw", "nsw", "ey", "ey_avg"],
     "outputs": ["bx", "by", "bz"],
@@ -59,7 +59,7 @@ conf = {
 if test_run:
   conf['results_dir'] = "./results-0"
   conf['results_desc'] = "Test run"
-  conf['data']['satellites'] = conf['data']['satellites'][0:1]
+  conf['data']['satellites'] = conf['data']['satellites'][0:2]
   conf['data']['n_df'] = 2
   conf['num_epochs'] = 5
   conf['num_boot_reps'] = 1

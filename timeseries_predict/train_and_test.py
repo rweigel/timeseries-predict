@@ -147,6 +147,7 @@ def _get_optimizer(model, optimizer_name, optimizer_kwargs):
     raise ValueError(f"Optimizer '{optimizer_name}' not found in torch.optim.__all__ = {optimizers}")
 
 def _get_dtype(dtype_name):
+
   dtypes = torch.__dict__.values()
   dtype_names = []
   for dtype_module in dtypes:
@@ -200,8 +201,12 @@ def _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device):
 
   return train_inputs, train_targets, test_inputs, scaler_targets
 
-def _nn_mimo(train_inputs, train_targets, test_inputs, output_names, device, indent, kwargs):
+def _nn_mimo(train_inputs, train_targets, test_inputs, delta, output_names, device, indent, kwargs):
   dtype = _get_dtype(kwargs['dtype'])
+
+  if delta is not None:
+    train_targets = train_targets - delta
+
   train_inputs, train_targets, test_inputs, scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device)
 
   arvs = []
@@ -227,7 +232,7 @@ def _nn_mimo(train_inputs, train_targets, test_inputs, output_names, device, ind
 
   return test_preds, arvs
 
-def _nn_miso(train_inputs, train_targets, test_inputs, output_names, device, indent, kwargs):
+def _nn_miso(train_inputs, train_targets, test_inputs, delta, output_names, device, indent, kwargs):
   dtype = _get_dtype(kwargs['dtype'])
   train_inputs, train_targets, test_inputs, scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device)
 
@@ -330,30 +335,25 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     if model not in ['nn_mimo', 'nn_miso', 'nn_mimo_resid', 'nn_miso_resid']:
       continue
 
-    if model in ['nn_mimo', 'nn_miso']:
-      if model == 'nn_mimo':
-        print(f"{indent}Training {len(outputs)}-output neural network w/ input '{removed_input}' removed")
-        test_preds, arvs = _nn_mimo(train_df[inputs], train_df[outputs], test_df[inputs], outputs, device, indent, kwargs)
-      if model == 'nn_miso':
-        print(f"{indent}Training single-output neural network w/ input '{removed_input}' removed")
-        test_preds, arvs = _nn_miso(train_df[inputs], train_df[outputs], test_df[inputs], outputs, device, indent, kwargs)
+    delta = None
+    if model.endswith('_resid'):
+      delta = ols_train_preds
 
-      results[model]['predicted'][outputs] = test_preds
-
-    if model in ['nn_mimo_resid', 'nn_miso_resid']:
-      train_outputs_resid = train_df[outputs].values - ols_train_preds
-
-      if model == 'nn_mimo_resid':
+    if model.startswith('nn_mimo'):
+      if model.endswith('_resid'):
         print(f"{indent}Training {len(outputs)}-output neural network w/ input '{removed_input}' removed on ols residuals")
-        test_preds, arvs = _nn_mimo(train_df[inputs], train_outputs_resid, test_df[inputs], outputs, device, indent, kwargs)
+      else:
+        print(f"{indent}Training {len(outputs)}-output neural network w/ input '{removed_input}' removed")
 
-      if model == 'nn_miso_resid':
+      test_preds, arvs = _nn_mimo(train_df[inputs], train_df[outputs], test_df[inputs], delta, outputs, device, indent, kwargs)
+
+    if model.startswith('nn_miso'):
+      if model.endswith('_resid'):
         print(f"{indent}Training single-output neural network w/ input '{removed_input}' removed on ols residuals")
-        test_preds, arvs = _nn_miso(train_df[inputs], train_outputs_resid, test_df[inputs], outputs, device, indent, kwargs)
+      else:
+        print(f"{indent}Training single-output neural network w/ input '{removed_input}' removed")
 
-      results[model]['predicted'][outputs] = test_preds + ols_test_preds
-
-      arvs_star = arv(test_df[outputs], test_preds + ols_test_preds)
+      test_preds, arvs = _nn_miso(train_df[inputs], train_df[outputs], test_df[inputs], delta, outputs, device, indent, kwargs)
 
     arvs = arv(test_df[outputs], test_preds)
     results[model]['epochs'] = arvs
@@ -361,7 +361,12 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     print(f"{indent}  Test set   ", end='')
     _print_metrics(outputs, arvs, np.nan)
 
-    if model.endswith('_resid'):
+    if delta is None:
+      results[model]['predicted'][outputs] = test_preds
+    else:
+      delta = ols_test_preds
+      results[model]['predicted'][outputs] = test_preds + delta
+      arvs_star = arv(test_df[outputs], test_preds + delta)
       print(f"{indent}  Test set*  ", end='')
       _print_metrics(outputs, arvs_star, np.nan)
 
