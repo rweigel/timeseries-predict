@@ -1,7 +1,7 @@
 test_run = True # For debugging code
 parallel_jobs = False # Do jobs in parallel
 
-results_dir = "./results-3"
+results_dir = "./results-0"
 results_desc = ""
 
 conf = {
@@ -36,9 +36,11 @@ conf = {
 
     "device": None,   # Parallelize using CPU or GPU in PyTorch. (Not implemented.)
 
+    "dtype": "float32",
+
     "num_epochs": 50,
     "num_boot_reps": 1,
-    "batch_size": 256,
+    "batch_size": 128,
     "hidden_size": 16,
     "activation": "Tanh",
     "optimizer": "Adam",
@@ -47,7 +49,8 @@ conf = {
     # True => [None, **outputs]; None or no attribute => # Only use all inputs
     "removed_inputs": True,
 
-    "models": ["ols", "nn_mimo", "nn_miso"],
+    #"models": ["ols", "nn_mimo", "nn_miso", "nn_mimo_resid"],
+    "models": ["ols", "nn_mimo", "nn_mimo_resid"],
 
     "inputs": ["r", "theta", "phi", "imfby", "imfbz", "vsw", "nsw", "ey", "ey_avg"],
     "outputs": ["bx", "by", "bz"],
@@ -56,11 +59,12 @@ conf = {
 if test_run:
   conf['results_dir'] = "./results-0"
   conf['results_desc'] = "Test run"
-  conf['data']['satellites'] = conf['data']['satellites'][0:2]
+  conf['data']['satellites'] = conf['data']['satellites'][0:1]
   conf['data']['n_df'] = 2
-  conf['num_epochs'] = 3
+  conf['num_epochs'] = 5
   conf['num_boot_reps'] = 1
-  conf['removed_inputs'] = [None, "r"]
+  #conf['removed_inputs'] = [None, "r"]
+  conf['removed_inputs'] = [None]
 
 if False:
   # Update summary, plot, stats, and table without running the rest of the code.
@@ -149,13 +153,18 @@ else:
 from timeseries_predict.train_and_test import train_and_test
 
 def job(combined_dfs, conf):
+  import traceback
   try:
     train_and_test(combined_dfs, conf)
   except Exception as e:
     import os
     error_fname = os.path.join(conf['results_dir'], conf['tag'], "main.error.txt")
     with open(error_fname, "a") as f:
-      f.write(f"Error in job with config {conf['tag']}:\n{str(e)}\n")
+      emsg = f"Error in job {conf['tag']}: {str(e)}\n"
+      print(emsg)
+      traceback.print_exc()
+      print(f"Error written to {error_fname}")
+      f.write(emsg)
 
 def job_wrapper(args):
   return job(args[0], args[1])
