@@ -1,3 +1,5 @@
+`timeseries-predict` was previously https://github.com/rweigel/satellite-predict
+
 sat_data basic programs
 
 -----------------------------------------
