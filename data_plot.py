@@ -2,53 +2,72 @@ import os
 import glob
 import numpy as np
 import pandas as pd
-import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+from concurrent.futures import ProcessPoolExecutor
+import time
 
-# column_info function to extract name, symbol, and unit from column names
-def column_info(column_name):
-    name = column_name.split('[')[0]
-    unit = column_name.split('[')[1].split(']')[1]
-    symbols = {'x': 'x', 'y': 'y', 'z': 'z', 'bx': 'B_x', 'by': 'B_y', 'bz': 'B_z'}
-    symbol = symbols.get(name, name)  # Default to name if not in the symbol dictionary
-    return name, symbol, unit
-
-# Define plot function
 def plot_data(dataframe, columns, labels, save_path, title, suptitle):
-    plt.figure(figsize=(12, 12), facecolor='white')
-    plt.suptitle(suptitle, fontsize=16)
-    for i, (col, label) in enumerate(zip(columns, labels)):
-        plt.subplot(3, 1, i + 1)
-        plt.plot(dataframe['date'], dataframe[col], linestyle='-')
-        plt.ylabel(label)
-        plt.grid(True)
-        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())
-    plt.xlabel('Date')
+    """
+    Plot selected columns from a DataFrame and save the figure as an image.
+
+    Args:
+        dataframe (pd.DataFrame): The DataFrame containing time series data.
+        columns (list of str): Column names to plot.
+        labels (list of str): Y-axis labels corresponding to each column.
+        save_path (str): Full path where the plot image will be saved.
+        title (str): Title used in console output.
+        suptitle (str): Title displayed on the plot.
+
+    Returns:
+        None
+    """
+    plt.ioff()  # Turn off interactive mode
+    fig, axs = plt.subplots(3, 1, figsize=(12, 12), sharex=True)
+    fig.suptitle(suptitle, fontsize=16)
+
+    for ax, col, label in zip(axs, columns, labels):
+        ax.plot(dataframe['date'], dataframe[col], linestyle='-')
+        ax.set_ylabel(label)
+        ax.grid(True)
+        ax.xaxis.set_major_locator(mdates.MonthLocator())
+
+    axs[-1].set_xlabel('Date')
+    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.savefig(save_path)
-    plt.close()
+    plt.close(fig)
     print(f"Saved {title} plot to {save_path}")
 
-# Directory paths
-data_directory = './data'
-save_directory = './data_plot'
-os.makedirs(save_directory, exist_ok=True)
 
-# Process each pickle file in the directory
-for file_path in glob.glob(os.path.join(data_directory, '*.pkl')):
+def process_file(file_path):
+    """
+    Read a .pkl data file, compute derived quantities, generate plots, and save them.
+
+    Args:
+        file_path (str): Path to the pickle file containing spacecraft data.
+
+    Returns:
+        None
+    """
     dataframe = pd.read_pickle(file_path)
     file_name = os.path.splitext(os.path.basename(file_path))[0]
     print(f"Processing {file_name}")
 
-    # Convert to spherical coordinates
-    dataframe['r[km]'] = np.sqrt(dataframe['x[km]']**2 + dataframe['y[km]']**2 + dataframe['z[km]']**2)
-    dataframe['theta[rad]'] = np.arctan2(dataframe['y[km]'], dataframe['x[km]'])
-    dataframe['phi[rad]'] = np.arccos(dataframe['z[km]'] / dataframe['r[km]'])
-    dataframe['b[nT]'] = np.sqrt(dataframe['bx[nT]']**2 + dataframe['by[nT]']**2 + dataframe['bz[nT]']**2)
-    dataframe['theta_b[rad]'] = np.arctan2(dataframe['by[nT]'], dataframe['bx[nT]'])
-    dataframe['phi_b[rad]'] = np.arccos(dataframe['bz[nT]'] / dataframe['b[nT]'])
-    print(f"Added polar coordinates for {file_name}")
+    # Compute vector magnitudes and angles
+    x, y, z = dataframe['x[km]'], dataframe['y[km]'], dataframe['z[km]']
+    bx, by, bz = dataframe['bx[nT]'], dataframe['by[nT]'], dataframe['bz[nT]']
 
-    # Add datetime column to dataframe
+    with np.errstate(invalid='ignore', divide='ignore'):
+        r = np.sqrt(x**2 + y**2 + z**2)
+        b = np.sqrt(bx**2 + by**2 + bz**2)
+        dataframe['r[km]'] = r
+        dataframe['theta[rad]'] = np.arctan2(y, x)
+        dataframe['phi[rad]'] = np.arccos(z / r)
+        dataframe['b[nT]'] = b
+        dataframe['theta_b[rad]'] = np.arctan2(by, bx)
+        dataframe['phi_b[rad]'] = np.arccos(bz / b)
+
+    # Combine datetime columns
     dataframe['date'] = pd.to_datetime(dataframe[['year', 'month', 'day', 'hour', 'minute', 'second']])
 
     # Define plot groups
@@ -59,9 +78,36 @@ for file_path in glob.glob(os.path.join(data_directory, '*.pkl')):
         (['b[nT]', 'theta_b[rad]', 'phi_b[rad]'], ['B (nT)', 'φ (rad)', 'θ (rad)'], f"{file_name}_bvalues_polar.png", "Polar Magnetic Field", f"{file_name} - Magnetic Field, Polar")
     ]
 
-    # Generate and save plots
+    save_directory = './data_plot'
     for columns, labels, save_filename, title, suptitle in plot_groups:
         save_path = os.path.join(save_directory, save_filename)
         plot_data(dataframe, columns, labels, save_path, title, suptitle)
 
-print('All plots created from directory')
+
+def main():
+    """
+    Main function that finds all .pkl files in the data directory and processes them in parallel.
+
+    Returns:
+        None
+    """
+    data_directory = './data'
+    save_directory = './data_plot'
+    os.makedirs(save_directory, exist_ok=True)
+
+    file_paths = glob.glob(os.path.join(data_directory, '*.pkl'))
+
+    # Use parallel processing
+    with ProcessPoolExecutor() as executor:
+        executor.map(process_file, file_paths)
+
+    print("All plots created from directory")
+
+
+if __name__ == "__main__":
+
+    start = time.time()
+
+    main()
+
+    print("Block time:", time.time() - start)
