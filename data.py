@@ -1,12 +1,29 @@
+"""
+Download empirical magnetic field modeling datasets from NASA's Space Physics Data Facility
+and process them into serialized pandas DataFrames (pickle files).
+
+Main functionalities include:
+- Scraping the specified URL for dataset file links (.txt, .csv, .dat)
+- Downloading and saving these files locally under a "data/" directory
+- Reading and converting each data file into a pandas DataFrame
+- Assigning column names from the first file for consistency
+- Saving each DataFrame as a .pkl file
+- Logging progress and key events to a log file
+
+"""
 import os
 import logging
 import requests
+import time
+import tqdm
 
 from os import listdir
 from os.path import isfile, join, dirname, abspath
 
 import pandas as pd
 from bs4 import BeautifulSoup
+
+start_time = time.time()
 
 ## Download data ##
 
@@ -37,7 +54,7 @@ links = soup.find_all("a")
 files = [link.get("href") for link in links if link.get("href").endswith((".txt", ".csv", ".dat"))]
 
 # Download each file
-for file in files:
+for file in tqdm.tqdm(files):
     if not all and not file.startswith("cluster1"):
         # Only d/l cluster1 files
         continue
@@ -79,7 +96,7 @@ xprint(f"Saving DataFrames for {len(files)} file(s)")
 names = pd.DataFrame(pd.read_csv(mypath + files[0], nrows=0, delimiter=',')).columns
 
 # Process each file in directory
-for i, file in enumerate(files):
+for i, file in enumerate(tqdm.tqdm(files)):
     file = mypath + file
     xprint(f"  Processing file {i+1}/{len(files)}: {file}")
 
@@ -97,3 +114,6 @@ for i, file in enumerate(files):
     xprint(f"  Saved DataFrame to {pkl_filename}")
 
 xprint("All files pickled and saved")
+
+end_time = time.time()
+print(f"\nTotal execution time: {end_time - start_time:.2f} seconds")

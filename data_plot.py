@@ -1,3 +1,22 @@
+"""
+Process pre-serialized data stored in .pkl files (from data.py), compute derived
+quantities, and generate time series plots of positional and magnetic field vectors in both
+Cartesian and polar coordinate systems.
+
+Main functionalities include:
+- Reading .pkl files containing spacecraft position and magnetic field data
+- Computing vector magnitudes and angular coordinates (theta, phi) in both spatial and field vectors
+- Merging timestamp columns into a datetime index
+- Plotting and saving figures of both raw and derived data for each file
+- Running in parallel using ProcessPoolExecutor to speed up batch processing
+
+Generated plots are saved to a created local directory ('./data_plot') and include:
+- Cartesian position (x, y, z)
+- Polar position (r, θ, φ)
+- Magnetic field components (Bx, By, Bz)
+- Polar magnetic field (B, θ_b, φ_b)
+
+"""
 import os
 import glob
 import numpy as np

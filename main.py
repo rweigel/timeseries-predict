@@ -1,3 +1,34 @@
+"""
+Time Series Modeling Pipeline
+
+This script loads, preprocesses, and trains machine learning models on satellite time series data
+to predict magnetic field components (bx, by, bz) using various input features (e.g., position, 
+solar wind parameters). It supports multiple model types, including:
+
+- OLS (Ordinary Least Squares)
+- Neural Networks: MIMO (multi-input multi-output), MISO (multi-input single-output)
+- Residual models (_resid) that model prediction errors
+
+Key features:
+- Parallel job execution using Python's multiprocessing
+- Configurable model parameters and data sources via the `conf` dictionary
+- Coordinate transformation from Cartesian to spherical
+- Robust error handling with logging to individual result directories
+
+Usage:
+- Set `test_run = True` to perform a quick debug run
+- Customize satellite list, models, and training hyperparameters in the `conf` dictionary
+- Run the script directly to start training and evaluation
+
+Expected input:
+- Pickle files (`.pkl`) for each satellite stored in `./data/`
+- Each file must contain columns for time (`year`, `month`, etc.), position (`x[km]`, `y[km]`, `z[km]`),
+  and other physical parameters
+
+Outputs:
+- Trained model results, performance metrics, and optional error logs saved in `results_dir`
+
+"""
 test_run = False      # For debugging code
 parallel_jobs = True  # Do jobs in parallel
 
@@ -50,7 +81,8 @@ conf = {
     "removed_inputs": True,
 
     #"models": ["ols", "nn_mimo", "nn_miso", "nn_mimo_resid"],
-    "models": ["ols", "nn_mimo", "nn_mimo_resid", "nn_miso", "nn_miso_resid"],
+    # "models": ["ols", "nn_mimo", "nn_mimo_resid", "nn_miso", "nn_miso_resid"],
+    "models": ["ols", "nn_mimo", "nn_mimo_resid"],
 
     "inputs": ["r", "theta", "phi", "imfby", "imfbz", "vsw", "nsw", "ey", "ey_avg"],
     "outputs": ["bx", "by", "bz"],

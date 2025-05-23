@@ -1,3 +1,20 @@
+"""
+Model Training and Evaluation Pipeline
+
+This script defines a comprehensive pipeline for training, testing, and evaluating 
+multiple machine learning models (OLS, multi- and single-output neural networks) 
+on tabular data with optional leave-one-out (LOO) configurations and bootstrap sampling.
+
+Key Features:
+-------------
+- Handles input removal scenarios (for sensitivity analysis).
+- Supports bootstrap-based evaluation.
+- Supports LOO-style cross-validation.
+- Trains OLS and neural network (MISO/MIMO) models with optional residual learning.
+- Tracks and prints training statistics using ARV (Average Relative Variance).
+- Saves predictions and evaluation metrics for downstream analysis.
+
+"""
 import os
 import json
 
@@ -20,10 +37,38 @@ from .summary import summary
 
 
 def train_and_test(combined_dfs, conf, parallel_jobs=False):
+  """
+  Train and evaluate models using bootstrap repetitions and optional LOO configuration.
+
+  Supports multiple models including ordinary least squares (OLS) and neural networks 
+  (single-output and multi-output). Handles configurations with removed input features 
+  to simulate input ablation or LOO cross-validation. Saves results and generates 
+  summary reports with statistics and plots.
+
+  Parameters:
+  -----------
+  combined_dfs : list of pandas.DataFrame
+      List of datasets to be used. If only one is provided, LOO is disabled.
+
+  conf : dict
+      Configuration dictionary with keys such as:
+      - 'tag': identifier for experiment results
+      - 'inputs', 'outputs': list of input/output column names
+      - 'models': models to use (e.g., 'ols', 'nn_miso', etc.)
+      - 'results_dir': directory to store outputs
+      - 'num_boot_reps': number of bootstrap repetitions
+      - 'removed_inputs': list of inputs to remove in each scenario
+      - and other model-specific training parameters
+
+  parallel_jobs : bool, optional
+      Unused in the current version; reserved for future parallelization support.
+
+  Returns:
+  --------
+  None
+      Results are saved to disk and summarized using markdown tables and plots.
 
   """
-  """
-
   conf = _prep_config(conf)
   print(f"{conf['tag']} started")
   is_loo = len(combined_dfs) > 1  # Check if leave-one-out is needed
