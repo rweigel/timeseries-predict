@@ -8,7 +8,8 @@ install_requires = [
     'requests',
     'tabulate',
     'torch',
-    'scikit-learn'
+    'scikit-learn',
+    'tqdm'
   ]
 
 setup(
