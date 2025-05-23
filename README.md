@@ -23,7 +23,7 @@ For all programs:
 Setup:
 
 ```
-git clone https://github.com/dstrnad17/satellite-predict
+git clone https://github.com/rweigel/timeseries-predict
 conda create -n python3.9.12-test python=3.9.12
 conda activate python3.9.12-test
 pip install -e .
@@ -33,8 +33,8 @@ Program run order:
 
 ```
 python data.py # Downloads data
-data_plot.py (if desired)
-main.py
-main_table.py
-main_plot.py
+python data_plot.py (if desired)
+python main.py
+python main_table.py
+python main_plot.py
 ```
