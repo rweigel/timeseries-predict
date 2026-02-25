@@ -1,7 +1,7 @@
-test_run = False      # For debugging code
-parallel_jobs = True  # Do jobs in parallel
+test_run = True      # For debugging code
+parallel_jobs = False  # Do jobs in parallel
 
-results_dir = "./results-4"
+results_dir = "./output/results-4"
 results_desc = "Same as results-1 but using new code structure and computing _resid models"
 
 conf = {
@@ -57,7 +57,7 @@ conf = {
 }
 
 if test_run:
-  conf['results_dir'] = "./results-0"
+  conf['results_dir'] = "./output/results-0"
   conf['results_desc'] = "Test run"
   conf['data']['satellites'] = conf['data']['satellites'][0:2]
   conf['data']['n_df'] = 2
@@ -69,7 +69,7 @@ if test_run:
 if False:
   # Update summary, plot, stats, and table without running the rest of the code.
   from timeseries_predict.summary import summary
-  summary("cluster1", results_dir="./results-1")
+  summary("cluster1", results_dir="./output/results-1")
   exit()
 
 def _data_load(**config):

@@ -12,12 +12,12 @@ install_requires = [
   ]
 
 setup(
-    name='satellite-predict',
+    name='timeseries-predict',
     version='0.0.1',
     author='Dunnchadn Strnad, Bob Weigel',
     author_email='dstrnad@gmu.edu',
     packages=find_packages(),
-    url='https://github.com/dstrnad17/satellite-predict',
+    url='https://github.com/rweigel/timeseries-predict',
     include_package_data=True,
     install_requires=install_requires
 )

@@ -378,7 +378,7 @@ def _train_and_test_single_epoch(model, optimizer, train_inputs, train_targets, 
   total_loss = 0
   all_predictions = []
   all_targets = []
-
+  
   DataLoader = torch.utils.data.DataLoader
   TensorDataset = torch.utils.data.TensorDataset
 
