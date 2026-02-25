@@ -35,8 +35,8 @@ Program run order:
 
 ```
 python data.py # Downloads data
-data_plot.py   # Optional
-main.py
-main_table.py
-main_plot.py
+python data_plot.py   # Optional
+python main.py
+python main_table.py
+python main_plot.py
 ```

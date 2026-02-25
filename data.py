@@ -17,11 +17,14 @@ url = "https://spdf.gsfc.nasa.gov/pub/data/aaa_special-purpose-datasets/empirica
 
 # Function to download a file
 def download_file(url, dest_folder):
+    file_name = os.path.join(dest_folder, url.split("/")[-1])
+    if os.path.exists(file_name):
+        print(f"File already exists; not re-downloading: {file_name}")
+        return
     os.makedirs(dest_folder, exist_ok=True)
     print(f"Getting {url}")
     response = requests.get(url, stream=True)
     response.raise_for_status()  # Ensure we notice bad responses
-    file_name = os.path.join(dest_folder, url.split("/")[-1])
     with open(file_name, "wb") as file:
         for chunk in response.iter_content(chunk_size=8192):
             file.write(chunk)
