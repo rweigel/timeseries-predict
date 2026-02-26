@@ -1,9 +1,5 @@
 # Overview
 
-`main.py` runs neural network (both with 3 outputs and 1 output) and linear regression to train and test on the .pkl files while removing one parameter in each iteration.
-
-The leave-one-out method is used, where a year of data is used as the test set and all remaining data is used as training, generating out-of-sample predictions. Repetitions with random sampling can be applied.
-
 # Installation
 
 Setup:
