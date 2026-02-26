@@ -30,7 +30,7 @@ conda activate python3.9.12-timeseries-predict
 pip install -e .
 ```
 
-# Running
+# Example
 
 From the directory `timeseries-predict/config/satellite-b`, execute
 
@@ -43,4 +43,5 @@ From the directory `timeseries-predict`, execute
 
 ```
 python main.py --config configs/satellite-b/test-parallel.yaml
+python main.py --config configs/satellite-b/test-serial.yaml
 ```
