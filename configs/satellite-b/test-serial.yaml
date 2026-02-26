@@ -1,0 +1,15 @@
+base_config: ./configs/satellite-b/base.yaml
+results_dir: ./data/results/satellite-b/results-0-serial
+results_desc: Test run
+data:
+  satellites:
+    - cluster1
+    - cluster2
+  n_df: 2
+parallel_jobs: false
+device: "mps"
+num_epochs: 5
+num_boot_reps: 1
+# removed_inputs: [null, r]
+removed_inputs:
+  - null

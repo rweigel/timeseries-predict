@@ -34,7 +34,7 @@ pip install -e .
 Program run order:
 
 ```
-python data.py # Downloads data
+python data.py        # Downloads data
 python data_plot.py   # Optional
 python main.py
 python main_table.py

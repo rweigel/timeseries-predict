@@ -29,8 +29,11 @@ def plot_data(dataframe, columns, labels, save_path, title, suptitle):
     print(f"Saved {title} plot to {save_path}")
 
 # Directory paths
-data_directory = './data'
-save_directory = './data_plot'
+base_dir = os.path.dirname(os.path.realpath(__file__))
+base_dir = os.path.join("..", "..", "data", "raw", "satellite-b")
+
+data_directory = os.path.join(base_dir, "files")
+save_directory = os.path.join(base_dir, "plots")
 os.makedirs(save_directory, exist_ok=True)
 
 # Process each pickle file in the directory

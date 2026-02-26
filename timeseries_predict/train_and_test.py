@@ -108,12 +108,16 @@ def _prep_config(conf):
 
   return conf
 
+
 def _device(device_name):
 
   if device_name is None:
     return None
+
   if device_name not in ['cpu', 'cuda', 'mps']:
     raise ValueError(f"Device '{device_name}' not in ['cpu', 'cuda', 'mps']")
+
+  device = None
 
   if device_name == 'mps':
     if torch.backends.mps.is_available():
@@ -127,7 +131,11 @@ def _device(device_name):
     if torch.cuda.is_available():
       device = torch.device("cpu")
 
+  if device is None:
+    raise ValueError(f"Device '{device_name}' was requested but is not available.")
+
   return device
+
 
 def _get_activation(activation_name):
 
@@ -136,6 +144,7 @@ def _get_activation(activation_name):
     return getattr(torch.nn, activation_name)
   else:
     raise ValueError(f"Activation '{activation_name}' not found in torch.nn.modules.activation.__all__ = {activations}")
+
 
 def _get_optimizer(model, optimizer_name, optimizer_kwargs):
 
@@ -378,7 +387,7 @@ def _train_and_test_single_epoch(model, optimizer, train_inputs, train_targets, 
   total_loss = 0
   all_predictions = []
   all_targets = []
-  
+
   DataLoader = torch.utils.data.DataLoader
   TensorDataset = torch.utils.data.TensorDataset
 
