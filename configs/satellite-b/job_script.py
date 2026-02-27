@@ -1,14 +1,14 @@
 def job_list(conf):
-  job_confs = [] # One config for each satellite
-  job_dfs = []
+
+  jobs = []
   for satellite in conf['data']['satellites']:
     job_conf = conf.copy()
-    job_conf['tag'] = satellite
+    job_conf['job'] = satellite
     job_conf['data']['file_pattern'] = f"{satellite}*.pkl"
-    job_confs.append(job_conf)
-    job_dfs.append(job_data(**job_conf['data']))
+    job_df = job_data(**job_conf['data'])
+    jobs.append((job_df, job_conf))
 
-  return job_dfs, job_confs
+  return jobs
 
 
 def job_data(**config):
@@ -39,6 +39,7 @@ def job_data(**config):
     phi = np.where(phi < 0, phi + 2 * np.pi, phi) * 180 / np.pi
     return np.column_stack((r, theta, phi))
 
+  print("  job_data(): Reading data files")
   # Labels for Cartesian position columns
   position_cart = ["x[km]", "y[km]", "z[km]"]
 
@@ -47,10 +48,14 @@ def job_data(**config):
 
   fglob = os.path.join(config['data_directory'], config['file_pattern'])
   files = sorted(glob.glob(fglob))
+  if not files:
+    print(f"Error: No files found matching '{fglob}'. Exiting.")
+    exit(1)
 
   dataframes = []
   n_r = 0 # Number of DataFrames read
   for f in files:
+    print(f"    Reading: {f}")
     df = pd.read_pickle(f) # Load the DataFrame from pickle
     n_r = n_r + 1
     cartesian = df[position_cart].to_numpy()

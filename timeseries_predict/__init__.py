@@ -1,10 +1,33 @@
 from .train_and_test import train_and_test as train_and_test
+from .summary import summary as summary
 
 def cli():
   import argparse
-  parser = argparse.ArgumentParser(description='Run time series prediction jobs.')
-  parser.add_argument('--config', type=str, default="./configs/satellite-test-serial.yaml",
-                      help='Path to the YAML configuration file.')
+
+  description = 'Run time series prediction jobs.'
+  args = {
+    'config': {
+      'type': str,
+      'default': "./configs/satellite-test-serial.yaml",
+      'help': 'Path to the YAML run configuration file.'
+    },
+    'postprocess': {
+      'type': str,
+      'default': None,
+      'help': 'Postprocess results starting at this results directory.'
+    },
+    'job': {
+      'type': str,
+      'default': None,
+      'help': 'Name of the job to run or postprocess. Default is to run or postprocess all jobs.'
+    }
+  }
+
+  parser = argparse.ArgumentParser(description=description)
+  group = parser.add_mutually_exclusive_group(required=True)
+  group.add_argument('--config', **args['config'])
+  group.add_argument('--postprocess', **args['postprocess'])
+  parser.add_argument('--job', **args['job'])
   args = parser.parse_args()
   return vars(args)
 

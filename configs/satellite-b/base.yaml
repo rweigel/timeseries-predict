@@ -1,10 +1,13 @@
 # All paths are relative to main.py.
 
+# User-defined script for loading data. Must contain a function job_list(config)
+job_script: ./configs/satellite-b/job_script.py
+
 data:
-  # data node passed to user-defined _data_load function
-  # n_df = num. of DataFrames for data_load to return. None => all DataFrames.
-  n_df: null
-  data_directory: ./data/raw/satellite-b
+  # Data node is configuration passed to user-defined job_list() function
+  # that is in job_script.
+  n_df: null # Number of DataFrames for return. None => all DataFrames.
+  data_directory: ./data/raw/satellite-b/files
   satellites:
     - cluster1
     - cluster2
@@ -25,14 +28,13 @@ data:
     - themisd
     - themise
 
-# User-defined script for loading data. Must contain a function job_list(config)
-job_script: ./configs/satellite-b/job_script.py
+# Job is set to the satellite name in job_script.py
+job: null
 
-tag: null
 parallel_jobs: true
 
-results_dir: ./data/results/satellite-b/results-4
-results_desc: Same as results-1 but using new code structure and computing _resid models
+run_dir: ./data/results/satellite-b/results-4
+run_desc: Same as results-1 but using new code structure and computing _resid models
 
 # device sets training parallelization using one of
 #   null
@@ -40,17 +42,6 @@ results_desc: Same as results-1 but using new code structure and computing _resi
 #   gpu (Linux/Windows)
 #   mps (OS-X)
 device: null
-
-dtype: float32
-
-num_epochs: 50
-num_boot_reps: 1
-batch_size: 256
-hidden_size: 32
-activation: Tanh
-optimizer: Adam
-optimizer_kwargs:
-  lr: 0.01
 
 # True => [None, **outputs]; null or no attribute => Only use all inputs
 removed_inputs: true
@@ -64,3 +55,17 @@ models:
 
 inputs: [r, theta, phi, imfby, imfbz, vsw, nsw, ey, ey_avg]
 outputs: [bx, by, bz]
+
+dtype: float32
+
+train_fraction: 0.8
+
+# Neural network hyperparameters
+num_epochs: 50
+num_boot_reps: 1
+batch_size: 256
+hidden_size: 32
+activation: Tanh
+optimizer: Adam
+optimizer_kwargs:
+  lr: 0.01

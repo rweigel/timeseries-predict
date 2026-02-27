@@ -22,13 +22,13 @@ from .summary import summary
 
 def prep_config(conf):
   defaults = {
-    'tag': 'tag1',
+    'job': 'job1',
     'lr': 0.001,
     'models': ['ols', 'nn3'],
     'device': None,
     'num_epochs': 200,
     'batch_size': 256,
-    'results_dir': './results',
+    'run_dir': './results',
     'num_boot_reps': 1
   }
   for key in defaults.keys():
@@ -42,7 +42,7 @@ def prep_config(conf):
     removed_inputs = [None] + conf['inputs']
   conf['removed_inputs'] = removed_inputs
 
-  config_file = os.path.join(conf['results_dir'], conf['tag'], 'config.json')
+  config_file = os.path.join(conf['run_dir'], conf['job'], 'config.json')
   print(f"Writing: {config_file}")
   if not os.path.exists(os.path.dirname(config_file)):
     os.makedirs(os.path.dirname(config_file))
@@ -58,7 +58,7 @@ def train_and_test(combined_dfs, conf, parallel_jobs=False):
 
   conf = prep_config(conf)
 
-  print(f"{conf['tag']} started")
+  print(f"{conf['job']} started")
   is_loo = len(combined_dfs) > 1  # Check if leave-one-out is needed
   datasets = combined_dfs if is_loo else [combined_dfs[0]]
 
@@ -85,12 +85,12 @@ def train_and_test(combined_dfs, conf, parallel_jobs=False):
         result = process_single_rep(train_boot, test_data, removed_input=removed_input, **conf)
         results.append(result)
 
-      save(results, conf['tag'], removed_input, conf['results_dir'], method=method_label)
+      save(results, conf['job'], removed_input, conf['run_dir'], method=method_label)
 
   print("  Creating tables and plots")
-  summary(conf['tag'], results_dir=conf['results_dir'])
+  summary(conf['job'], run_dir=conf['run_dir'])
 
-  print(f"{conf['tag']} finished\n")
+  print(f"{conf['job']} finished\n")
 
 def _device(device_name):
 
@@ -293,7 +293,7 @@ def process_single_rep(train_df, test_df, removed_input=None, **kwargs):
 
       return epochs, nn1_preds
 
-def save(results_dict, tag, removed_input, results_directory, method):
+def save(results_dict, job, removed_input, run_directory, method):
 
     # If method = 'loo'
     # removed_input/
@@ -308,7 +308,7 @@ def save(results_dict, tag, removed_input, results_directory, method):
     if removed_input is None:
       removed_input = 'None'
 
-    subdir = os.path.join(results_directory, tag, removed_input)
+    subdir = os.path.join(run_directory, job, removed_input)
     if method.startswith('loo'):
       subdir = os.path.join(subdir, 'loo')
 

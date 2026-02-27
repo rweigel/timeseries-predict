@@ -1,18 +1,24 @@
-import os
-import matplotlib.pyplot as plt
+def plot(boots, run_dir, plot_subdir, file_base):
+  import os
+  import matplotlib.pyplot as plt
 
-def savefig(plt, save_path):
-  if not os.path.exists(os.path.dirname(save_path)):
-    os.makedirs(os.path.dirname(save_path))
+  def savefig(plt, file_name):
+    file_subpath = os.path.join(plot_subdir, f"{file_name}.png")
+    file_path = os.path.join(run_dir, file_subpath)
+    if not os.path.exists(os.path.dirname(file_path)):
+      os.makedirs(os.path.dirname(file_path))
 
-  plt.savefig(f"{save_path}")
-  print(f"      Wrote:   {save_path}")
-  plt.close()
+    plt.savefig(f"{file_path}")
+    print(f"        Wrote:   {file_subpath}")
+    plt.close()
 
-def plot(boots, save_path, stats):
+  boot_num = 0 # Only plot results for the first bootstrap repetition for now.
+  # TODO: Plot average model results across all bootstrap repetitions and
+  # include error bars to show variability across bootstrap repetitions.
 
-  #print(stats)
-  boot_num = 0
+  kwargs_actual = {'linestyle': '-', 'color': 'black', 'label': 'Actual'}
+  kwargs_model = {'linestyle': '-', 'color': 'red', 'label': None}
+
   actual = boots[boot_num]['actual']
   outputs = actual.columns[1:] # Exclude timestamp
 
@@ -24,8 +30,9 @@ def plot(boots, save_path, stats):
     gs = plt.gcf().add_gridspec(len(outputs))
     axs = gs.subplots(sharex=True)
     for i, output in enumerate(outputs):
-      axs[i].plot(actual['timestamp'], actual[output], linestyle='-', color='black', label='Actual')
-      axs[i].plot(predicted['timestamp'], predicted[output], linestyle='-', color='red', label=model)
+      kwargs_model['label'] = model
+      axs[i].plot(actual['timestamp'], actual[output], **kwargs_actual)
+      axs[i].plot(predicted['timestamp'], predicted[output], **kwargs_model)
       if i == 0:
         axs[i].legend()
       axs[i].set_ylabel(output)
@@ -33,13 +40,15 @@ def plot(boots, save_path, stats):
       #datetick()
 
     plt.tight_layout()
-    savefig(plt, f"{save_path}_boot_{boot_num}_{model}.png")
+    savefig(plt, f"{file_base}_boot_{boot_num}_{model}")
 
     if 'epochs' in boots[boot_num][model]:
       plt.figure(figsize=(8.5, 8.5), facecolor='white')
       plt.semilogy(boots[boot_num][model]['epochs'])
+      # Only allow integer ticks on the x-axis since epochs are discrete
+      plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
       plt.grid(True)
       plt.ylabel('ARV')
       plt.xlabel('Epoch')
       plt.tight_layout()
-      savefig(plt, f"{save_path}_boot_{boot_num}_{model}_epochs.png")
+      savefig(plt, f"{file_base}_boot_{boot_num}_{model}_epochs")

@@ -1,6 +1,6 @@
 base_config: ./configs/satellite-b/base.yaml
-results_dir: ./data/results/satellite-b/results-0-serial
-results_desc: Test run
+run_dir: ./data/results/satellite-b/results-0-parallel
+run_desc: Test run
 data:
   satellites:
     - cluster1
