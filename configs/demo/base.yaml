@@ -8,7 +8,7 @@ data:
 # job name below is set in job_script.py
 job: null
 
-parallel_jobs: true
+parallel_jobs: false
 
 run_dir: ./data/results/demo/results-0
 run_desc: Same as results-1 but using new code structure and computing _resid models

@@ -1,4 +1,5 @@
 # All paths are relative to main.py.
+base_config: ./configs/demo/base.yaml
 
 # User-defined script for loading data. Must contain a function job_list(config)
 job_script: ./configs/demo/job_script.py
@@ -11,8 +12,6 @@ data:
 
 # job name below is set in job_script.py
 job: null
-
-parallel_jobs: true
 
 run_dir: ./data/results/demo/demo-0
 run_desc: Description of demo-0 run
