@@ -100,11 +100,12 @@ def _prep_config(conf):
 
 
 def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
+
+  import pandas
   import numpy as np
   from .arv import arv
   from .print_metrics import print_metrics
 
-  import pandas
   indent = 10 * " "
 
   inputs = kwargs['inputs']
