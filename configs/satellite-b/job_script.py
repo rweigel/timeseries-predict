@@ -1,5 +1,12 @@
 def job_list(conf):
+  """
+  Return a list of (job_dfs, job_conf) tuples, where job_dfs is a list of
+  DataFrames for the job and job_conf is the job configuration dictionary.
 
+  Each dataframe must have a column 'datetime' with datetime values.
+  Each dataframe must of columns for the input and output variables
+  specified in the job configuration.
+  """
   jobs = []
   for satellite in conf['data']['satellites']:
     job_conf = conf.copy()

@@ -3,19 +3,19 @@
 `timeseries-predict` computes time series models given Pandas `DataFrame`s.
 
 Given a `DataFrame` with $n_i$ inputs and $n_o$ outputs, it can be configured to
-* compute $n_o$ ordinary linear regression models, each with $n_i$ inputs
-* create $n_o$ neural network models with $n_i$ inputs
-* create a neural network model with $n_i$ inputs and $n_o$ outputs
-* create a neural network model that predicts the output residuals of a regression model
-* compute $n_i-1$ models by leaving one input out
+* compute $n_o$ ordinary linear regression models, each with $n_i$ inputs;
+* create $n_o$ neural network models with $n_i$ inputs;
+* create a neural network model with $n_i$ inputs and $n_o$ outputs;
+* create a neural network model that predicts the output residuals of a regression model; and
+* compute $n_i-1$ models by leaving one input out.
 
 Options include
-* Parallel computation of models
-* Parallelization of neural network training
-* Options for splitting time series into training, testing, and validation intervals  continuous chunks
-* Extensive diagnostics, logging, and metrics calculations
-* Uncertainty in metrics using the bootstrap
-* Visualization of predictions
+* parallel computation of models;
+* parallelization of neural network training;
+* options for splitting time series into training, testing, and validation intervals  continuous chunks;
+* extensive diagnostics, logging, and metrics calculations;
+* uncertainty in metrics using the bootstrap; and
+* visualization of predictions.
 
 See `configs/satellite-b` for example usage.
 
@@ -33,7 +33,8 @@ pip install -e .
 # Terms
 
 * `run` - A list of jobs. The output results are stored in a `run_dir` given in this file. The user provides a function named `job_list` that is passed the configuration file specified as the command line value for `--config`.
-* `job` - A `DataFrame` and configuration. The configuration for each job is typically based on modifying the `run` configuration.
+* `job` - One or more `DataFrame`s and configuration. The configuration for each job is typically based on modifying the `run` configuration.
+* `segment` - Each job contains $n_s$ `DataFrame`s. Each `DataFrame` in a job is called a segment. When $n_s>1$, training and testing is done using all unique sets of $n_s-1$ `DataFrame`s and validation is done on the remaining `DataFrame`. (In the code this is referred to as leave-one-out).
 
 `timeseries-predict/config/satellite-b` has a collection of run configurations (YAML files).
 

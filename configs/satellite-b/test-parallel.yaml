@@ -1,5 +1,5 @@
 base_config: ./configs/satellite-b/base.yaml
-run_dir: ./data/results/satellite-b/results-0-parallel
+run_dir: ./data/results/satellite-b/test-parallel
 run_desc: Test run
 data:
   satellites:
