@@ -1,5 +1,6 @@
 from .train_and_test import train_and_test as train_and_test
 from .summary import summary as summary
+from . import job
 
 def cli():
   import argparse
@@ -52,14 +53,3 @@ def read_conf(conf_file):
     conf = base_conf
 
   return conf
-
-def job_list_function(job_script):
-  import os
-  import importlib.util
-  job_script = os.path.expanduser(job_script)
-  spec = importlib.util.spec_from_file_location("job_list", job_script)
-  mod = importlib.util.module_from_spec(spec)
-  spec.loader.exec_module(mod)
-  return mod.job_list
-
-
