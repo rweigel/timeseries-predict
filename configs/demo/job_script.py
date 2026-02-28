@@ -8,9 +8,10 @@ def job_list(conf):
   specified in the job configuration.
   """
   jobs = []
-  for jidx in range(3):
+
+  for jidx in range(conf['data']['num_jobs']):
     job_conf = conf.copy()
-    job_conf['job'] = f"Noise multiplier: {jidx}"
+    job_conf['job'] = f"noise-multiplier-{jidx}"
     job_df = job_data(jidx, **job_conf['data'])
     jobs.append((job_df, job_conf))
 

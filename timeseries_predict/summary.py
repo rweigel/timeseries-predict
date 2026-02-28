@@ -10,9 +10,18 @@ from .stats import stats
 def summary(run_dir, job=None):
 
   if job is None:
+    # Check if a subdirectory of a run directory was given. Technically an
+    # error, but we know what was meant.
+    if os.path.exists(os.path.join(run_dir, 'config.json')):
+      # Use the subdirectory name as the job name
+      job = os.path.basename(run_dir)
+      # Use the parent directory of given run_dir as the run directory
+      run_dir = os.path.dirname(run_dir)
+
+  if job is None:
     # If job is not provided, loop over subdirectories in run_dir
     if not os.path.isdir(run_dir):
-      print(f"Error: Config file '{run_dir}' not found. Skipping postprocessing.")
+      print(f"Error: Run directory '{run_dir}' not found. Skipping postprocessing.")
       return
 
     for subdir in sorted(os.listdir(run_dir)):
@@ -20,6 +29,7 @@ def summary(run_dir, job=None):
       if os.path.isdir(subdir_path):
         print(f"\n    Processing job: {subdir}")
         summary(run_dir, job=subdir)
+
     return
 
   config_path = os.path.join(run_dir, job, 'config.json')
@@ -32,54 +42,61 @@ def summary(run_dir, job=None):
   with open(config_path, 'r') as f:
     kwargs = json.load(f)
 
-  directory = os.path.dirname(config_path)
+  job_dir = os.path.dirname(config_path)
 
   _stats = {}
 
   # Iterate through subdirectories under each pattern
-  for removed_input in kwargs['removed_inputs']:
-    if removed_input is None:
-      removed_input = 'None'
-
-    removed_input_dir = os.path.join(directory, removed_input)
-
-    if not os.path.isdir(removed_input_dir):
-      print(f"    Removed input dir '{removed_input_dir}' not found. Skipping.")
+  for method in ['loo', 'lno']:
+    print(f"    Looking for {os.path.join(job_dir, method)}")
+    if not os.path.isdir(os.path.join(job_dir, method)):
       continue
 
-    print(f"    Processing removed input dir: {removed_input_dir}")
+    for removed_input in kwargs['removed_inputs']:
+      if removed_input is None:
+        removed_input = 'None'
 
-    _stats[removed_input] = []
-    loo_dir = os.path.join(removed_input_dir, 'loo')
-    for file_name in sorted(os.listdir(loo_dir)):
-      if not file_name.endswith('.pkl'):
+      method_dir = os.path.join(job_dir, method)
+
+      removed_input_dir = os.path.join(method_dir, removed_input)
+
+      if not os.path.isdir(removed_input_dir):
+        print(f"    Removed input dir '{removed_input_dir}' not found. Skipping.")
         continue
 
-      file_path = os.path.join(loo_dir, file_name)
+      print(f"    Processing removed input dir: {removed_input_dir}")
 
-      """pkl file contains a list of bootstrap results, each in
-         the form of a dict
-      [
-        {
-          actual: df, # Validation DataFrame
-          ols: df,    # OLS predicted DataFrame
-          nn_miso: df,
-          nn_mimo: df
-        }, ...
-      ]
-      """
+      _stats[removed_input] = []
 
-      print(f"      Reading: {file_name}")
-      boots = pd.read_pickle(file_path) # Array of bootstrap results
+      for file_name in sorted(os.listdir(removed_input_dir)):
+        if not file_name.endswith('.pkl'):
+          continue
 
-      # Each element of stats[removed_input] is stats for a given removed input
-      # and for a loo repetition across all bootstrap repetitions.
-      stat = stats(boots, kwargs['outputs'])
+        file_path = os.path.join(removed_input_dir, file_name)
 
-      _stats[removed_input].append(stat)
+        """pkl file contains a list of bootstrap results, each in
+          the form of a dict
+        [
+          {
+            actual: df, # Validation DataFrame
+            ols: df,    # OLS predicted DataFrame
+            nn_miso: df,
+            nn_mimo: df
+          }, ...
+        ]
+        """
 
-      plot_subdir = os.path.join(job, removed_input, 'loo', 'figures')
-      file_base = file_name.replace('.pkl', '')
-      plot(boots, run_dir, plot_subdir, file_base)
+        print(f"      Reading: {file_name}")
+        reps = pd.read_pickle(file_path) # Array of bootstrap repetitions
 
-  table(_stats, directory, **kwargs)
+        # Each element of stats[removed_input] is stats for a given removed input
+        # and for a loo repetition across all bootstrap repetitions.
+        stat = stats(reps, kwargs['outputs'])
+
+        _stats[removed_input].append(stat)
+
+        plot_dir = os.path.join(removed_input_dir, 'figures')
+        file_base = file_name.replace('.pkl', '')
+        plot(reps, plot_dir, file_base)
+
+  table(_stats, job_dir, **kwargs)

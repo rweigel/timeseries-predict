@@ -74,6 +74,13 @@ def job_data(**config):
 
     ymdhms = df[['year', 'month', 'day', 'hour', 'minute', 'second']]
     df['datetime'] = pd.to_datetime(ymdhms)
+    df = df.drop(columns=['year', 'month', 'day', 'hour', 'minute', 'second'])
+
+    n_before = len(df)
+    df = df.dropna()
+    n_dropped = n_before - len(df)
+    if n_dropped > 0:
+      print(f"    Dropped {n_dropped}/{n_before} rows with NaN/NaT values in: {f}")
 
     rename_columns(df)
     dataframes.append(df)
@@ -81,5 +88,7 @@ def job_data(**config):
     if config['n_df'] is not None and n_r == config['n_df']:
       # Break if n_df (number of DataFrames to return) is specified
       break
+
+    
 
   return dataframes

@@ -1,17 +1,21 @@
 def run(combined_dfs, conf):
   import timeseries_predict as tsp
   import traceback
+
   try:
     tsp.train_and_test(combined_dfs, conf)
   except Exception as e:
     import os
     tb = traceback.format_exc()
     try:
-      error_fname = os.path.join(conf['run_dir'], conf['job'], "main.error.txt")
+      error_fname = os.path.join(conf['run_dir'], conf['job'], "error.txt")
+      os.makedirs(os.path.dirname(error_fname), exist_ok=True)
+      if os.path.exists(error_fname):
+        os.remove(error_fname)
       emsg = f"Error in job {conf['job']}: {str(e)}\n"
       print(emsg)
       print(tb)
-      with open(error_fname, "a") as f:
+      with open(error_fname, "w") as f:
         f.write(emsg)
         f.write(tb)
       print(f"Error written to {error_fname}")
@@ -35,6 +39,7 @@ def job_function(job_script):
 
 
 def check(job_list):
+
   for idx, (job_dfs, job_conf) in enumerate(job_list):
     print(f"Job {idx+1}: name: {job_conf['job']}, Number of segments: {len(job_dfs)}")
 
@@ -44,11 +49,21 @@ def check(job_list):
     if 'outputs' not in job_conf:
       raise ValueError(f"{msg} 'outputs' in the job configuration.")
 
-    # Validate that each job_df has required columns
+    # Validate that each job_df (segment) has required columns
     required_cols = set(job_conf['inputs'] + job_conf['outputs'] + ['datetime'])
-    for df in job_dfs:
+    for df_idx, df in enumerate(job_dfs):
       missing_cols = required_cols - set(df.columns)
       if missing_cols:
-        msg = f"Job '{job_conf['job']}' is missing columns {missing_cols}. "
+        msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} is missing columns {missing_cols}. "
         msg += "Check configuration or job script."
+        raise ValueError(msg)
+
+      # Check for NaN/NaT values in required columns
+      present_cols = list(required_cols & set(df.columns))
+      nan_counts = df[present_cols].isna().sum()
+      nan_cols = nan_counts[nan_counts > 0]
+      if not nan_cols.empty:
+        details = ', '.join(f"'{col}': {count}" for col, count in nan_cols.items())
+        msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} has NaN/NaT values in columns: {details}."
+        print(msg)
         raise ValueError(msg)

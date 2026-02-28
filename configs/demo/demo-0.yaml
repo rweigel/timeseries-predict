@@ -6,9 +6,11 @@ job_script: ./configs/demo/job_script.py
 
 data:
   noise_amplitude: 0.1
-  cadence: 1s
-  start: 2023-01-01
-  end: 2023-01-02
+  num_jobs: 1
+  cadence: "1s"
+  # Quotes need for start/stop values to prevent automatic conversion to datetime
+  start: "2023-01-01"
+  end: "2023-01-02"
 
 # job name below is set in job_script.py
 job: null

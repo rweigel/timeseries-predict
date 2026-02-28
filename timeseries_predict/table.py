@@ -1,7 +1,6 @@
-import os
-import pandas as pd
-
 def table(stats, directory, **kwargs):
+  import os
+  import pandas as pd
 
   columns = ['Removed Input', 'Model']
   for output in kwargs['outputs']:
@@ -12,7 +11,8 @@ def table(stats, directory, **kwargs):
   n_loo = None
   for removed_input in stats.keys():
     if n_loo is not None and len(stats[removed_input]) != n_loo:
-      raise ValueError("Number of loo repetitions is not consistent across removed inputs.")
+      msg = "Number of loo repetitions is not consistent across removed inputs."
+      raise ValueError(msg)
     n_loo = len(stats[removed_input])
 
   for loo_idx in range(n_loo):
@@ -28,6 +28,6 @@ def table(stats, directory, **kwargs):
     # Combine all the summary data into one table
     table = pd.DataFrame(table, columns=columns)
 
-    table_file = os.path.join(directory, f'loo_{loo_idx}.md')
+    table_file = os.path.join(directory, f'loo_{loo_idx+1}.md')
     table.to_markdown(table_file, index=False, floatfmt=".3f")
     print(f"    Wrote {table_file}")

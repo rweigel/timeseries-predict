@@ -11,10 +11,10 @@ if args['postprocess'] is not None:
 print(f"Reading: {args['config']}")
 conf = tsp.read_conf(args['config'])
 
-print(f"Getting job list by calling {conf['job_script']}:job_list(conf)")
 
 if __name__ == "__main__":
 
+  print(f"Getting job list by calling {conf['job_script']}:job_list(conf)")
   job_list = tsp.job.job_list(conf)
 
   tsp.job.check(job_list)

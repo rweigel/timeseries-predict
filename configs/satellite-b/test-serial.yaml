@@ -1,13 +1,13 @@
 base_config: ./configs/satellite-b/base.yaml
 run_dir: ./data/results/satellite-b/test-serial
-run_desc: Test run
+run_desc: Use parallel_jobs = false and do a single job for cluster1
 data:
   satellites:
     - cluster1
-  n_df: 2
+  n_df: 2 # Number of segments per job (each segment spans one year)
 parallel_jobs: false
 device: mps
-num_epochs: 1
+num_epochs: 2
 num_boot_reps: 2
 # removed_inputs: [null, r]
 removed_inputs:

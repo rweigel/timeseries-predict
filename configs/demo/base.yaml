@@ -21,24 +21,24 @@ run_desc: Same as results-1 but using new code structure and computing _resid mo
 device: null
 
 # True => [None, **outputs]; null or no attribute => Only use all inputs
-removed_inputs: true
+removed_inputs: false
 
 models:
   - ols
-  - nn_mimo
-  - nn_mimo_resid
-  - nn_miso
-  - nn_miso_resid
+#  - nn_mimo
+#  - nn_mimo_resid
+#  - nn_miso
+#  - nn_miso_resid
 
-inputs: [r, theta, phi, imfby, imfbz, vsw, nsw, ey, ey_avg]
-outputs: [bx, by, bz]
+inputs: [input1]
+outputs: [output1]
 
 dtype: float32
 
 train_fraction: 0.8
 
 # Neural network hyperparameters
-num_epochs: 50
+num_epochs: 2
 num_boot_reps: 1
 batch_size: 256
 hidden_size: 32
