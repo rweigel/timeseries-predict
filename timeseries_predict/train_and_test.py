@@ -171,47 +171,50 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     if model not in ['nn_mimo', 'nn_miso', 'nn_mimo_resid', 'nn_miso_resid']:
       continue
 
-    delta = None
+    train_inputs = train_df[inputs]
+    train_targets = train_df[outputs]
+    test_inputs = test_df[inputs]
+    test_targets = test_df[outputs]
+
     if model.endswith('_resid'):
       delta = ols_train_preds
+      train_targets = train_targets - delta
+
+    nn_args = [
+      train_inputs,
+      train_targets,
+      test_inputs,
+      test_targets,
+      outputs,
+      indent,
+      kwargs
+    ]
 
     if model.startswith('nn_mimo'):
-      msg = f"{indent}Training {len(outputs)}-output neural network with input "
+      msg = f"{indent}Training {len(outputs)}-output neural network with input"
       if model.endswith('_resid'):
         print(f"{msg} '{removed_input}' removed on ols residuals")
       else:
         print(f"{msg} '{removed_input}' removed")
 
-      test_preds, arvs = mimo(train_df[inputs],
-                                  train_df[outputs],
-                                  test_df[inputs],
-                                  delta,
-                                  outputs,
-                                  indent,
-                                  kwargs)
+      train_preds, test_preds, train_arvs, test_arvs = mimo(*nn_args)
 
     if model.startswith('nn_miso'):
-      msg = f"{indent}Training {len(outputs)} single-output neural networks with input "
+      msg = f"{indent}Training {len(outputs)} single-output neural networks with input"
       if model.endswith('_resid'):
         print(f"{msg} '{removed_input}' removed on ols residuals")
       else:
         print(f"{msg} '{removed_input}' removed")
 
-      test_preds, arvs = miso(train_df[inputs],
-                                  train_df[outputs],
-                                  test_df[inputs],
-                                  delta,
-                                  outputs,
-                                  indent,
-                                  kwargs)
+      train_preds, test_preds, train_arvs, test_arvs = miso(*nn_args)
 
     arvs = arv(test_df[outputs], test_preds)
-    results[model]['epochs'] = arvs
+    results[model]['epochs'] = test_arvs
 
     print(f"{indent}  Test set   ", end='')
     print_metrics(outputs, arvs, np.nan)
 
-    if delta is None:
+    if not model.endswith('_resid'):
       results[model]['predicted'][outputs] = test_preds
     else:
       delta = ols_test_preds

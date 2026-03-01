@@ -1,55 +1,76 @@
 import torch
 
 
-def mimo(train_inputs, train_targets, test_inputs, delta, output_names, indent, kwargs):
+def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, indent, kwargs):
   import numpy as np
+  import time
+
+  from .arv import arv
 
   from .print_metrics import print_metrics
 
   dtype = _get_dtype(kwargs['dtype'])
   device = _device(kwargs['device'])
 
-  if delta is not None:
-    train_targets = train_targets - delta
+  train_inputs, train_targets, test_inputs, test_targets, scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, test_targets, dtype, device)
 
-  train_inputs, train_targets, test_inputs, scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device)
-
-  arvs = []
+  train_arvs = []
+  test_arvs = []
   # Multi-output neural network
   model = _NeuralNetwork(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size']).to(device)
   print(f"{indent}  Number of fitting parameters: {_num_params(model)}")
   print(f"{indent}  Number of training values: {np.prod(train_inputs.shape)}")
   optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
 
+  start = time.time()
   for epoch in range(kwargs['num_epochs']):
     epoch_str = f"{epoch + 1}/{kwargs['num_epochs']}".ljust(5)
     print(f"{indent}  Epoch {epoch_str}", end='')
-    _arvs, losses = _train_single_epoch(model, optimizer, train_inputs, train_targets, device, kwargs['batch_size'])
-    print_metrics(output_names, _arvs, losses)
-    arvs.append(_arvs)
+    train_arv, train_loss = _train_single_epoch(model,
+                                        optimizer,
+                                        train_inputs,
+                                        train_targets,
+                                        device,
+                                        kwargs['batch_size'])
+    print_metrics(output_names, train_arv, train_loss)
+    train_arvs.append(train_arv)
+
+    if False:
+      model.eval()
+      with torch.no_grad():
+        test_arv = arv(test_targets.detach().cpu().numpy(), model(test_inputs).cpu().numpy())
+      model.train()
+      test_arvs.append(test_arv)
+    print(f"Elapsed time: {time.time() - start:.9f} seconds")
 
   model.eval()
   with torch.no_grad():
-    test_preds = model(test_inputs).cpu().numpy()  # Multi-output NN predictions
+    train_preds = model(train_inputs).cpu().numpy()
+    test_preds = model(test_inputs).cpu().numpy()
 
   # Unscale predictions
   test_preds = scaler_targets.inverse_transform(test_preds)
 
-  return test_preds, arvs
+  return train_preds, test_preds, train_arvs, test_arvs
 
 
-def miso(train_inputs, train_targets, test_inputs, delta, output_names, indent, kwargs):
+def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, indent, kwargs):
+  import time
   import numpy as np
 
+  from .arv import arv
   from .print_metrics import print_metrics
 
   dtype = _get_dtype(kwargs['dtype'])
   device = _device(kwargs['device'])
 
-  train_inputs, train_targets, test_inputs, scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device)
+  train_inputs, train_targets, test_inputs, test_targets,scaler_targets = _prep_tensors(train_inputs, train_targets, test_inputs, test_targets, dtype, device)
 
   test_preds = {}
-  arvs = []
+  train_preds = {}
+  train_arvs = []
+  test_arvs = []
+  start = time.time()
   for i, output in enumerate(output_names):
     model = _NeuralNetwork(train_inputs.shape[1], 1, hidden_size=kwargs['hidden_size']).to(device)
     optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
@@ -59,29 +80,42 @@ def miso(train_inputs, train_targets, test_inputs, delta, output_names, indent, 
 
     print(f"{indent}  Training single-output neural network for output = '{output}'")
     train_target = train_targets[:, i:i+1]
+    start = time.time()
     for epoch in range(kwargs['num_epochs']):
       print(f"{indent}    Epoch {epoch + 1}/{kwargs['num_epochs']}", end='')
-      _arv, loss = _train_single_epoch(model, optimizer, train_inputs, train_target, device, kwargs['batch_size'])
-      print_metrics(output, _arv, loss)
-      arvs.append(_arv)
+      train_arv, train_loss = _train_single_epoch(model, optimizer, train_inputs, train_target, device, kwargs['batch_size'])
+      print_metrics(output, train_arv, train_loss)
+      train_arvs.append(train_arv)
+
+      if False:
+        model.eval()
+        with torch.no_grad():
+          test_arv = arv(test_targets[:, i].detach().cpu().numpy(), model(test_inputs).cpu().numpy())
+        model.train()
+        test_arvs.append(test_arv)
+      print(f"Elapsed time: {time.time() - start:.9f} seconds")
+
 
     model.eval()
     with torch.no_grad():
+      train_preds[output] = model(train_inputs).cpu().numpy()
       test_preds[output] = model(test_inputs).cpu().numpy()
 
   # arvs is in form
   # [ out1_arv_epoch1, out1_arv_epoch2, ..., out2_arv_epoch1, out2_arv_epoch2, ... ]
   # Convert to form of mimo
   # [ [out1_arv_epoch1, out2_arv_epoch1, ...], [out1_arv_epoch2, out2_arv_epoch2, ...], ... ]
-  arvs = list(np.reshape(arvs, (-1, len(output_names))))
+  train_arvs = list(np.reshape(train_arvs, (-1, len(output_names))))
 
   # Combine outputs results
+  train_preds = np.column_stack([train_preds[output] for output in output_names])
   test_preds = np.column_stack([test_preds[output] for output in output_names])
 
   # Unscale predictions
+  train_preds = scaler_targets.inverse_transform(train_preds)
   test_preds = scaler_targets.inverse_transform(test_preds)
 
-  return test_preds, arvs
+  return train_preds, test_preds, train_arvs, test_arvs
 
 
 class _NeuralNetwork(torch.nn.Module):
@@ -205,7 +239,7 @@ def _num_params(model):
   return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
-def _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device):
+def _prep_tensors(train_inputs, train_targets, test_inputs, test_targets, dtype, device):
   from sklearn.preprocessing import MinMaxScaler
 
   # Scale data
@@ -215,10 +249,12 @@ def _prep_tensors(train_inputs, train_targets, test_inputs, dtype, device):
 
   scaler_targets = MinMaxScaler()
   train_targets = scaler_targets.fit_transform(train_targets)
+  test_targets = scaler_targets.transform(test_targets)
 
   # Convert data to tensors
   train_inputs = torch.tensor(train_inputs, dtype=dtype).to(device)
   train_targets = torch.tensor(train_targets, dtype=dtype).to(device)
   test_inputs = torch.tensor(test_inputs, dtype=dtype).to(device)
+  test_targets = torch.tensor(test_targets, dtype=dtype).to(device)
 
-  return train_inputs, train_targets, test_inputs, scaler_targets
+  return train_inputs, train_targets, test_inputs, test_targets, scaler_targets

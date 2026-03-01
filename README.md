@@ -62,20 +62,28 @@ python data_plot.py   # Creates plots in data/raw/satellite-b/plots
 From the directory `timeseries-predict`, execute a run using
 
 ```
-python main.py --config configs/satellite-b/test-parallel.yaml
-python main.py --config configs/satellite-b/test-serial.yaml
+python run.py --config configs/satellite-b/test-parallel.yaml
+python run.py --config configs/satellite-b/test-serial.yaml
 ```
 
 # Development
 
 If any post-processing code changes, runs can be re-postprocessed.
 
-Re-postprocess all jobs from a run by passing the run results directory:
+Re-postprocess all jobs from a run by passing the results directory:
 ```
-python main.py --postprocess data/results/satellite-b/results-0-serial
+python run.py --postprocess data/results/satellite-b/test-parallel
 ```
 
 Re-postprocess job with job from a run (will process only job results in subdir `cluster1`)
 ```
-python main.py --job cluster1 --postprocess data/results/satellite-b/results-0-serial
+python run.py --job cluster1 --postprocess data/results/satellite-b/test-serial
+# Or
+python run.py --postprocess data/results/satellite-b/test-serial/cluster1
+```
+
+To execute all demo test cases,
+
+```
+bash test/tests.sh
 ```

@@ -40,12 +40,12 @@ def plot(reps, plot_dir, file_base):
       #datetick()
 
     plt.tight_layout()
-    savefig(plt, f"{file_base}_rep_{rep_num}_{model}")
+    savefig(plt, f"{file_base}_rep_{rep_num}_{model}_timeseries")
 
     if 'epochs' in reps[rep_num][model]:
       plt.figure(figsize=(8.5, 8.5), facecolor='white')
       plt.semilogy(reps[rep_num][model]['epochs'])
-      # Only allow integer ticks on the x-axis since epochs are discrete
+      # Only allow integer ticks on the x-axis because epochs are discrete
       plt.gca().xaxis.set_major_locator(plt.MaxNLocator(integer=True))
       plt.grid(True)
       plt.ylabel('ARV')

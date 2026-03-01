@@ -39,7 +39,7 @@ train_fraction: 0.8
 
 # Neural network hyperparameters
 num_epochs: 2
-num_boot_reps: 1
+num_boot_reps: 2
 batch_size: 256
 hidden_size: 32
 activation: Tanh
