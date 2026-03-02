@@ -1,19 +1,14 @@
-# All paths are relative to main.py.
+# All paths are relative to run.py.
 base_config: ./configs/demo/base.yaml
-
-# User-defined script for loading data. Must contain a function job_list(config)
-job_script: ./configs/demo/job_script.py
 
 data:
   noise_amplitude: 0.1
   num_jobs: 1
   cadence: "1s"
-  # Quotes need for start/stop values to prevent automatic conversion to datetime
+  # Quotes need for start/stop values to prevent automatic conversion to
+  # datetime by Python YAML parser
   start: "2023-01-01"
   end: "2023-01-02"
 
-# job name below is set in job_script.py
-job: null
-
 run_dir: ./data/results/demo/demo-0
-run_desc: Description of demo-0 run
+run_desc: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude

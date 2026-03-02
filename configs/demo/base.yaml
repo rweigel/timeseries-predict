@@ -3,15 +3,15 @@
 # User-defined script for loading data. Must contain a function job_list(config)
 job_script: ./configs/demo/job_script.py
 
+# The following are set in demo-0.yaml
 data:
 
-# job name below is set in job_script.py
 job: null
 
-parallel_jobs: false
+run_dir: 
+run_desc: 
 
-run_dir: ./data/results/demo/results-0
-run_desc: Same as results-1 but using new code structure and computing _resid models
+parallel_jobs: false
 
 # device sets training parallelization using one of
 #   null
@@ -20,9 +20,6 @@ run_desc: Same as results-1 but using new code structure and computing _resid mo
 #   mps (OS-X)
 device: null
 
-# True => [None, **outputs]; null or no attribute => Only use all inputs
-removed_inputs: false
-
 models:
   - ols
 #  - nn_mimo
@@ -30,6 +27,8 @@ models:
 #  - nn_miso
 #  - nn_miso_resid
 
+# True => [None, **outputs]; null or no attribute => Only use all inputs
+removed_inputs: false
 inputs: [input1]
 outputs: [output1]
 

@@ -124,6 +124,7 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   # Convert to form of mimo
   # [ [out1_arv_epoch1, out2_arv_epoch1, ...], [out1_arv_epoch2, out2_arv_epoch2, ...], ... ]
   train_arvs = list(np.reshape(train_arvs, (-1, len(output_names))))
+  test_arvs = list(np.reshape(test_arvs, (-1, len(output_names))))
 
   # Combine outputs results
   train_preds = np.column_stack([train_preds[output] for output in output_names])

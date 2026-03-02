@@ -6,7 +6,7 @@ data:
   n_df: null
 parallel_jobs: false
 device: mps
-num_epochs: 100
+num_epochs: 10
 num_boot_reps: 2
 removed_inputs:
   - null

@@ -4,6 +4,8 @@ def train_and_test(job_dfs, conf):
 
   from .summary import summary
 
+  conf = _prep_config(conf)
+
   print(f"{'-'*shutil.get_terminal_size(fallback=(80, 24)).columns}")
 
   s = "s" if len(job_dfs) != 1 else ""
@@ -11,8 +13,6 @@ def train_and_test(job_dfs, conf):
 
   if len(job_dfs) == 0:
     raise ValueError(f"len(job_dfs) = 0 for job '{conf['job']}'.")
-
-  conf = _prep_config(conf)
 
   for removed_input in conf['removed_inputs']:
     print(f"  Removed input: {removed_input}")
@@ -40,7 +40,10 @@ def train_and_test(job_dfs, conf):
         result = _train_and_test_single_rep(train_data_rep, validation_data, removed_input=removed_input, **conf)
         results.append(result)
 
-      _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, i+1)
+      if len(job_dfs) == 1:
+        _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, None)
+      else:
+        _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, i+1)
 
   print("\n  Creating tables and plots")
 
@@ -58,20 +61,31 @@ def _prep_config(conf):
 
   known_models = ['ols', 'nn_miso', 'nn_mimo', 'nn_miso_resid', 'nn_mimo_resid']
 
-  for model in conf['models']:
-    if model not in known_models:
-      raise ValueError(f"Model '{model}' not in list of known models: {known_models}")
-
   defaults = {
     'job': 'job1',
     'lr': 0.001,
+    'run_desc': '',
+    'removed_inputs': None,
     'models': known_models,
+    'train_fraction': 0.8,
     'device': None,
     'num_epochs': 200,
     'batch_size': 256,
     'run_dir': './results',
     'num_boot_reps': 1
   }
+
+  for key in defaults.keys():
+    if key not in conf or conf[key] is None:
+      conf[key] = defaults[key]
+
+  for key in ['inputs', 'outputs', 'models']:
+    if isinstance(conf[key], str):
+      conf[key] = [key]
+
+  for model in conf['models']:
+    if model not in known_models:
+      raise ValueError(f"Model '{model}' not in list of known models: {known_models}")
 
   os.makedirs(conf['run_dir'], exist_ok=True)
 
@@ -80,10 +94,6 @@ def _prep_config(conf):
     print(f"  Writing job description to: {desc_file}")
     with open(desc_file, 'w') as f:
       f.write(conf['run_desc'])
-
-  for key in defaults.keys():
-    if key not in conf or conf[key] is None:
-      conf[key] = defaults[key]
 
   if isinstance(conf['inputs'], str):
     conf['inputs'] = [conf['inputs']]
@@ -126,19 +136,15 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
   # Determine the current input features
   inputs = [inp for inp in inputs if inp != removed_input] if removed_input else inputs
 
-  test_targets = test_df[outputs].values
+  actual_df = test_df[['datetime'] + outputs].copy()
+  results = {'actual': actual_df}
 
   # Create DataFrames with only time stamps. Data is put in at end.
-  results = {'actual': {'timestamp': test_df['datetime'].values}}
-  for output in outputs:
-    results['actual'][output] = test_targets[:, outputs.index(output)]
-  results['actual'] = pandas.DataFrame(results['actual'])
-
   for model in kwargs['models']:
     results[model] = {}
     if model != 'ols':
-      results[model]['epochs'] = []
-    results[model]['predicted'] = pandas.DataFrame({'timestamp': test_df['datetime'].values})
+      results[model]['epoch_metrics'] = {}
+    results[model]['predicted'] = test_df[['datetime']].copy()
 
   resid = any(model.endswith('_resid') for model in models)
 
@@ -192,18 +198,19 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       kwargs
     ]
 
+    if removed_input is None:
+      removed_str = "all inputs"
+    else:
+      removed_str = f"'{removed_input}' input removed"
+
     if model.startswith('nn_mimo'):
-      if removed_input is None:
-        removed_str = f"'{removed_input}' input removed"
-      else:
-        removed_str = "all inputs"
 
       msg = f"{indent}Training {len(outputs)}-output neural network with"
 
       if model.endswith('_resid'):
         print(f"{msg} {removed_str} on ols residuals")
       else:
-        print(f"{msg} {removed_str} input removed")
+        print(f"{msg} {removed_str}")
 
       train_preds, test_preds, train_arvs, test_arvs = mimo(*nn_args)
 
@@ -211,14 +218,14 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       msg = f"{indent}Training {len(outputs)} single-output neural networks with"
 
       if model.endswith('_resid'):
-        print(f"{msg} {removed_str} input removed on ols residuals")
+        print(f"{msg} {removed_str} on ols residuals")
       else:
-        print(f"{msg} {removed_str} input removed")
+        print(f"{msg} {removed_str}")
 
       train_preds, test_preds, train_arvs, test_arvs = miso(*nn_args)
 
-    arvs = arv(test_df[outputs], test_preds)
-    results[model]['epochs'] = test_arvs
+    results[model]['epoch_metrics']['train'] = train_arvs
+    results[model]['epoch_metrics']['test'] = test_arvs
 
     if not model.endswith('_resid'):
       results[model]['predicted'][outputs] = test_preds
@@ -228,16 +235,13 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       arvs_star = arv(test_df[outputs], test_preds + delta)
       print(f"{indent}   OLS results")
       print(f"{indent} {14 * ' '}{ols_test_string}")
-      print(f"{indent}   NN results when redisuals are added back")
+      print(f"{indent}   NN results when residuals are added back")
       print_metrics(outputs, arvs_star, indent=25, type="test")
 
   return results
 
 
 def _save_results(results_dict, job, removed_input, run_dir, method, loo_idx):
-  import os
-  import pandas
-
   """
   If method = 'loo', directory structure is:
     {removed input name}/
@@ -253,6 +257,9 @@ def _save_results(results_dict, job, removed_input, run_dir, method, loo_idx):
     }
   is a bootstrap repetition and df is a DataFrame with cols of timestamp and outputs
   """
+
+  import os
+  import pandas
 
   if removed_input is None:
     # TODO: Address potential for a name conflict if a column name is 'None'
