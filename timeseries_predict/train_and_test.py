@@ -111,6 +111,7 @@ def _prep_config(conf):
 
 def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
 
+  import time
   import pandas
   import numpy as np
   from .arv import arv
@@ -149,18 +150,19 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     print(f"{indent}  Number of fitting parameters: {len(inputs) + 1}")
     print(f"{indent}  Number of training values: {np.prod(train_df[inputs].shape)}")
 
+    start = time.time()
     ols_model = LinearRegression()
     ols_model.fit(train_df[inputs], train_df[outputs])
     ols_train_preds = ols_model.predict(train_df[inputs])
     ols_test_preds = ols_model.predict(test_df[inputs])
 
     arvs = arv(train_df[outputs], ols_train_preds)
-    print(f"{indent}  Train set", end='')
-    print_metrics(outputs, arvs, np.nan)
+    print(f"{indent} {14 * ' '}", end='')
+    print_metrics(outputs, arvs, type="train", dt=time.time() - start)
 
     arvs = arv(test_df[outputs], ols_test_preds)
-    print(f"{indent}  Test set ", end='')
-    print_metrics(outputs, arvs, np.nan)
+    print(f"{indent} {14 * ' '}", end='')
+    print_metrics(outputs, arvs, type="test")
 
     results['ols']['predicted'][outputs] = ols_test_preds
 
@@ -211,18 +213,19 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     arvs = arv(test_df[outputs], test_preds)
     results[model]['epochs'] = test_arvs
 
-    print(f"{indent}  Test set   ", end='')
-    print_metrics(outputs, arvs, np.nan)
+    #print(f"{indent}  Test set   ", end='')
+    #print_metrics(outputs, arvs, np.nan)
 
     if not model.endswith('_resid'):
       results[model]['predicted'][outputs] = test_preds
     else:
       delta = ols_test_preds
       results[model]['predicted'][outputs] = test_preds + delta
+      mse = np.mean((test_df[outputs] - (test_preds + delta)) ** 2)
       arvs_star = arv(test_df[outputs], test_preds + delta)
-      print(f"{indent}  Test set*  ", end='')
-      print_metrics(outputs, arvs_star, np.nan)
-
+      #print(f"{indent}  Test set*  ", end='')
+      #print_metrics(outputs, arvs_star, mse, indent=indent, type="test*")
+  exit()
   return results
 
 

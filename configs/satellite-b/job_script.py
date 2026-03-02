@@ -75,7 +75,6 @@ def job_data(**config):
     ymdhms = df[['year', 'month', 'day', 'hour', 'minute', 'second']]
     df['datetime'] = pd.to_datetime(ymdhms)
     df = df.drop(columns=['year', 'month', 'day', 'hour', 'minute', 'second'])
-
     n_before = len(df)
     df = df.dropna()
     n_dropped = n_before - len(df)

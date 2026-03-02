@@ -8,7 +8,9 @@ def arv(A, P):
         P = P.to_numpy()
 
     if A.ndim == 1:
-        A, P = np.expand_dims(A, axis=1), np.expand_dims(P, axis=1)
+        A = np.expand_dims(A, axis=1)
+    if P.ndim == 1:
+        P = np.expand_dims(P, axis=1)
 
     arvs = []
     for i in range(A.shape[1]):
