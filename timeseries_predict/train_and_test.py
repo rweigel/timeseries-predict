@@ -162,7 +162,7 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
 
     arvs = arv(test_df[outputs], ols_test_preds)
     print(f"{indent} {14 * ' '}", end='')
-    print_metrics(outputs, arvs, type="test")
+    ols_test_string = print_metrics(outputs, arvs, type="test")
 
     results['ols']['predicted'][outputs] = ols_test_preds
 
@@ -193,39 +193,44 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     ]
 
     if model.startswith('nn_mimo'):
-      msg = f"{indent}Training {len(outputs)}-output neural network with input"
-      if model.endswith('_resid'):
-        print(f"{msg} '{removed_input}' removed on ols residuals")
+      if removed_input is None:
+        removed_str = f"'{removed_input}' input removed"
       else:
-        print(f"{msg} '{removed_input}' removed")
+        removed_str = "all inputs"
+
+      msg = f"{indent}Training {len(outputs)}-output neural network with"
+
+      if model.endswith('_resid'):
+        print(f"{msg} {removed_str} on ols residuals")
+      else:
+        print(f"{msg} {removed_str} input removed")
 
       train_preds, test_preds, train_arvs, test_arvs = mimo(*nn_args)
 
     if model.startswith('nn_miso'):
-      msg = f"{indent}Training {len(outputs)} single-output neural networks with input"
+      msg = f"{indent}Training {len(outputs)} single-output neural networks with"
+
       if model.endswith('_resid'):
-        print(f"{msg} '{removed_input}' removed on ols residuals")
+        print(f"{msg} {removed_str} input removed on ols residuals")
       else:
-        print(f"{msg} '{removed_input}' removed")
+        print(f"{msg} {removed_str} input removed")
 
       train_preds, test_preds, train_arvs, test_arvs = miso(*nn_args)
 
     arvs = arv(test_df[outputs], test_preds)
     results[model]['epochs'] = test_arvs
 
-    #print(f"{indent}  Test set   ", end='')
-    #print_metrics(outputs, arvs, np.nan)
-
     if not model.endswith('_resid'):
       results[model]['predicted'][outputs] = test_preds
     else:
       delta = ols_test_preds
       results[model]['predicted'][outputs] = test_preds + delta
-      mse = np.mean((test_df[outputs] - (test_preds + delta)) ** 2)
       arvs_star = arv(test_df[outputs], test_preds + delta)
-      #print(f"{indent}  Test set*  ", end='')
-      #print_metrics(outputs, arvs_star, mse, indent=indent, type="test*")
-  exit()
+      print(f"{indent}   OLS results")
+      print(f"{indent} {14 * ' '}{ols_test_string}")
+      print(f"{indent}   NN results when redisuals are added back")
+      print_metrics(outputs, arvs_star, indent=25, type="test")
+
   return results
 
 

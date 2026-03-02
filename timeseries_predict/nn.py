@@ -24,8 +24,8 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   print(f"{indent}  Number of training values: {np.prod(train_inputs.shape)}")
   optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
 
-  start = time.time()
   for epoch in range(kwargs['num_epochs']):
+    start = time.time()
     epoch_str = f"{epoch + 1}/{kwargs['num_epochs']}".ljust(5)
     epoch_str = f"{indent}    Epoch {epoch_str}"
     print(epoch_str, end='')
@@ -96,8 +96,8 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
     print(f"{indent}  Training single-output neural network for output = '{output_names[i]}'")
     train_target = train_targets[:, i:i+1]
-    start = time.time()
     for epoch in range(kwargs['num_epochs']):
+      start = time.time()
       epoch_str = f"{epoch + 1}/{kwargs['num_epochs']}".ljust(5)
       epoch_str = f"{indent}    Epoch {epoch_str}"
       print(epoch_str, end='')

@@ -8,6 +8,11 @@ def job_list(conf):
   specified in the job configuration.
   """
   jobs = []
+  if conf['data']['satellites'] is None:
+    conf['data']['satellites'] = satellite_list(conf['data']['data_directory'])
+    print(f"  Found satellites: {conf['data']['satellites']}")
+  if isinstance(conf['data']['satellites'], str):
+    conf['data']['satellites'] = [conf['data']['satellites']]
   for satellite in conf['data']['satellites']:
     job_conf = conf.copy()
     job_conf['job'] = satellite
@@ -17,6 +22,18 @@ def job_list(conf):
 
   return jobs
 
+def satellite_list(data_directory):
+  import os
+  import glob
+  fglob = os.path.join(data_directory, "*.pkl")
+  files = sorted(glob.glob(fglob))
+  satellites = set()
+  for f in files:
+    basename = os.path.basename(f)
+    satellite = basename.split('_')[0]
+    satellites.add(satellite)
+
+  return list(satellites)
 
 def job_data(**config):
   import os
@@ -87,7 +104,5 @@ def job_data(**config):
     if config['n_df'] is not None and n_r == config['n_df']:
       # Break if n_df (number of DataFrames to return) is specified
       break
-
-    
 
   return dataframes

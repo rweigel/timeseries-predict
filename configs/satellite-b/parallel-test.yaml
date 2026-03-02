@@ -1,5 +1,5 @@
 base_config: ./configs/satellite-b/base.yaml
-run_dir: ./data/results/satellite-b/test-parallel
+run_dir: ./data/results/satellite-b/parallel-test
 run_desc: Use parallel_jobs = true and do two jobs (one for each satellite cluster)
 data:
   satellites:

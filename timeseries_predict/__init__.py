@@ -9,7 +9,6 @@ def cli():
   args = {
     'config': {
       'type': str,
-      'default': "./configs/satellite-test-serial.yaml",
       'help': 'Path to the YAML run configuration file.'
     },
     'postprocess': {

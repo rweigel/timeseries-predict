@@ -1,15 +1,17 @@
 def print_metrics(outputs, arvs, type=None, indent=0, dt=None):
 
+  msg = ""
   if isinstance(outputs, str):
     outputs = [outputs]
-  print(indent * ' ', end='')
+  msg = indent * ' '
   for output, _arv in zip(outputs, arvs):
-    print(f" | {output} ARV = {_arv:7.3f}", end='')
+    msg += f" | {output} ARV = {_arv:7.3f}"
 
-  timimg = ""
   if dt is not None:
-    timimg = f" ({type}; {dt:.3f} s)"
+    msg += f" ({type}; {dt:.3f} s)"
   else:
-    timimg = f" ({type})"
+    msg += f" ({type})"
 
-  print(f" {timimg}")
+  print(msg)
+
+  return msg
