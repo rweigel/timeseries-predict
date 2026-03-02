@@ -16,7 +16,7 @@ def plot(reps, plot_dir, file_base):
 
     file_path = os.path.join(plot_dir, f"{file_name}.png")
     plt.savefig(file_path)
-    print(f"        Wrote:   {os.path.basename(file_path)}")
+    print(f"        Wrote: {os.path.basename(file_path)}")
     plt.close()
 
   rep_num = 0 # Only plot results for the first bootstrap repetition for now.

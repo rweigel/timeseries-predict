@@ -1,0 +1,1222 @@
+
+***
+Running command: python run.py --config configs/demo/demo-0.yaml
+***
+Reading: configs/demo/demo-0.yaml
+Getting job list by calling ./configs/demo/job_script.py:job_list(conf)
+Getting job list from ./configs/demo/job_script.py
+Job 1: name: noise-multiplier-0, Number of segments: 1
+  Writing job configuration to: ./data/results/demo/demo-0/noise-multiplier-0/config.json
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-0' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Bootstrap repetition 1/2
+          Performing 1-output/1-input linear regression
+            Number of fitting parameters: 2
+            Number of training values: 69120
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+        Bootstrap repetition 2/2
+          Performing 1-output/1-input linear regression
+            Number of fitting parameters: 2
+            Number of training values: 69120
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+  Saved './data/results/demo/demo-0/noise-multiplier-0/lno/None/lno.pkl'
+
+  Creating tables and plots
+    Reading: ./data/results/demo/demo-0/noise-multiplier-0/config.json
+    Looking for ./data/results/demo/demo-0/noise-multiplier-0/loo
+    Looking for ./data/results/demo/demo-0/noise-multiplier-0/lno
+    Processing removed input dir: ./data/results/demo/demo-0/noise-multiplier-0/lno/None
+      Reading: lno.pkl
+        Wrote: lno_rep_0_ols_timeseries.png
+        Wrote: lno_rep_0_ols_epoch_metrics.png
+    Wrote ./data/results/demo/demo-0/noise-multiplier-0/loo_1.md
+Finished job 'noise-multiplier-0'
+
+
+***
+Running command: python run.py --postprocess data/results/demo/demo-0
+***
+
+    Processing job: noise-multiplier-0
+    Reading: data/results/demo/demo-0/noise-multiplier-0/config.json
+    Looking for data/results/demo/demo-0/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-0/noise-multiplier-0/lno
+    Processing removed input dir: data/results/demo/demo-0/noise-multiplier-0/lno/None
+      Reading: lno.pkl
+        Wrote: lno_rep_0_ols_timeseries.png
+        Wrote: lno_rep_0_ols_epoch_metrics.png
+    Wrote data/results/demo/demo-0/noise-multiplier-0/loo_1.md
+
+***
+Running command: python run.py --postprocess data/results/demo/demo-0/noise-multiplier-0
+***
+    Reading: data/results/demo/demo-0/noise-multiplier-0/config.json
+    Looking for data/results/demo/demo-0/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-0/noise-multiplier-0/lno
+    Processing removed input dir: data/results/demo/demo-0/noise-multiplier-0/lno/None
+      Reading: lno.pkl
+        Wrote: lno_rep_0_ols_timeseries.png
+        Wrote: lno_rep_0_ols_epoch_metrics.png
+    Wrote data/results/demo/demo-0/noise-multiplier-0/loo_1.md
+
+***
+Running command: python run.py --postprocess data/results/demo/demo-0 --job noise-multiplier-0
+***
+    Reading: data/results/demo/demo-0/noise-multiplier-0/config.json
+    Looking for data/results/demo/demo-0/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-0/noise-multiplier-0/lno
+    Processing removed input dir: data/results/demo/demo-0/noise-multiplier-0/lno/None
+      Reading: lno.pkl
+        Wrote: lno_rep_0_ols_timeseries.png
+        Wrote: lno_rep_0_ols_epoch_metrics.png
+    Wrote data/results/demo/demo-0/noise-multiplier-0/loo_1.md
+
+***
+Running command: python run.py --config configs/satellite-b/parallel-test.yaml
+***
+Reading: configs/satellite-b/parallel-test.yaml
+Getting job list by calling ./configs/satellite-b/job_script.py:job_list(conf)
+Getting job list from ./configs/satellite-b/job_script.py
+  job_data(): Reading data files
+    Reading: ./data/raw/satellite-b/files/cluster1_2001_avg_300_omni.pkl
+    Reading: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
+    Dropped 1/31191 rows with NaN/NaT values in: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
+  job_data(): Reading data files
+    Reading: ./data/raw/satellite-b/files/cluster2_2001_avg_300_omni.pkl
+    Reading: ./data/raw/satellite-b/files/cluster2_2002_avg_300_omni.pkl
+Job 1: name: cluster1, Number of segments: 2
+Job 2: name: cluster2, Number of segments: 2
+# CPUs available for parallel processing: 16
+Using 2 CPUs for parallel processing 2 jobs
+Reading: configs/satellite-b/parallel-test.yaml
+  Writing job configuration to: ./data/results/satellite-b/parallel-test/cluster1/config.json
+--------------------------------------------------------------------------------
+Starting job 'cluster1' with 2 DataFrames
+  Removed input: None
+    Training with DataFrame 1/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 224568
+                          | bx ARV =   0.297 | by ARV =   0.916 | bz ARV =   0.681 (train; 0.007 s)
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   0.446 | by ARV =   6.762 | bz ARV =   6.080 (train; 0.104 s)
+                          | bx ARV =   0.415 | by ARV =   1.129 | bz ARV =   0.768 (test)
+              Epoch 2/2   | bx ARV =   0.305 | by ARV =   0.952 | bz ARV =   0.727 (train; 0.124 s)
+                          | bx ARV =   0.421 | by ARV =   1.032 | bz ARV =   0.703 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   1.962 | by ARV =   3.148 | bz ARV =  19.129 (train; 0.080 s)
+                          | bx ARV =   1.015 | by ARV =   1.048 | bz ARV =   1.116 (test)
+              Epoch 2/2   | bx ARV =   1.016 | by ARV =   1.031 | bz ARV =   1.403 (train; 0.080 s)
+                          | bx ARV =   1.007 | by ARV =   1.004 | bz ARV =   1.035 (test)
+             OLS results
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.405 | by ARV =   1.021 | bz ARV =   0.778 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.549 (train; 0.076 s)
+                          | bx ARV =   0.411 (test)
+              Epoch 2/2   | bx ARV =   0.306 (train; 0.074 s)
+                          | bx ARV =   0.406 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   8.596 (train; 0.075 s)
+                          | by ARV =   1.547 (test)
+              Epoch 2/2   | by ARV =   1.330 (train; 0.080 s)
+                          | by ARV =   1.235 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   2.662 (train; 0.076 s)
+                          | bz ARV =   0.744 (test)
+              Epoch 2/2   | bz ARV =   0.679 (train; 0.074 s)
+                          | bz ARV =   0.677 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   4.455 (train; 0.075 s)
+                          | bx ARV =   0.976 (test)
+              Epoch 2/2   | bx ARV =   1.049 (train; 0.073 s)
+                          | bx ARV =   0.945 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   6.601 (train; 0.073 s)
+                          | by ARV =   1.040 (test)
+              Epoch 2/2   | by ARV =   1.162 (train; 0.075 s)
+                          | by ARV =   1.002 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   4.449 (train; 0.119 s)
+                          | bz ARV =   1.157 (test)
+              Epoch 2/2   | bz ARV =   1.111 (train; 0.075 s)
+                          | bz ARV =   1.160 (test)
+             OLS results
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.426 | by ARV =   1.063 | bz ARV =   0.691 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 224568
+                          | bx ARV =   0.297 | by ARV =   0.917 | bz ARV =   0.678 (train; 0.007 s)
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   0.777 | by ARV =   3.236 | bz ARV =   5.243 (train; 0.079 s)
+                          | bx ARV =   0.410 | by ARV =   1.089 | bz ARV =   0.776 (test)
+              Epoch 2/2   | bx ARV =   0.303 | by ARV =   0.953 | bz ARV =   0.712 (train; 0.079 s)
+                          | bx ARV =   0.408 | by ARV =   1.026 | bz ARV =   0.678 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   2.183 | by ARV =   1.995 | bz ARV =  10.826 (train; 0.081 s)
+                          | bx ARV =   1.013 | by ARV =   1.001 | bz ARV =   1.071 (test)
+              Epoch 2/2   | bx ARV =   1.038 | by ARV =   1.012 | bz ARV =   1.101 (train; 0.079 s)
+                          | bx ARV =   1.030 | by ARV =   0.993 | bz ARV =   1.173 (test)
+             OLS results
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.407 | by ARV =   0.980 | bz ARV =   0.688 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.510 (train; 0.077 s)
+                          | bx ARV =   0.408 (test)
+              Epoch 2/2   | bx ARV =   0.301 (train; 0.075 s)
+                          | bx ARV =   0.408 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   3.097 (train; 0.075 s)
+                          | by ARV =   1.093 (test)
+              Epoch 2/2   | by ARV =   0.954 (train; 0.077 s)
+                          | by ARV =   1.011 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  13.455 (train; 0.076 s)
+                          | bz ARV =   1.098 (test)
+              Epoch 2/2   | bz ARV =   1.011 (train; 0.077 s)
+                          | bz ARV =   0.918 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   2.611 (train; 0.119 s)
+                          | bx ARV =   0.930 (test)
+              Epoch 2/2   | bx ARV =   1.132 (train; 0.077 s)
+                          | bx ARV =   0.982 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =  11.058 (train; 0.077 s)
+                          | by ARV =   1.199 (test)
+              Epoch 2/2   | by ARV =   1.301 (train; 0.078 s)
+                          | by ARV =   1.052 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  12.210 (train; 0.074 s)
+                          | bz ARV =   1.204 (test)
+              Epoch 2/2   | bz ARV =   1.590 (train; 0.075 s)
+                          | bz ARV =   1.172 (test)
+             OLS results
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.451 | by ARV =   1.136 | bz ARV =   0.863 (test)
+  Saved './data/results/satellite-b/parallel-test/cluster1/loo/None/loo_1.pkl'
+    Training with DataFrame 2/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 229473
+                          | bx ARV =   0.389 | by ARV =   0.897 | bz ARV =   0.663 (train; 0.007 s)
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   3.972 | by ARV =   3.816 | bz ARV =   1.894 (train; 0.083 s)
+                          | bx ARV =   0.331 | by ARV =   1.049 | bz ARV =   0.834 (test)
+              Epoch 2/2   | bx ARV =   0.418 | by ARV =   0.953 | bz ARV =   0.721 (train; 0.082 s)
+                          | bx ARV =   0.310 | by ARV =   1.022 | bz ARV =   0.722 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   5.975 | by ARV =  16.319 | bz ARV =   4.028 (train; 0.081 s)
+                          | bx ARV =   0.993 | by ARV =   1.164 | bz ARV =   1.239 (test)
+              Epoch 2/2   | bx ARV =   1.056 | by ARV =   1.190 | bz ARV =   0.997 (train; 0.082 s)
+                          | bx ARV =   0.996 | by ARV =   1.075 | bz ARV =   1.171 (test)
+             OLS results
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.326 | by ARV =   1.151 | bz ARV =   0.705 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   1.641 (train; 0.077 s)
+                          | bx ARV =   0.332 (test)
+              Epoch 2/2   | bx ARV =   0.410 (train; 0.078 s)
+                          | bx ARV =   0.313 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   6.362 (train; 0.078 s)
+                          | by ARV =   1.082 (test)
+              Epoch 2/2   | by ARV =   1.030 (train; 0.119 s)
+                          | by ARV =   1.067 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   8.517 (train; 0.077 s)
+                          | bz ARV =   0.883 (test)
+              Epoch 2/2   | bz ARV =   0.755 (train; 0.084 s)
+                          | bz ARV =   0.737 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   1.493 (train; 0.078 s)
+                          | bx ARV =   1.017 (test)
+              Epoch 2/2   | bx ARV =   1.014 (train; 0.076 s)
+                          | bx ARV =   1.073 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =  13.185 (train; 0.079 s)
+                          | by ARV =   1.093 (test)
+              Epoch 2/2   | by ARV =   1.188 (train; 0.079 s)
+                          | by ARV =   1.027 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   1.449 (train; 0.079 s)
+                          | bz ARV =   1.371 (test)
+              Epoch 2/2   | bz ARV =   1.052 (train; 0.077 s)
+                          | bz ARV =   1.056 (test)
+             OLS results
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.328 | by ARV =   1.200 | bz ARV =   0.750 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 229473
+                          | bx ARV =   0.397 | by ARV =   0.906 | bz ARV =   0.656 (train; 0.007 s)
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   2.850 | by ARV =   3.899 | bz ARV =   7.672 (train; 0.083 s)
+                          | bx ARV =   0.306 | by ARV =   1.047 | bz ARV =   0.783 (test)
+              Epoch 2/2   | bx ARV =   0.398 | by ARV =   0.961 | bz ARV =   0.736 (train; 0.083 s)
+                          | bx ARV =   0.309 | by ARV =   0.990 | bz ARV =   0.762 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   8.829 | by ARV =   4.421 | bz ARV =   2.600 (train; 0.081 s)
+                          | bx ARV =   0.972 | by ARV =   1.189 | bz ARV =   1.110 (test)
+              Epoch 2/2   | bx ARV =   1.177 | by ARV =   1.108 | bz ARV =   1.045 (train; 0.124 s)
+                          | bx ARV =   1.014 | by ARV =   0.996 | bz ARV =   1.313 (test)
+             OLS results
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.332 | by ARV =   1.045 | bz ARV =   0.718 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   5.471 (train; 0.077 s)
+                          | bx ARV =   0.490 (test)
+              Epoch 2/2   | bx ARV =   0.541 (train; 0.076 s)
+                          | bx ARV =   0.429 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =  14.414 (train; 0.075 s)
+                          | by ARV =   1.639 (test)
+              Epoch 2/2   | by ARV =   1.244 (train; 0.077 s)
+                          | by ARV =   1.143 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   6.982 (train; 0.077 s)
+                          | bz ARV =   0.790 (test)
+              Epoch 2/2   | bz ARV =   0.715 (train; 0.076 s)
+                          | bz ARV =   0.744 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   6.986 (train; 0.076 s)
+                          | bx ARV =   0.996 (test)
+              Epoch 2/2   | bx ARV =   1.085 (train; 0.076 s)
+                          | bx ARV =   1.004 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   6.221 (train; 0.076 s)
+                          | by ARV =   1.201 (test)
+              Epoch 2/2   | by ARV =   1.223 (train; 0.076 s)
+                          | by ARV =   1.095 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  11.243 (train; 0.076 s)
+                          | bz ARV =   1.305 (test)
+              Epoch 2/2   | bz ARV =   1.238 (train; 0.075 s)
+                          | bz ARV =   1.251 (test)
+             OLS results
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.337 | by ARV =   1.197 | bz ARV =   0.864 (test)
+  Saved './data/results/satellite-b/parallel-test/cluster1/loo/None/loo_2.pkl'
+
+  Creating tables and plots
+    Reading: ./data/results/satellite-b/parallel-test/cluster1/config.json
+    Looking for ./data/results/satellite-b/parallel-test/cluster1/loo
+    Processing removed input dir: ./data/results/satellite-b/parallel-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for ./data/results/satellite-b/parallel-test/cluster1/lno
+    Wrote ./data/results/satellite-b/parallel-test/cluster1/loo_1.md
+    Wrote ./data/results/satellite-b/parallel-test/cluster1/loo_2.md
+Finished job 'cluster1'
+
+Reading: configs/satellite-b/parallel-test.yaml
+  Writing job configuration to: ./data/results/satellite-b/parallel-test/cluster2/config.json
+--------------------------------------------------------------------------------
+Starting job 'cluster2' with 2 DataFrames
+  Removed input: None
+    Training with DataFrame 1/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 398250
+                          | bx ARV =   0.302 | by ARV =   0.911 | bz ARV =   0.663 (train; 0.010 s)
+                          | bx ARV =   0.410 | by ARV =   0.944 | bz ARV =   0.694 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 398250
+              Epoch 1/2   | bx ARV =   0.991 | by ARV =   1.458 | bz ARV =   7.240 (train; 0.164 s)
+                          | bx ARV =   0.418 | by ARV =   0.962 | bz ARV =   0.697 (test)
+              Epoch 2/2   | bx ARV =   0.311 | by ARV =   0.927 | bz ARV =   0.658 (train; 0.190 s)
+                          | bx ARV =   0.422 | by ARV =   0.947 | bz ARV =   0.670 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 398250
+              Epoch 1/2   | bx ARV =   1.718 | by ARV =   3.852 | bz ARV =   7.524 (train; 0.143 s)
+                          | bx ARV =   1.007 | by ARV =   1.020 | bz ARV =   1.181 (test)
+              Epoch 2/2   | bx ARV =   1.002 | by ARV =   1.028 | bz ARV =   1.050 (train; 0.143 s)
+                          | bx ARV =   0.984 | by ARV =   0.976 | bz ARV =   1.182 (test)
+             OLS results
+                          | bx ARV =   0.410 | by ARV =   0.944 | bz ARV =   0.694 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.414 | by ARV =   0.930 | bz ARV =   0.689 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 398250
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.790 (train; 0.136 s)
+                          | bx ARV =   0.417 (test)
+              Epoch 2/2   | bx ARV =   0.303 (train; 0.132 s)
+                          | bx ARV =   0.410 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   2.667 (train; 0.133 s)
+                          | by ARV =   1.013 (test)
+              Epoch 2/2   | by ARV =   0.935 (train; 0.133 s)
+                          | by ARV =   0.938 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   8.560 (train; 0.177 s)
+                          | bz ARV =   0.803 (test)
+              Epoch 2/2   | bz ARV =   0.778 (train; 0.132 s)
+                          | bz ARV =   0.723 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 398250
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   2.339 (train; 0.133 s)
+                          | bx ARV =   0.962 (test)
+              Epoch 2/2   | bx ARV =   1.025 (train; 0.137 s)
+                          | bx ARV =   1.000 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   1.198 (train; 0.134 s)
+                          | by ARV =   1.058 (test)
+              Epoch 2/2   | by ARV =   1.020 (train; 0.138 s)
+                          | by ARV =   1.028 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   8.891 (train; 0.134 s)
+                          | bz ARV =   1.173 (test)
+              Epoch 2/2   | bz ARV =   1.057 (train; 0.181 s)
+                          | bz ARV =   1.174 (test)
+             OLS results
+                          | bx ARV =   0.410 | by ARV =   0.944 | bz ARV =   0.694 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.411 | by ARV =   0.964 | bz ARV =   0.692 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 398250
+                          | bx ARV =   0.302 | by ARV =   0.908 | bz ARV =   0.659 (train; 0.009 s)
+                          | bx ARV =   0.410 | by ARV =   0.943 | bz ARV =   0.693 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 398250
+              Epoch 1/2   | bx ARV =   0.705 | by ARV =   3.069 | bz ARV =   2.931 (train; 0.143 s)
+                          | bx ARV =   0.419 | by ARV =   0.948 | bz ARV =   0.685 (test)
+              Epoch 2/2   | bx ARV =   0.302 | by ARV =   0.929 | bz ARV =   0.650 (train; 0.141 s)
+                          | bx ARV =   0.414 | by ARV =   0.987 | bz ARV =   0.679 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 398250
+              Epoch 1/2   | bx ARV =   2.052 | by ARV =   1.754 | bz ARV =   2.161 (train; 0.144 s)
+                          | bx ARV =   0.997 | by ARV =   1.002 | bz ARV =   1.098 (test)
+              Epoch 2/2   | bx ARV =   1.005 | by ARV =   1.033 | bz ARV =   1.014 (train; 0.143 s)
+                          | bx ARV =   1.016 | by ARV =   1.012 | bz ARV =   1.076 (test)
+             OLS results
+                          | bx ARV =   0.410 | by ARV =   0.943 | bz ARV =   0.693 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.408 | by ARV =   0.952 | bz ARV =   0.696 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 398250
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.624 (train; 0.134 s)
+                          | bx ARV =   0.413 (test)
+              Epoch 2/2   | bx ARV =   0.304 (train; 0.133 s)
+                          | bx ARV =   0.412 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   2.236 (train; 0.181 s)
+                          | by ARV =   0.974 (test)
+              Epoch 2/2   | by ARV =   0.935 (train; 0.141 s)
+                          | by ARV =   0.961 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   6.665 (train; 0.136 s)
+                          | bz ARV =   0.745 (test)
+              Epoch 2/2   | bz ARV =   0.669 (train; 0.136 s)
+                          | bz ARV =   0.699 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 398250
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   1.333 (train; 0.135 s)
+                          | bx ARV =   1.001 (test)
+              Epoch 2/2   | bx ARV =   1.004 (train; 0.134 s)
+                          | bx ARV =   1.002 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   3.643 (train; 0.136 s)
+                          | by ARV =   1.050 (test)
+              Epoch 2/2   | by ARV =   1.054 (train; 0.177 s)
+                          | by ARV =   0.997 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   1.334 (train; 0.134 s)
+                          | bz ARV =   1.067 (test)
+              Epoch 2/2   | bz ARV =   1.018 (train; 0.132 s)
+                          | bz ARV =   1.287 (test)
+             OLS results
+                          | bx ARV =   0.410 | by ARV =   0.943 | bz ARV =   0.693 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.409 | by ARV =   0.953 | bz ARV =   0.670 (test)
+  Saved './data/results/satellite-b/parallel-test/cluster2/loo/None/loo_1.pkl'
+    Training with DataFrame 2/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 231426
+                          | bx ARV =   0.390 | by ARV =   0.910 | bz ARV =   0.675 (train; 0.007 s)
+                          | bx ARV =   0.321 | by ARV =   0.958 | bz ARV =   0.686 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 231426
+              Epoch 1/2   | bx ARV =   1.742 | by ARV =   8.643 | bz ARV =   3.226 (train; 0.084 s)
+                          | bx ARV =   0.316 | by ARV =   1.150 | bz ARV =   0.778 (test)
+              Epoch 2/2   | bx ARV =   0.393 | by ARV =   1.038 | bz ARV =   0.727 (train; 0.084 s)
+                          | bx ARV =   0.313 | by ARV =   1.058 | bz ARV =   0.718 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 231426
+              Epoch 1/2   | bx ARV =   1.753 | by ARV =   8.092 | bz ARV =   6.191 (train; 0.084 s)
+                          | bx ARV =   1.014 | by ARV =   1.144 | bz ARV =   1.341 (test)
+              Epoch 2/2   | bx ARV =   1.016 | by ARV =   1.117 | bz ARV =   1.032 (train; 0.084 s)
+                          | bx ARV =   0.953 | by ARV =   1.040 | bz ARV =   1.538 (test)
+             OLS results
+                          | bx ARV =   0.321 | by ARV =   0.958 | bz ARV =   0.686 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.310 | by ARV =   1.022 | bz ARV =   0.758 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 231426
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   9.857 (train; 0.080 s)
+                          | bx ARV =   0.507 (test)
+              Epoch 2/2   | bx ARV =   0.502 (train; 0.078 s)
+                          | bx ARV =   0.372 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   3.211 (train; 0.078 s)
+                          | by ARV =   1.129 (test)
+              Epoch 2/2   | by ARV =   0.990 (train; 0.120 s)
+                          | by ARV =   1.048 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   5.861 (train; 0.078 s)
+                          | bz ARV =   0.799 (test)
+              Epoch 2/2   | bz ARV =   0.739 (train; 0.076 s)
+                          | bz ARV =   0.744 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 231426
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   8.412 (train; 0.077 s)
+                          | bx ARV =   0.915 (test)
+              Epoch 2/2   | bx ARV =   1.107 (train; 0.075 s)
+                          | bx ARV =   0.974 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   4.177 (train; 0.084 s)
+                          | by ARV =   1.029 (test)
+              Epoch 2/2   | by ARV =   1.044 (train; 0.076 s)
+                          | by ARV =   1.004 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  15.383 (train; 0.075 s)
+                          | bz ARV =   1.269 (test)
+              Epoch 2/2   | bz ARV =   1.295 (train; 0.076 s)
+                          | bz ARV =   1.266 (test)
+             OLS results
+                          | bx ARV =   0.321 | by ARV =   0.958 | bz ARV =   0.686 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.340 | by ARV =   1.011 | bz ARV =   0.916 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 231426
+                          | bx ARV =   0.390 | by ARV =   0.909 | bz ARV =   0.666 (train; 0.007 s)
+                          | bx ARV =   0.321 | by ARV =   0.956 | bz ARV =   0.688 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 231426
+              Epoch 1/2   | bx ARV =  10.277 | by ARV =   4.679 | bz ARV =   6.689 (train; 0.081 s)
+                          | bx ARV =   0.386 | by ARV =   1.098 | bz ARV =   0.730 (test)
+              Epoch 2/2   | bx ARV =   0.458 | by ARV =   0.978 | bz ARV =   0.712 (train; 0.080 s)
+                          | bx ARV =   0.352 | by ARV =   0.999 | bz ARV =   0.754 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 231426
+              Epoch 1/2   | bx ARV =   6.642 | by ARV =  10.138 | bz ARV =   4.154 (train; 0.081 s)
+                          | bx ARV =   1.027 | by ARV =   1.086 | bz ARV =   1.321 (test)
+              Epoch 2/2   | bx ARV =   1.079 | by ARV =   1.106 | bz ARV =   1.066 (train; 0.081 s)
+                          | bx ARV =   0.993 | by ARV =   1.008 | bz ARV =   1.488 (test)
+             OLS results
+                          | bx ARV =   0.321 | by ARV =   0.956 | bz ARV =   0.688 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.353 | by ARV =   1.059 | bz ARV =   0.745 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 231426
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   4.758 (train; 0.127 s)
+                          | bx ARV =   0.417 (test)
+              Epoch 2/2   | bx ARV =   0.455 (train; 0.078 s)
+                          | bx ARV =   0.362 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   2.842 (train; 0.079 s)
+                          | by ARV =   1.073 (test)
+              Epoch 2/2   | by ARV =   0.971 (train; 0.079 s)
+                          | by ARV =   1.057 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   1.986 (train; 0.077 s)
+                          | bz ARV =   0.785 (test)
+              Epoch 2/2   | bz ARV =   0.714 (train; 0.079 s)
+                          | bz ARV =   0.689 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 231426
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   7.660 (train; 0.082 s)
+                          | bx ARV =   0.830 (test)
+              Epoch 2/2   | bx ARV =   1.144 (train; 0.077 s)
+                          | bx ARV =   0.994 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =  13.958 (train; 0.079 s)
+                          | by ARV =   1.247 (test)
+              Epoch 2/2   | by ARV =   1.185 (train; 0.075 s)
+                          | by ARV =   1.133 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   3.328 (train; 0.078 s)
+                          | bz ARV =   1.576 (test)
+              Epoch 2/2   | bz ARV =   1.035 (train; 0.078 s)
+                          | bz ARV =   1.362 (test)
+             OLS results
+                          | bx ARV =   0.321 | by ARV =   0.956 | bz ARV =   0.688 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.346 | by ARV =   1.143 | bz ARV =   0.709 (test)
+  Saved './data/results/satellite-b/parallel-test/cluster2/loo/None/loo_2.pkl'
+
+  Creating tables and plots
+    Reading: ./data/results/satellite-b/parallel-test/cluster2/config.json
+    Looking for ./data/results/satellite-b/parallel-test/cluster2/loo
+    Processing removed input dir: ./data/results/satellite-b/parallel-test/cluster2/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for ./data/results/satellite-b/parallel-test/cluster2/lno
+    Wrote ./data/results/satellite-b/parallel-test/cluster2/loo_1.md
+    Wrote ./data/results/satellite-b/parallel-test/cluster2/loo_2.md
+Finished job 'cluster2'
+
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/parallel-test
+***
+
+    Processing job: cluster1
+    Reading: data/results/satellite-b/parallel-test/cluster1/config.json
+    Looking for data/results/satellite-b/parallel-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/parallel-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/parallel-test/cluster1/lno
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_2.md
+
+    Processing job: cluster2
+    Reading: data/results/satellite-b/parallel-test/cluster2/config.json
+    Looking for data/results/satellite-b/parallel-test/cluster2/loo
+    Processing removed input dir: data/results/satellite-b/parallel-test/cluster2/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/parallel-test/cluster2/lno
+    Wrote data/results/satellite-b/parallel-test/cluster2/loo_1.md
+    Wrote data/results/satellite-b/parallel-test/cluster2/loo_2.md
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/parallel-test/cluster1
+***
+    Reading: data/results/satellite-b/parallel-test/cluster1/config.json
+    Looking for data/results/satellite-b/parallel-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/parallel-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/parallel-test/cluster1/lno
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_2.md
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/parallel-test --job cluster1
+***
+    Reading: data/results/satellite-b/parallel-test/cluster1/config.json
+    Looking for data/results/satellite-b/parallel-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/parallel-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/parallel-test/cluster1/lno
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/parallel-test/cluster1/loo_2.md
+
+***
+Running command: python run.py --config configs/satellite-b/serial-test.yaml
+***
+Reading: configs/satellite-b/serial-test.yaml
+Getting job list by calling ./configs/satellite-b/job_script.py:job_list(conf)
+Getting job list from ./configs/satellite-b/job_script.py
+  job_data(): Reading data files
+    Reading: ./data/raw/satellite-b/files/cluster1_2001_avg_300_omni.pkl
+    Reading: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
+    Dropped 1/31191 rows with NaN/NaT values in: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
+Job 1: name: cluster1, Number of segments: 2
+  Writing job configuration to: ./data/results/satellite-b/serial-test/cluster1/config.json
+--------------------------------------------------------------------------------
+Starting job 'cluster1' with 2 DataFrames
+  Removed input: None
+    Training with DataFrame 1/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 224568
+                          | bx ARV =   0.297 | by ARV =   0.916 | bz ARV =   0.681 (train; 0.007 s)
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   1.632 | by ARV =   2.998 | bz ARV =   5.358 (train; 0.747 s)
+                          | bx ARV =   0.429 | by ARV =   1.028 | bz ARV =   0.685 (test)
+              Epoch 2/2   | bx ARV =   0.305 | by ARV =   0.951 | bz ARV =   0.707 (train; 0.647 s)
+                          | bx ARV =   0.409 | by ARV =   1.007 | bz ARV =   0.675 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   2.170 | by ARV =   1.439 | bz ARV =   3.292 (train; 0.574 s)
+                          | bx ARV =   1.012 | by ARV =   1.040 | bz ARV =   1.231 (test)
+              Epoch 2/2   | bx ARV =   1.026 | by ARV =   1.020 | bz ARV =   1.023 (train; 0.567 s)
+                          | bx ARV =   1.023 | by ARV =   1.058 | bz ARV =   1.207 (test)
+             OLS results
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.413 | by ARV =   1.027 | bz ARV =   0.669 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   1.371 (train; 0.677 s)
+                          | bx ARV =   0.431 (test)
+              Epoch 2/2   | bx ARV =   0.302 (train; 0.630 s)
+                          | bx ARV =   0.409 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   7.128 (train; 0.637 s)
+                          | by ARV =   1.411 (test)
+              Epoch 2/2   | by ARV =   1.203 (train; 0.596 s)
+                          | by ARV =   1.202 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  11.002 (train; 0.566 s)
+                          | bz ARV =   0.912 (test)
+              Epoch 2/2   | bz ARV =   0.857 (train; 0.548 s)
+                          | bz ARV =   0.765 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   3.377 (train; 0.574 s)
+                          | bx ARV =   0.934 (test)
+              Epoch 2/2   | bx ARV =   1.080 (train; 0.553 s)
+                          | bx ARV =   0.989 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   6.321 (train; 0.590 s)
+                          | by ARV =   1.271 (test)
+              Epoch 2/2   | by ARV =   1.129 (train; 0.567 s)
+                          | by ARV =   1.056 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   8.290 (train; 0.594 s)
+                          | bz ARV =   1.264 (test)
+              Epoch 2/2   | bz ARV =   1.274 (train; 0.545 s)
+                          | bz ARV =   1.178 (test)
+             OLS results
+                          | bx ARV =   0.405 | by ARV =   0.990 | bz ARV =   0.682 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.432 | by ARV =   1.084 | bz ARV =   0.756 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 224568
+                          | bx ARV =   0.297 | by ARV =   0.917 | bz ARV =   0.678 (train; 0.006 s)
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   2.678 | by ARV =   9.228 | bz ARV =   6.442 (train; 0.611 s)
+                          | bx ARV =   0.440 | by ARV =   1.263 | bz ARV =   0.690 (test)
+              Epoch 2/2   | bx ARV =   0.314 | by ARV =   1.128 | bz ARV =   0.672 (train; 0.570 s)
+                          | bx ARV =   0.417 | by ARV =   1.076 | bz ARV =   0.682 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 224568
+              Epoch 1/2   | bx ARV =   1.897 | by ARV =  11.972 | bz ARV =   4.852 (train; 0.572 s)
+                          | bx ARV =   0.996 | by ARV =   1.057 | bz ARV =   1.321 (test)
+              Epoch 2/2   | bx ARV =   1.003 | by ARV =   1.078 | bz ARV =   1.048 (train; 0.564 s)
+                          | bx ARV =   1.023 | by ARV =   1.013 | bz ARV =   1.064 (test)
+             OLS results
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.405 | by ARV =   1.027 | bz ARV =   0.713 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.543 (train; 0.559 s)
+                          | bx ARV =   0.412 (test)
+              Epoch 2/2   | bx ARV =   0.301 (train; 0.561 s)
+                          | bx ARV =   0.411 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   1.180 (train; 0.555 s)
+                          | by ARV =   1.013 (test)
+              Epoch 2/2   | by ARV =   0.951 (train; 0.564 s)
+                          | by ARV =   1.071 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   6.574 (train; 0.642 s)
+                          | bz ARV =   0.895 (test)
+              Epoch 2/2   | bz ARV =   0.780 (train; 0.636 s)
+                          | bz ARV =   0.743 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 224568
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   2.906 (train; 0.680 s)
+                          | bx ARV =   1.018 (test)
+              Epoch 2/2   | bx ARV =   1.056 (train; 0.571 s)
+                          | bx ARV =   1.003 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   2.261 (train; 0.550 s)
+                          | by ARV =   0.998 (test)
+              Epoch 2/2   | by ARV =   1.023 (train; 0.610 s)
+                          | by ARV =   1.001 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   2.036 (train; 0.626 s)
+                          | bz ARV =   1.139 (test)
+              Epoch 2/2   | bz ARV =   1.016 (train; 0.635 s)
+                          | bz ARV =   1.109 (test)
+             OLS results
+                          | bx ARV =   0.407 | by ARV =   0.990 | bz ARV =   0.685 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.425 | by ARV =   0.986 | bz ARV =   0.675 (test)
+  Saved './data/results/satellite-b/serial-test/cluster1/loo/None/loo_1.pkl'
+    Training with DataFrame 2/2 excluded
+        Bootstrap repetition 1/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 229473
+                          | bx ARV =   0.389 | by ARV =   0.897 | bz ARV =   0.663 (train; 0.006 s)
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   3.660 | by ARV =   3.303 | bz ARV =   7.900 (train; 0.686 s)
+                          | bx ARV =   0.431 | by ARV =   1.135 | bz ARV =   0.987 (test)
+              Epoch 2/2   | bx ARV =   0.461 | by ARV =   0.962 | bz ARV =   0.838 (train; 0.614 s)
+                          | bx ARV =   0.359 | by ARV =   1.048 | bz ARV =   0.851 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   1.340 | by ARV =  16.575 | bz ARV =   4.883 (train; 0.585 s)
+                          | bx ARV =   0.988 | by ARV =   1.069 | bz ARV =   1.277 (test)
+              Epoch 2/2   | bx ARV =   1.025 | by ARV =   1.133 | bz ARV =   1.063 (train; 0.583 s)
+                          | bx ARV =   1.010 | by ARV =   1.013 | bz ARV =   1.157 (test)
+             OLS results
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.309 | by ARV =   1.110 | bz ARV =   0.728 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   8.247 (train; 0.579 s)
+                          | bx ARV =   0.421 (test)
+              Epoch 2/2   | bx ARV =   0.473 (train; 0.568 s)
+                          | bx ARV =   0.354 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   2.235 (train; 0.608 s)
+                          | by ARV =   1.206 (test)
+              Epoch 2/2   | by ARV =   0.956 (train; 0.685 s)
+                          | by ARV =   1.235 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  13.844 (train; 0.648 s)
+                          | bz ARV =   1.206 (test)
+              Epoch 2/2   | bz ARV =   0.849 (train; 0.583 s)
+                          | bz ARV =   0.812 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   3.431 (train; 0.642 s)
+                          | bx ARV =   0.991 (test)
+              Epoch 2/2   | bx ARV =   1.065 (train; 0.583 s)
+                          | bx ARV =   0.995 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =  13.523 (train; 0.562 s)
+                          | by ARV =   1.171 (test)
+              Epoch 2/2   | by ARV =   1.276 (train; 0.631 s)
+                          | by ARV =   1.138 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   2.728 (train; 0.649 s)
+                          | bz ARV =   1.139 (test)
+              Epoch 2/2   | bz ARV =   1.060 (train; 0.653 s)
+                          | bz ARV =   1.284 (test)
+             OLS results
+                          | bx ARV =   0.309 | by ARV =   1.008 | bz ARV =   0.701 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.321 | by ARV =   1.233 | bz ARV =   0.739 (test)
+        Bootstrap repetition 2/2
+          Performing 3-output/9-input linear regression
+            Number of fitting parameters: 10
+            Number of training values: 229473
+                          | bx ARV =   0.397 | by ARV =   0.906 | bz ARV =   0.656 (train; 0.006 s)
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+          Training 3-output neural network with all inputs
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   3.804 | by ARV =   6.710 | bz ARV =   9.474 (train; 0.656 s)
+                          | bx ARV =   0.354 | by ARV =   1.067 | bz ARV =   0.770 (test)
+              Epoch 2/2   | bx ARV =   0.428 | by ARV =   0.956 | bz ARV =   0.708 (train; 0.572 s)
+                          | bx ARV =   0.338 | by ARV =   1.019 | bz ARV =   0.720 (test)
+          Training 3-output neural network with all inputs on ols residuals
+            Number of fitting parameters: 419
+            Number of training values: 229473
+              Epoch 1/2   | bx ARV =   1.988 | by ARV =   4.126 | bz ARV =  14.831 (train; 0.585 s)
+                          | bx ARV =   1.020 | by ARV =   1.144 | bz ARV =   1.257 (test)
+              Epoch 2/2   | bx ARV =   1.035 | by ARV =   1.068 | bz ARV =   1.049 (train; 0.644 s)
+                          | bx ARV =   1.034 | by ARV =   1.051 | bz ARV =   1.251 (test)
+             OLS results
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.323 | by ARV =   1.044 | bz ARV =   0.727 (test)
+          Training 3 single-output neural networks with all inputs
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   0.952 (train; 0.597 s)
+                          | bx ARV =   0.307 (test)
+              Epoch 2/2   | bx ARV =   0.403 (train; 0.567 s)
+                          | bx ARV =   0.304 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   1.592 (train; 0.594 s)
+                          | by ARV =   1.065 (test)
+              Epoch 2/2   | by ARV =   0.934 (train; 0.628 s)
+                          | by ARV =   1.011 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =   8.047 (train; 0.648 s)
+                          | bz ARV =   1.110 (test)
+              Epoch 2/2   | bz ARV =   0.830 (train; 0.635 s)
+                          | bz ARV =   0.774 (test)
+          Training 3 single-output neural networks with all inputs on ols residuals
+            Number of fitting parameters per network: 144 (total: 432)
+            Number of training values: 229473
+            Training single-output neural network for output = 'bx'
+              Epoch 1/2   | bx ARV =   2.191 (train; 0.643 s)
+                          | bx ARV =   0.993 (test)
+              Epoch 2/2   | bx ARV =   1.061 (train; 0.661 s)
+                          | bx ARV =   1.022 (test)
+            Training single-output neural network for output = 'by'
+              Epoch 1/2   | by ARV =   3.873 (train; 0.632 s)
+                          | by ARV =   1.041 (test)
+              Epoch 2/2   | by ARV =   1.088 (train; 0.574 s)
+                          | by ARV =   1.018 (test)
+            Training single-output neural network for output = 'bz'
+              Epoch 1/2   | bz ARV =  12.161 (train; 0.585 s)
+                          | bz ARV =   1.290 (test)
+              Epoch 2/2   | bz ARV =   1.212 (train; 0.646 s)
+                          | bz ARV =   1.151 (test)
+             OLS results
+                          | bx ARV =   0.310 | by ARV =   0.997 | bz ARV =   0.704 (test)
+             NN results when residuals are added back
+                          | bx ARV =   0.324 | by ARV =   1.080 | bz ARV =   0.849 (test)
+  Saved './data/results/satellite-b/serial-test/cluster1/loo/None/loo_2.pkl'
+
+  Creating tables and plots
+    Reading: ./data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for ./data/results/satellite-b/serial-test/cluster1/loo
+    Processing removed input dir: ./data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for ./data/results/satellite-b/serial-test/cluster1/lno
+    Wrote ./data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote ./data/results/satellite-b/serial-test/cluster1/loo_2.md
+Finished job 'cluster1'
+
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/serial-test
+***
+
+    Processing job: cluster1
+    Reading: data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for data/results/satellite-b/serial-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/serial-test/cluster1/lno
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/serial-test/cluster1
+***
+    Reading: data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for data/results/satellite-b/serial-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/serial-test/cluster1/lno
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
+
+***
+Running command: python run.py --postprocess data/results/satellite-b/serial-test --job cluster1
+***
+    Reading: data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for data/results/satellite-b/serial-test/cluster1/loo
+    Processing removed input dir: data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: loo_1_rep_0_ols_timeseries.png
+        Wrote: loo_1_rep_0_ols_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_1_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_1_rep_0_nn_miso_resid_epoch_metrics.png
+      Reading: loo_2.pkl
+        Wrote: loo_2_rep_0_ols_timeseries.png
+        Wrote: loo_2_rep_0_ols_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_mimo_resid_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_epoch_metrics.png
+        Wrote: loo_2_rep_0_nn_miso_resid_timeseries.png
+        Wrote: loo_2_rep_0_nn_miso_resid_epoch_metrics.png
+    Looking for data/results/satellite-b/serial-test/cluster1/lno
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md

@@ -34,7 +34,10 @@ pip install -e .
 
 * `run` - A list of jobs. The output results are stored in a `run_dir` given in this file. The user provides a function named `job_list` that is passed the configuration file specified as the command line value for `--config`.
 * `job` - One or more `DataFrame`s and configuration. The configuration for each job is typically based on modifying the `run` configuration.
-* `segment` - Each job contains $n_s$ `DataFrame`s. Each `DataFrame` in a job is called a segment. When $n_s>1$, training and testing is done using all unique sets of $n_s-1$ `DataFrame`s and validation is done on the remaining `DataFrame`. (In the code this is referred to as leave-one-out).
+* `segment` - Each job contains $n_s$ `DataFrame`s. Each `DataFrame` in a job is called a segment.
+  * When $n_s=1$, training and testing is performed using all segments. (In this code this is referred to as leave-none-out, abbreviated as `lno`.)
+  * When $n_s>1$, training and testing is done using all unique sets of $n_s-1$ segments and validation is done on the remaining segments. (In the code this is referred to as leave-one-out, abbreviated as `loo`.)
+* `repetition` - Training can be repeated with a different random sample. Each case is a repetition. This is used determine the uncertainty due to the arbitrary training data choice on the final results.
 
 `timeseries-predict/config/satellite-b` has a collection of run configurations (YAML files).
 
