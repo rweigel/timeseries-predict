@@ -125,7 +125,6 @@ def _prep_config(conf):
 def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
 
   import time
-  import pandas
   import numpy as np
   from .arv import arv
   from .print_metrics import print_metrics
@@ -174,10 +173,22 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
 
     arvs = arv(test_df[outputs], ols_test_preds)
     print(f"{indent} {14 * ' '}", end='')
+
+    # ols_test_string is used later when printing results for residual models
     ols_test_string = print_metrics(outputs, arvs, type="test")
 
     results['ols']['predicted'][outputs] = ols_test_preds
-
+    if False:
+      # New results schema
+      results['inputs'] = inputs
+      results['outputs'] = outputs
+      results['indices'] = {
+        'train': train_indices,
+        'validation': validation_indices,
+        'test': test_indices
+      }
+      results['ols']['predicted']['test'] = ols_test_preds
+      results['ols']['predicted']['train'] = ols_train_preds
 
   from .nn import mimo, miso
 

@@ -69,5 +69,5 @@ def plot(reps, plot_dir, file_base):
           axs[i].set_xlabel('Epoch')
 
       plt.tight_layout()
-      savefig(plt, f"{model}-rep-epoch-metrics-{file_base}-{rep_num}")
+      savefig(plt, f"{model}-epoch-metrics-{file_base}-rep_{rep_num}")
 

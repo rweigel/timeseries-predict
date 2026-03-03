@@ -4,20 +4,19 @@ run_desc: Use parallel_jobs = false and do a single job for cluster1
 data:
   satellites: # null => use all available satellites
     - cluster1
-  n_years_max: 2
-  loo: false
+  n_years_max: 3
+  loo: true
 parallel_jobs: false
 device: mps
-num_epochs: 2
-num_boot_reps: 2
-# removed_inputs: [null, r]
+num_epochs: 1
+num_boot_reps: 1
 removed_inputs:
   - null
 
 models:
   - ols
-  - nn_mimo
-  - nn_mimo_resid
-  - nn_miso
-  - nn_miso_resid
+#  - nn_mimo
+#  - nn_mimo_resid
+#  - nn_miso
+#  - nn_miso_resid
 

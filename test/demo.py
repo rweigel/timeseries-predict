@@ -23,17 +23,18 @@ def _print(msg, log):
   log.write(msg)
   log.flush()
 
-log_path = os.path.join(os.path.dirname(__file__), 'test.log')
+log_file = os.path.join(os.path.dirname(__file__), 'test.log')
 kwargs = {
   "stdout": subprocess.PIPE,
   "stderr": subprocess.STDOUT,
   "text": True,
   "bufsize": 1
 }
-with open('test.log', 'w') as log:
+with open(log_file, 'w') as log:
   for args in args_list:
     cmd = base_cmd + args
-    _print(f"\n***\nRunning command: {' '.join(cmd)}\n***\n\n", log)
+    msg = f"\n***\nRunning command: {' '.join(cmd)}\n***\n\n"
+    _print(msg, log)
     with subprocess.Popen(cmd, **kwargs) as proc:
       for line in proc.stdout:
         _print(line, log)

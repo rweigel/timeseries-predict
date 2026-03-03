@@ -1,6 +1,6 @@
 base_config: ./configs/satellite-b/base.yaml
 run_dir: ./data/results/satellite-b/serial
-run_desc: Use parallel_jobs = false and do a single job for cluster1
+run_desc: Serial run for cluster1 only.
 data:
   satellites: cluster1
   n_years_max: null
