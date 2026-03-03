@@ -24,7 +24,7 @@ def plot(reps, plot_dir, file_base):
   # include error bars to show variability across bootstrap repetitions.
 
   kwargs_actual = {'linestyle': '-', 'color': 'black', 'label': 'Actual'}
-  kwargs_model = {'linestyle': '-', 'color': 'red', 'label': None}
+  kwargs_model = {'linestyle': '-', 'color': 'red', 'label': 'Predicted'}
 
   actual = reps[rep_num]['actual']
   outputs = actual.columns[1:] # Exclude timestamp
@@ -34,18 +34,19 @@ def plot(reps, plot_dir, file_base):
   for model in models:
     axs = axes()
     predicted = reps[rep_num][model]['predicted']
+    time_col = 'timestamp' if 'timestamp' in predicted.columns else 'datetime'
     for i, output in enumerate(outputs):
-      kwargs_model['label'] = model
-      axs[i].plot(actual['datetime'], actual[output], **kwargs_actual)
-      axs[i].plot(predicted['datetime'], predicted[output], **kwargs_model)
+      axs[i].plot(actual[time_col], actual[output], **kwargs_actual)
+      axs[i].plot(predicted[time_col], predicted[output], **kwargs_model)
       if i == 0:
+        axs[i].set_title(model)
         axs[i].legend()
       axs[i].set_ylabel(output)
       axs[i].grid(True)
       #datetick()
 
     plt.tight_layout()
-    savefig(plt, f"{file_base}_rep_{rep_num}_{model}_timeseries")
+    savefig(plt, f"{model}-timeseries-{file_base}-rep_{rep_num}")
 
     if 'epoch_metrics' in reps[rep_num][model]:
       train = numpy.array(reps[rep_num][model]['epoch_metrics']['train'])
@@ -59,6 +60,7 @@ def plot(reps, plot_dir, file_base):
         axs[i].xaxis.set_major_locator(plt.MaxNLocator(integer=True))
 
         if i == 0:
+          axs[i].set_title(model)
           axs[i].legend(['Train', 'Test'])
 
         axs[i].grid(True)
@@ -66,5 +68,6 @@ def plot(reps, plot_dir, file_base):
         if i == len(outputs) - 1:
           axs[i].set_xlabel('Epoch')
 
-    plt.tight_layout()
-    savefig(plt, f"{file_base}_rep_{rep_num}_{model}_epoch_metrics")
+      plt.tight_layout()
+      savefig(plt, f"{model}-rep-epoch-metrics-{file_base}-{rep_num}")
+

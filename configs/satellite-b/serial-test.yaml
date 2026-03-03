@@ -4,7 +4,8 @@ run_desc: Use parallel_jobs = false and do a single job for cluster1
 data:
   satellites: # null => use all available satellites
     - cluster1
-  n_df: 2 # Number of segments per job (each segment spans one year; null => use all available data)
+  n_years_max: 2
+  loo: false
 parallel_jobs: false
 device: mps
 num_epochs: 2

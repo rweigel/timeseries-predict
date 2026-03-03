@@ -5,7 +5,8 @@ data:
   satellites:
     - cluster1
     - cluster2
-  n_df: 2 # Number of segments per job (each segment spans one year)
+  n_years_max: null
+  loo: false
 parallel_jobs: true
 num_epochs: 2
 num_boot_reps: 2

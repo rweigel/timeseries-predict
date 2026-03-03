@@ -28,6 +28,13 @@ def table(stats, directory, **kwargs):
     # Combine all the summary data into one table
     table = pd.DataFrame(table, columns=columns)
 
-    table_file = os.path.join(directory, f'loo_{loo_idx+1}.md')
+    if n_loo == 1:
+      file_name = 'lno.md'
+    else:
+      idx_width = len(str(n_loo))
+      idx_zero_padded = str(loo_idx + 1).zfill(idx_width)
+      file_name = f'loo_{idx_zero_padded}.md'
+
+    table_file = os.path.join(directory, file_name)
     table.to_markdown(table_file, index=False, floatfmt=".3f")
     print(f"    Wrote {table_file}")

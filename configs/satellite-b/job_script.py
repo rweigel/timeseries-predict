@@ -8,17 +8,20 @@ def job_list(conf):
   specified in the job configuration.
   """
   jobs = []
+
   if conf['data']['satellites'] is None:
     conf['data']['satellites'] = satellite_list(conf['data']['data_directory'])
     print(f"  Found satellites: {conf['data']['satellites']}")
+
   if isinstance(conf['data']['satellites'], str):
     conf['data']['satellites'] = [conf['data']['satellites']]
+
   for satellite in conf['data']['satellites']:
     job_conf = conf.copy()
     job_conf['job'] = satellite
     job_conf['data']['file_pattern'] = f"{satellite}*.pkl"
-    job_df = job_data(**job_conf['data'])
-    jobs.append((job_df, job_conf))
+    job_dfs = job_data(**job_conf['data'])
+    jobs.append((job_dfs, job_conf))
 
   return jobs
 
@@ -91,7 +94,7 @@ def job_data(**config):
 
     ymdhms = df[['year', 'month', 'day', 'hour', 'minute', 'second']]
     df['datetime'] = pd.to_datetime(ymdhms)
-    df = df.drop(columns=['year', 'month', 'day', 'hour', 'minute', 'second'])
+    df = df.drop(columns=['year', 'doy', 'month', 'day', 'hour', 'minute', 'second'])
     n_before = len(df)
     df = df.dropna()
     n_dropped = n_before - len(df)
@@ -101,8 +104,12 @@ def job_data(**config):
     rename_columns(df)
     dataframes.append(df)
 
-    if config['n_df'] is not None and n_r == config['n_df']:
-      # Break if n_df (number of DataFrames to return) is specified
+    if config['n_years_max'] is not None and n_r == config['n_years_max']:
+      # Break if n_years_max (equal to number of DataFrames to return)
+      # is specified b/c one file per year.
       break
+
+  if not config['loo']:
+    dataframes = [pd.concat(dataframes, ignore_index=True)]
 
   return dataframes

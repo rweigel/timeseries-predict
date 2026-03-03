@@ -14,9 +14,11 @@ def train_and_test(job_dfs, conf):
   if len(job_dfs) == 0:
     raise ValueError(f"len(job_dfs) = 0 for job '{conf['job']}'.")
 
+  num_dfs = len(job_dfs)
+
   for removed_input in conf['removed_inputs']:
     print(f"  Removed input: {removed_input}")
-    for i in range(len(job_dfs)):
+    for i in range(num_dfs): # Loop over segments
       if len(job_dfs) > 1:
         # For leave-one-out, concatenate training job_dfs excluding the ith
         print(f"    Training with DataFrame {i + 1}/{len(job_dfs)} excluded")
@@ -35,15 +37,16 @@ def train_and_test(job_dfs, conf):
       for rep in range(conf['num_boot_reps']):
         print(f"        Bootstrap repetition {rep + 1}/{conf['num_boot_reps']}")
         train_data_rep = train_test_data.sample(frac=conf['train_fraction'], random_state=rep)
-        # TODO: Pass test_data_rep
-        #test_data_rep = train_data_rep.drop(train_test_data.index)
-        result = _train_and_test_single_rep(train_data_rep, validation_data, removed_input=removed_input, **conf)
+        test_data_rep = train_test_data.drop(train_data_rep.index)
+        result = _train_and_test_single_rep(train_data_rep, test_data_rep, removed_input=removed_input, **conf)
         results.append(result)
 
       if len(job_dfs) == 1:
         _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, None)
       else:
-        _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, i+1)
+        idx_width = len(str(num_dfs))
+        idx_zero_padded = str(i + 1).zfill(idx_width)
+        _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, idx_zero_padded)
 
   print("\n  Creating tables and plots")
 
@@ -154,7 +157,10 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     # Ordinary linear regression
     print(f"{indent}Performing {len(outputs)}-output/{len(inputs)}-input linear regression")
     print(f"{indent}  Number of fitting parameters: {len(inputs) + 1}")
-    print(f"{indent}  Number of training values: {np.prod(train_df[inputs].shape)}")
+    n_train = np.prod(train_df[inputs].shape[0])
+    n_test = np.prod(test_df[inputs].shape[0])
+    print(f"{indent}  Number of training values: {n_train}")
+    print(f"{indent}  Number of testing values:  {n_test} (ratio: {n_test/(n_train+n_test):.2f})")
 
     start = time.time()
     ols_model = LinearRegression()
@@ -261,15 +267,20 @@ def _save_results(results_dict, job, removed_input, run_dir, method, loo_idx):
   import os
   import pandas
 
-  if removed_input is None:
-    # TODO: Address potential for a name conflict if a column name is 'None'
-    removed_input = 'None'
+  if loo_idx is None:
+    # lno mode
+    file_name = f"{method}.pkl"
+    sub_dir = '' # Don't create subdir
+  else:
+    file_name = f"{method}_{loo_idx}.pkl"
+    sub_dir = removed_input
+    if removed_input is None:
+      # TODO: Address potential for a name conflict if a column name is 'None'
+      sub_dir = 'None'
 
-  subdir = os.path.join(run_dir, job, method, removed_input)
+  sub_dir = os.path.join(run_dir, job, method, sub_dir)
+  os.makedirs(sub_dir, exist_ok=True)
+  file_name = os.path.join(sub_dir, file_name)
 
-  os.makedirs(subdir, exist_ok=True)
-  if loo_idx is not None:
-    method = f"{method}_{loo_idx}"
-  pkl_filepath = os.path.join(subdir, f"{method}.pkl")
-  pandas.to_pickle(results_dict, pkl_filepath)
-  print(f"  Saved '{pkl_filepath}'")
+  pandas.to_pickle(results_dict, file_name)
+  print(f"  Saved '{file_name}'")

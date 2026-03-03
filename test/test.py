@@ -20,8 +20,8 @@ args_list = [
   ["--postprocess", "data/results/satellite-b/serial-test", "--job", "cluster1"]
 ]
 
-def _print(msg, log, end=''):
-  print(msg)
+def _print(msg, log):
+  print(msg, end='')
   log.write(msg)
   log.flush()
 
@@ -35,7 +35,7 @@ kwargs = {
 with open('test.log', 'w') as log:
   for args in args_list:
     cmd = base_cmd + args
-    _print(f"\n***\nRunning command: {' '.join(cmd)}\n***\n", log, end='\n')
+    _print(f"\n***\nRunning command: {' '.join(cmd)}\n***\n\n", log)
     with subprocess.Popen(cmd, **kwargs) as proc:
       for line in proc.stdout:
         _print(line, log)

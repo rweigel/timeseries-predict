@@ -53,26 +53,30 @@ def summary(run_dir, job=None):
       continue
 
     for removed_input in kwargs['removed_inputs']:
-      if removed_input is None:
-        removed_input = 'None'
+      if method == 'lno':
+        sub_dir = ''
+      else:
+        if removed_input is None:
+          removed_input = 'None'
+          sub_dir = removed_input
 
       method_dir = os.path.join(job_dir, method)
 
-      removed_input_dir = os.path.join(method_dir, removed_input)
+      sub_dir = os.path.join(method_dir, sub_dir)
 
-      if not os.path.isdir(removed_input_dir):
-        print(f"    Removed input dir '{removed_input_dir}' not found. Skipping.")
+      if not os.path.isdir(sub_dir):
+        print(f"    Dir '{sub_dir}' not found. Skipping.")
         continue
 
-      print(f"    Processing removed input dir: {removed_input_dir}")
+      print(f"    Processing dir: {sub_dir}")
 
       _stats[removed_input] = []
 
-      for file_name in sorted(os.listdir(removed_input_dir)):
+      for file_name in sorted(os.listdir(sub_dir)):
         if not file_name.endswith('.pkl'):
           continue
 
-        file_path = os.path.join(removed_input_dir, file_name)
+        file_path = os.path.join(sub_dir, file_name)
 
         """pkl file contains a list of bootstrap results, each in
           the form of a dict
@@ -95,7 +99,7 @@ def summary(run_dir, job=None):
 
         _stats[removed_input].append(stat)
 
-        plot_dir = os.path.join(removed_input_dir, 'figures')
+        plot_dir = os.path.join(sub_dir, 'figures')
         file_base = file_name.replace('.pkl', '')
         plot(reps, plot_dir, file_base)
 

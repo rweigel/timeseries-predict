@@ -21,7 +21,10 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   # Multi-output neural network
   model = _NeuralNetwork(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size']).to(device)
   print(f"{indent}  Number of fitting parameters: {_num_params(model)}")
-  print(f"{indent}  Number of training values: {np.prod(train_inputs.shape)}")
+  n_train = np.prod(train_inputs.shape[0])
+  n_test = np.prod(test_inputs.shape[0])
+  print(f"{indent}  Number of training values: {n_train}")
+  print(f"{indent}  Number of testing values:  {n_test} (ratio: {n_test/(n_train+n_test):.2f})")
   optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
 
   for epoch in range(kwargs['num_epochs']):
@@ -90,9 +93,10 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
     model = _NeuralNetwork(train_inputs.shape[1], 1, hidden_size=miso_hidden_size).to(device)
     optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
     if i == 0:
-      n_fit = f"{_num_params(model)} (total: {_num_params(model) * len(output_names)})"
-      print(f"{indent}  Number of fitting parameters per network: {n_fit}")
-      print(f"{indent}  Number of training values: {np.prod(train_inputs.shape)}")
+      n_train = np.prod(train_inputs.shape[0])
+      n_test = np.prod(test_inputs.shape[0])
+      print(f"{indent}  Number of training values: {n_train}")
+      print(f"{indent}  Number of testing values:  {n_test} (ratio: {n_test/(n_train+n_test):.2f})")
 
     print(f"{indent}  Training single-output neural network for output = '{output_names[i]}'")
     train_target = train_targets[:, i:i+1]
