@@ -6,30 +6,13 @@ def cli():
   import argparse
 
   description = 'Run time series prediction jobs.'
-  args = {
-    'config': {
-      'type': str,
-      'help': 'Path to the YAML run configuration file.'
-    },
-    'postprocess': {
-      'type': str,
-      'default': None,
-      'help': 'Postprocess results starting at this results directory.'
-    },
-    'job': {
-      'type': str,
-      'default': None,
-      'help': 'Name of the job to run or postprocess. Default is to run or postprocess all jobs.'
-    }
-  }
+  parser = argparse.ArgumentParser(description=description, usage='run.py DIR | CONFIG_FILE')
+  parser.add_argument('target', help='Results [sub]directory to postprocess, or YAML config file to run.')
 
-  parser = argparse.ArgumentParser(description=description)
-  group = parser.add_mutually_exclusive_group(required=True)
-  group.add_argument('--config', **args['config'])
-  group.add_argument('--postprocess', **args['postprocess'])
-  parser.add_argument('--job', **args['job'])
-  args = parser.parse_args()
-  return vars(args)
+  target = parser.parse_args().target
+
+  return target
+
 
 def read_conf(conf_file):
   import yaml

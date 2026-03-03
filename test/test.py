@@ -4,20 +4,18 @@ import subprocess
 base_cmd = ["python", "run.py"]
 
 args_list = [
-  ["--config", "configs/demo/demo-0.yaml"],
-  ["--postprocess", "data/results/demo/demo-0"],
-  ["--postprocess", "data/results/demo/demo-0/noise-multiplier-0"],
-  ["--postprocess", "data/results/demo/demo-0", "--job", "noise-multiplier-0"],
+  ["configs/demo/demo-0.yaml"],
+  ["data/results/demo/demo-0"],
+  ["data/results/demo/demo-0/noise-multiplier-0"],
 
-  ["--config", "configs/satellite-b/parallel-test.yaml"],
-  ["--postprocess", "data/results/satellite-b/parallel-test"],
-  ["--postprocess", "data/results/satellite-b/parallel-test/cluster1"],
-  ["--postprocess", "data/results/satellite-b/parallel-test", "--job", "cluster1"],
+  ["configs/satellite-b/parallel-test.yaml"],
+  ["data/results/satellite-b/parallel-test"],
+  ["data/results/satellite-b/parallel-test/cluster1"],
 
-  ["--config", "configs/satellite-b/serial-test.yaml"],
-  ["--postprocess", "data/results/satellite-b/serial-test"],
-  ["--postprocess", "data/results/satellite-b/serial-test/cluster1"],
-  ["--postprocess", "data/results/satellite-b/serial-test", "--job", "cluster1"]
+  ["configs/satellite-b/serial-test.yaml"],
+  ["data/results/satellite-b/serial-test"],
+  ["data/results/satellite-b/serial-test/cluster1"],
+  ["data/results/satellite-b/serial-test"]
 ]
 
 def _print(msg, log):

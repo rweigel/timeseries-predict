@@ -60,7 +60,7 @@ def _prep_config(conf):
   import copy
   import json
 
-  conf = copy.deepcopy(conf)  # avoid mutating the caller's dict
+  conf = copy.deepcopy(conf)
 
   known_models = ['ols', 'nn_miso', 'nn_mimo', 'nn_miso_resid', 'nn_mimo_resid']
 

@@ -1,16 +1,16 @@
+import os
+import sys
 import timeseries_predict as tsp
 
-args = tsp.cli()
+arg = tsp.cli()
 
-if args['postprocess'] is not None:
-  import sys
+if os.path.isdir(arg):
   # Update summary, plot, stats, and table without running the rest of the code.
-  tsp.summary(args['postprocess'], job=args['job'])
+  tsp.summary(arg)
   sys.exit(0)
 
-print(f"Reading: {args['config']}")
-conf = tsp.read_conf(args['config'])
-
+print(f"Reading: {arg}")
+conf = tsp.read_conf(arg)
 
 if __name__ == "__main__":
 
