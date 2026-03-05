@@ -1,4 +1,4 @@
-# All paths are relative to main.py.
+# All paths are relative to run.py.
 
 # User-defined script for loading data. Must contain a function job_list(config)
 job_script: ./configs/satellite-b/job_script.py
@@ -6,34 +6,17 @@ job_script: ./configs/satellite-b/job_script.py
 data:
   # Data node is configuration passed to user-defined job_list() function
   # that is in job_script.
-  n_df: null # Number of DataFrames for return. None => all DataFrames.
   data_directory: ./data/raw/satellite-b/files
-  satellites:
-    - cluster1
-    - cluster2
-    - cluster3
-    - cluster4
-    - geotail
-    - goes8
-    - goes9
-    - goes10
-    - goes12
-    - imp8
-    - polar
-    - rbspa
-    - rbspa
-    - themisa
-    - themisb
-    - themisc
-    - themisd
-    - themise
+  n_years_max: null # Number of DataFrames for return. None => all DataFrames.
+  satellites: null
+  loo: false
 
 # Job is set to the satellite name in job_script.py
 job: null
 
-parallel_jobs: true
+parallel_jobs: false
 
-run_dir: ./data/results/satellite-b/results-4
+base_dir: ./data/results/satellite-b
 run_desc: Same as results-1 but using new code structure and computing _resid models
 
 # device sets training parallelization using one of
@@ -43,8 +26,8 @@ run_desc: Same as results-1 but using new code structure and computing _resid mo
 #   mps (OS-X)
 device: null
 
-# True => [None, **outputs]; null or no attribute => Only use all inputs
-removed_inputs: true
+num_epochs: 1
+num_boot_reps: 1
 
 models:
   - ols
@@ -55,6 +38,10 @@ models:
 
 inputs: [r, theta, phi, imfby, imfbz, vsw, nsw, ey, ey_avg]
 outputs: [bx, by, bz]
+
+# True => [None, **outputs]; null or no attribute => Only use all inputs
+removed_inputs:
+  - null
 
 dtype: float32
 

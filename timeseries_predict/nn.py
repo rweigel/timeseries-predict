@@ -1,5 +1,7 @@
 import torch
 
+# In principle, setting to False should speed up computation when GPU is used.
+# However, this does not seem to be the case for the tests run.
 compute_test_arvs = True
 
 def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, indent, kwargs):
@@ -40,15 +42,15 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
                                         kwargs['batch_size'])
     train_arvs.append(train_arv)
 
+    print_metrics(output_names, train_arv, type="train", dt=time.time() - start)
+
     if compute_test_arvs:
       model.eval()
       with torch.no_grad():
         test_arv = arv(test_targets.detach().cpu().numpy(), model(test_inputs).cpu().numpy())
       model.train()
       test_arvs.append(test_arv)
-
-    print_metrics(output_names, train_arv, type="train", dt=time.time() - start)
-    print_metrics(output_names, test_arv, type="test", indent=len(epoch_str))
+      print_metrics(output_names, test_arv, type="test", indent=len(epoch_str))
 
   model.eval()
   with torch.no_grad():
@@ -108,15 +110,14 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
       train_arv, train_rmse = _train_single_epoch(model, optimizer, train_inputs, train_target, device, kwargs['batch_size'])
       train_arvs.append(train_arv)
 
+      print_metrics(output_names[i], train_arv, type="train", dt=time.time() - start)
       if compute_test_arvs:
         model.eval()
         with torch.no_grad():
           test_arv = arv(test_targets[:, i:i+1].detach().cpu().numpy(), model(test_inputs).cpu().numpy())
         model.train()
         test_arvs.append(test_arv)
-
-      print_metrics(output_names[i], train_arv, type="train", dt=time.time() - start)
-      print_metrics(output_names[i], test_arv, type="test", indent=len(epoch_str))
+        print_metrics(output_names[i], test_arv, type="test", indent=len(epoch_str))
 
     model.eval()
     with torch.no_grad():

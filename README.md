@@ -14,7 +14,7 @@ Options include
 * parallelization of neural network training;
 * options for splitting time series into training, testing, and validation intervals  continuous chunks;
 * extensive diagnostics, logging, and metrics calculations;
-* uncertainty in metrics using the bootstrap; and
+* uncertainty in metrics; and
 * visualization of predictions.
 
 See `configs/satellite-b` for example usage.

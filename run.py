@@ -1,5 +1,7 @@
 import os
 import sys
+
+import utilrsw
 import timeseries_predict as tsp
 
 arg = tsp.cli()
@@ -9,8 +11,12 @@ if os.path.isdir(arg):
   tsp.summary(arg)
   sys.exit(0)
 
-print(f"Reading: {arg}")
-conf = tsp.read_conf(arg)
+conf = tsp.config(arg)
+
+utilrsw.hline()
+print(f"{arg}:")
+utilrsw.print_dict(conf, indent=2)
+utilrsw.hline()
 
 if __name__ == "__main__":
 
@@ -18,6 +24,10 @@ if __name__ == "__main__":
   job_list = tsp.job.job_list(conf)
 
   tsp.job.check(job_list)
+
+  for idx, (job_dfs, job_conf) in enumerate(job_list):
+    if 'job' not in job_conf or job_conf['job'] is None:
+      job_conf['job'] = f"job_{idx+1}"
 
   if not conf.get('parallel_jobs', False):
     for idx, (job_dfs, job_conf) in enumerate(job_list):

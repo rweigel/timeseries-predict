@@ -8,8 +8,7 @@ data:
 
 job: null
 
-run_dir: 
-run_desc: 
+base_dir: ./data/results/demo
 
 parallel_jobs: false
 

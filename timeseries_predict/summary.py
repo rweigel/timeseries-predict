@@ -1,5 +1,5 @@
 import os
-import json
+import yaml
 
 import pandas as pd
 
@@ -12,7 +12,7 @@ def summary(run_dir, job=None):
   if job is None:
     # Check if a subdirectory of a run directory was given. Technically an
     # error, but we know what was meant.
-    if os.path.exists(os.path.join(run_dir, 'config.json')):
+    if os.path.exists(os.path.join(run_dir, 'config.yaml')):
       # Use the subdirectory name as the job name
       job = os.path.basename(run_dir)
       # Use the parent directory of given run_dir as the run directory
@@ -32,7 +32,7 @@ def summary(run_dir, job=None):
 
     return
 
-  config_path = os.path.join(run_dir, job, 'config.json')
+  config_path = os.path.join(run_dir, job, 'config.yaml')
   if not os.path.isfile(config_path):
     emsg = f"Config file '{config_path}' not found for job '{job}'. Skipping."
     print(f"    Error: {emsg}")
@@ -40,11 +40,11 @@ def summary(run_dir, job=None):
 
   print(f"    Reading: {config_path}")
   with open(config_path, 'r') as f:
-    kwargs = json.load(f)
+    kwargs = yaml.safe_load(f)
 
   job_dir = os.path.dirname(config_path)
 
-  _stats = {}
+  reps_stats = {}
 
   # Iterate through subdirectories under each pattern
   for method in ['loo', 'lno']:
@@ -70,7 +70,7 @@ def summary(run_dir, job=None):
 
       print(f"    Processing dir: {sub_dir}")
 
-      _stats[removed_input] = []
+      reps_stats[removed_input] = []
 
       for file_name in sorted(os.listdir(sub_dir)):
         if not file_name.endswith('.pkl'):
@@ -78,29 +78,13 @@ def summary(run_dir, job=None):
 
         file_path = os.path.join(sub_dir, file_name)
 
-        """pkl file contains a list of bootstrap results, each in
-          the form of a dict
-        [
-          {
-            actual: df, # Validation DataFrame
-            ols: df,    # OLS predicted DataFrame
-            nn_miso: df,
-            nn_mimo: df
-          }, ...
-        ]
-        """
-
         print(f"      Reading: {file_name}")
-        reps = pd.read_pickle(file_path) # Array of bootstrap repetitions
+        reps = pd.read_pickle(file_path) # Array of repetitions
 
-        # Each element of stats[removed_input] is stats for a given removed input
-        # and for a loo repetition across all bootstrap repetitions.
-        stat = stats(reps, kwargs['outputs'])
-
-        _stats[removed_input].append(stat)
+        reps_stats[removed_input].append(stats(reps))
 
         plot_dir = os.path.join(sub_dir, 'figures')
         file_base = file_name.replace('.pkl', '')
         plot(reps, plot_dir, file_base)
 
-  table(_stats, job_dir, **kwargs)
+  table(reps_stats, job_dir, **kwargs)

@@ -41,7 +41,7 @@ def job_function(job_script):
 def check(job_list):
 
   for idx, (job_dfs, job_conf) in enumerate(job_list):
-    print(f"Job {idx+1}: name: {job_conf['job']}, Number of segments: {len(job_dfs)}")
+    print(f"Job {idx+1}: name: '{job_conf['job']}', Number of segments: {len(job_dfs)}")
 
     msg = f"Job '{job_conf['job']}' configuration is missing"
     if 'inputs' not in job_conf:

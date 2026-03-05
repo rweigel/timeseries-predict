@@ -576,3 +576,36 @@ Running command: python run.py data/results/satellite-b/serial-test
 Running command: python run.py data/results/satellite-b/serial-test/cluster1
 ***
 
+    Reading: data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for data/results/satellite-b/serial-test/cluster1/loo
+    Processing dir: data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: ols-timeseries-loo_1-rep_0.png
+      Reading: loo_2.pkl
+        Wrote: ols-timeseries-loo_2-rep_0.png
+      Reading: loo_3.pkl
+        Wrote: ols-timeseries-loo_3-rep_0.png
+    Looking for data/results/satellite-b/serial-test/cluster1/lno
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_3.md
+
+***
+Running command: python run.py data/results/satellite-b/serial-test
+***
+
+
+    Processing job: cluster1
+    Reading: data/results/satellite-b/serial-test/cluster1/config.json
+    Looking for data/results/satellite-b/serial-test/cluster1/loo
+    Processing dir: data/results/satellite-b/serial-test/cluster1/loo/None
+      Reading: loo_1.pkl
+        Wrote: ols-timeseries-loo_1-rep_0.png
+      Reading: loo_2.pkl
+        Wrote: ols-timeseries-loo_2-rep_0.png
+      Reading: loo_3.pkl
+        Wrote: ols-timeseries-loo_3-rep_0.png
+    Looking for data/results/satellite-b/serial-test/cluster1/lno
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
+    Wrote data/results/satellite-b/serial-test/cluster1/loo_3.md

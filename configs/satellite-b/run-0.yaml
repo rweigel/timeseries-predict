@@ -1,0 +1,5 @@
+base_config: ./configs/satellite-b/base.yaml
+run_dir: run-0
+run_desc: Run all satellites.
+num_epochs: 1000
+parallel_jobs: true
