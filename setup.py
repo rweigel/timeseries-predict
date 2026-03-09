@@ -9,12 +9,13 @@ install_requires = [
     'tabulate',
     'torch',
     'scikit-learn',
-    'PyYAML'
+    'PyYAML',
+    'utilrsw @ git+https://github.com/rweigel/utilrsw'
   ]
 
 setup(
     name='timeseries-predict',
-    version='0.0.1',
+    version='0.0.2',
     author='Dunnchadn Strnad, Bob Weigel',
     author_email='dstrnad@gmu.edu',
     packages=find_packages(),
