@@ -7,3 +7,5 @@ data:
   n_years_max: 3
 parallel_jobs: false
 num_epochs: 2
+optimizer_kwargs:
+  lr: 0.01

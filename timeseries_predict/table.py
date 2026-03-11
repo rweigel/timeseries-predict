@@ -1,6 +1,6 @@
 def table(stats, directory, **kwargs):
   import os
-  import pandas as pd
+  import pandas
 
   # Check that the number of loo repetitions is consistent across removed inputs
   n_loo = None
@@ -19,37 +19,42 @@ def table(stats, directory, **kwargs):
     columns.append(f"{output} ARV")
     columns.append(f"{output} ARV SE")
 
+  def build_row(metrics, model, row_prefix, label):
+    row = row_prefix + [label]
+    for output_stats in metrics.values():
+      row.append(output_stats[model][label]['mean'])
+      row.append(output_stats[model][label]['se'])
+    return row
+
   for loo_idx in range(n_loo):
-    table_train = []
-    table_test = []
     table_all = []
     for removed_input in stats.keys():
       for model in stats[removed_input][loo_idx][output]:
         if n_loo == 1:
-          row_train = [model, 'train']
-          row_test = [model, 'test']
+          row_prefix = [model]
         else:
-          row_train = [removed_input, model]
-          row_test = [removed_input, model]
-        for output in stats[removed_input][loo_idx].keys():
-          row_train.append(stats[removed_input][loo_idx][output][model]['train']['mean'])
-          row_train.append(stats[removed_input][loo_idx][output][model]['train']['se'])
-          row_test.append(stats[removed_input][loo_idx][output][model]['test']['mean'])
-          row_test.append(stats[removed_input][loo_idx][output][model]['test']['se'])
+          row_prefix = [removed_input, model]
 
-        table_test.append(row_test)
-        table_train.append(row_train)
+        metrics = stats[removed_input][loo_idx]
+
+        row_train = build_row(metrics, model, row_prefix, 'train')
+        row_test = build_row(metrics, model, row_prefix, 'test')
+
         table_all.append(row_train)
         table_all.append(row_test)
 
+        # Optional aggregated rows if available
+        if 'train*' in stats[removed_input][loo_idx][output][model]:
+          row_train_star = build_row(metrics, model, row_prefix, 'train*')
+          table_all.append(row_train_star)
+        if 'test*' in stats[removed_input][loo_idx][output][model]:
+          row_test_star = build_row(metrics, model, row_prefix, 'test*')
+          table_all.append(row_test_star)
+
     # Combine all the summary data into one table
-    table_test = pd.DataFrame(table_test, columns=columns)
-    table_train = pd.DataFrame(table_train, columns=columns)
-    table_all = pd.DataFrame(table_all, columns=columns)
+    table_all = pandas.DataFrame(table_all, columns=columns)
 
     # Drop empty columns (for example SE if std is not available)
-    table_train = table_train.dropna(axis=1, how='all')
-    table_test = table_test.dropna(axis=1, how='all')
     table_all = table_all.dropna(axis=1, how='all')
 
     if n_loo == 1:
@@ -63,11 +68,5 @@ def table(stats, directory, **kwargs):
     with open(table_file, 'w') as f:
       f.write('# Training and Test Combined\n')
       table_all.to_markdown(f, index=False, floatfmt=".3f")
-      f.write('\n\n')
-      f.write('# Training Results\n')
-      table_train.to_markdown(f, index=False, floatfmt=".3f")
-      f.write('\n\n')
-      f.write('# Test Results\n')
-      table_test.to_markdown(f, index=False, floatfmt=".3f")
 
     print(f"    Wrote {table_file}")

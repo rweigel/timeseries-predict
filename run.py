@@ -7,8 +7,9 @@ import timeseries_predict as tsp
 arg = tsp.cli()
 
 if os.path.isdir(arg):
-  # Update summary, plot, stats, and table without running the rest of the code.
-  tsp.summary(arg)
+  # Update summary, stats, plot, and table without running the rest of the code.
+  #tsp.summary(arg)
+  tsp.aggregate(arg)
   sys.exit(0)
 
 conf = tsp.config(arg)

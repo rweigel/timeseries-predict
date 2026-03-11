@@ -32,6 +32,8 @@ def summary(run_dir, job=None):
 
     return
 
+  print("  Starting table and plot generation.")
+
   config_path = os.path.join(run_dir, job, 'config.yaml')
   if not os.path.isfile(config_path):
     emsg = f"Config file '{config_path}' not found for job '{job}'. Skipping."
@@ -88,3 +90,35 @@ def summary(run_dir, job=None):
         plot(reps, plot_dir, file_base)
 
   table(reps_stats, job_dir, **kwargs)
+  print("  Finished table and plot generation.")
+
+def aggregate(run_dir):
+  print("  Agregating results for all jobs.")
+  desc_file = os.path.join(run_dir, 'description.txt')
+  if not os.path.isfile(desc_file):
+    msg = f"Description file '{desc_file}' not found in '{run_dir}'. "
+    msg += "Aborting aggregation of postprocessing output."
+    raise FileNotFoundError(msg)
+
+  with open(desc_file, 'r') as f:
+    desc_text = f.read().strip()
+  if desc_text:
+    md = f"Description: {desc_text}"
+  else:
+    md = "Description: (empty)"
+
+  for subdir in sorted(os.listdir(run_dir)):
+    subdir_path = os.path.join(run_dir, subdir)
+    if os.path.isdir(subdir_path):
+      lno_file = os.path.join(subdir_path, 'lno.md')
+      if os.path.isfile(lno_file):
+        with open(lno_file, 'r') as f:
+          lno_content = f.read()
+        md += f"\n\n# {subdir}\n\n#{lno_content}"
+
+  print(md)
+
+  with open(os.path.join(run_dir, 'tables.md'), 'w') as f:
+    f.write(md)
+    print(f"Wrote {os.path.join(run_dir, 'tables.md')}")
+

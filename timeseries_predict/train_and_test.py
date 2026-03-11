@@ -1,6 +1,7 @@
 def train_and_test(job_dfs, conf):
-  import utilrsw
+
   import pandas
+  import utilrsw
 
   from .summary import summary
 
@@ -62,8 +63,6 @@ def train_and_test(job_dfs, conf):
         idx_width = len(str(num_dfs))
         idx_zero_padded = str(i + 1).zfill(idx_width)
         _save_results(results, conf['job'], removed_input, conf['run_dir'], method_label, idx_zero_padded)
-
-  print("\n  Creating tables and plots")
 
   summary(conf['run_dir'], job=conf['job'])
 
