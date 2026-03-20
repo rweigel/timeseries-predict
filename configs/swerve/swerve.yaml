@@ -1,0 +1,20 @@
+# All paths are relative to run.py.
+job_script: ./configs/swerve/job_script.py
+
+data:
+  data_directory: ./data/raw/SWERVE
+
+inputs: [bx,by,bz]
+outputs: [gic]
+
+dtype: float32
+
+# Neural network hyperparameters
+num_epochs: 100
+num_boot_reps: 1
+batch_size: 256
+hidden_size: 32
+activation: Tanh
+optimizer: Adam
+optimizer_kwargs:
+  lr: 0.01
