@@ -27,7 +27,7 @@ def summary(run_dir, job=None):
     for subdir in sorted(os.listdir(run_dir)):
       subdir_path = os.path.join(run_dir, subdir)
       if os.path.isdir(subdir_path):
-        print(f"\n    Processing job: {subdir}")
+        print(f"\nProcessing job: {subdir}")
         summary(run_dir, job=subdir)
 
     return
@@ -93,21 +93,23 @@ def summary(run_dir, job=None):
   print("  Finished table and plot generation.")
 
 def aggregate(run_dir):
-  print("  Agregating results for all jobs.")
+  print("\nAgregating results for all jobs.")
   desc_file = os.path.join(run_dir, 'description.txt')
   if not os.path.isfile(desc_file):
-    msg = f"   Description file '{desc_file}' not found in '{run_dir}'. Looking in parent directory."
+    msg = f" Run description file '{desc_file}' not found in '{run_dir}'. Looking in parent directory."
     desc_file = os.path.join(run_dir, '..', 'description.txt')
     if not os.path.isfile(desc_file):
-      msg = f"   Description file '{desc_file}' not found in '{run_dir}' or its parent directory."
+      msg = f" Run description file '{desc_file}' not found in '{run_dir}' or its parent directory."
       raise FileNotFoundError(msg)
 
   with open(desc_file, 'r') as f:
     desc_text = f.read().strip()
   if desc_text:
-    desc_text = f"Description: {desc_text}"
+    desc_text = f"Run description: {desc_text}"
   else:
-    desc_text = "Description: (empty)"
+    desc_text = "Run description: (empty)"
+
+  print(f"  {desc_text}")
 
   md = desc_text
   for subdir in sorted(os.listdir(run_dir)):
@@ -115,13 +117,13 @@ def aggregate(run_dir):
     if os.path.isdir(subdir_path):
       lno_file = os.path.join(subdir_path, 'lno.md')
       if os.path.isfile(lno_file):
+        print(f"  Reading: {lno_file}")
         with open(lno_file, 'r') as f:
           lno_content = f.read()
         md += f"\n\n# {subdir}\n\n#{lno_content}"
 
-  print(f"    {desc_text}")
 
   with open(os.path.join(run_dir, 'tables.md'), 'w') as f:
     f.write(md)
-    print(f"    Wrote {os.path.join(run_dir, 'tables.md')}")
+    print(f"  Wrote: {os.path.join(run_dir, 'tables.md')}")
 

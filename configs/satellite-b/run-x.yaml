@@ -1,0 +1,18 @@
+base_config: ./configs/satellite-b/base.yaml
+run_dir: run-x
+run_desc: Run only cluster1.
+num_epochs: 10
+parallel_jobs: false
+data:
+  satellites:
+    - cluster1
+  n_years_max: 3
+
+lags: 0
+
+hidden_size: 32
+activation: ReLU
+
+models:
+  - ols
+  - nn_mimo

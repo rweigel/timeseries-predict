@@ -47,5 +47,5 @@ if __name__ == "__main__":
     with multiprocessing.Pool(n_cpu) as p:
       p.starmap(tsp.job.run, job_list)
 
-  tsp.summary(conf['run_dir'])
+  #tsp.summary(conf['run_dir'])
   tsp.aggregate(conf['run_dir'])

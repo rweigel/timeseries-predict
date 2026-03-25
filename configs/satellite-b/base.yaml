@@ -48,6 +48,7 @@ dtype: float32
 train_fraction: 0.8
 
 # Neural network hyperparameters
+nn_class: NeuralNetworkOneLayer
 num_epochs: 100
 n_reps: 1
 batch_size: 256

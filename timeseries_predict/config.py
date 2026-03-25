@@ -53,12 +53,22 @@ def config(conf_file):
     if key not in conf or conf[key] is None:
       conf[key] = defaults[key]
 
-  if conf['lags'] is not None and isinstance(conf['lags'], dict):
-    for key, value in conf['lags'].items():
-      if not isinstance(value, int):
-        raise ValueError(f"Lag value for '{key}' must be an integer, got {type(value)}")
-      if key not in conf['inputs']:
-        raise ValueError(f"Lag key '{key}' must be in inputs, got {conf['inputs']}")
+  if conf['lags'] is not None:
+    if isinstance(conf['lags'], dict):
+      for key, value in conf['lags'].items():
+        if not isinstance(value, int):
+          raise ValueError(f"Lag value for '{key}' must be an integer, got {type(value)}")
+        if key not in conf['inputs']:
+          raise ValueError(f"Lag key '{key}' must be in inputs, got {conf['inputs']}")
+    elif isinstance(conf['lags'], int):
+      if conf['lags'] < 0:
+        raise ValueError(f"Lags must be >= 0, got {conf['lags']}")
+      if conf['lags'] == 0:
+        conf['lags'] = None
+    else:
+      example = "{conf['inputs'][0]: 3, ...}"
+      msg = f"Lags must be an integer or a dictionary of input names to max lag values, e.g. {example}, got {conf['lags']}"
+      raise ValueError(msg)
 
   for key in ['inputs', 'outputs', 'models']:
     if isinstance(conf[key], str):

@@ -32,19 +32,24 @@ def train_and_test(job_dfs, conf):
         train_test_data = job_dfs[0]
 
       if conf['lags'] is not None:
-        for p, max_lag in conf['lags'].items():
-          for lag in range(1, 4):
-            p_lag = f'{p}_{lag}'
+        for p, lag in conf['lags'].items():
+          for lag in range(1, lag + 1):
+            p_lag = f'{p}_lag_{lag}'
             train_test_data[p_lag] = train_test_data[p].shift(lag)
             train_test_data = train_test_data.iloc[lag:].reset_index(drop=True)
             conf['inputs'].append(p_lag)
+
+        max_lag = max(conf['lags'].values())
+        # Keep every max_lag row to avoid overlap between training and testing
+        # data when sampling randomly below.
+        train_test_data = train_test_data.iloc[::max_lag, :].reset_index(drop=True)
 
       # Loop for repetitions
       results = []
       for rep in range(conf['n_reps']):
         print(f"        Repetition {rep + 1}/{conf['n_reps']}")
 
-        train_data = train_test_data.sample(frac=conf['train_fraction'], random_state=rep)
+        train_data = train_test_data.sample(frac=conf['train_fraction'], random_state=rep).sort_index()
         test_data = train_test_data.drop(train_data.index)
         rep = _train_and_test_single_rep(train_data, test_data, removed_input=removed_input, **conf)
 
@@ -136,8 +141,10 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     print(f"{indent}  Number of fitting parameters: {len(inputs) + 1}")
     n_train = np.prod(train_df[inputs].shape[0])
     n_test = np.prod(test_df[inputs].shape[0])
-    print(f"{indent}  Number of training values: {n_train}")
-    print(f"{indent}  Number of testing values:  {n_test} (ratio: {n_test/(n_train+n_test):.2f})")
+    ratio = f"(# parameters/# train: {(len(inputs) + 1)/n_train:.4f})"
+    print(f"{indent}  Number of training values: {n_train} {ratio}")
+    ratio = f"(# test/# train: {n_test/(n_train+n_test):.2f})"
+    print(f"{indent}  Number of testing values:  {n_test} {ratio}")
 
     start = time.time()
     ols_model = LinearRegression()

@@ -22,12 +22,14 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
 
   # Multi-output neural network
-  model = _NeuralNetwork(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size']).to(device)
+  nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
+  model = nn_class(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size'], activation=kwargs.get('activation', 'Tanh')).to(device)
+
   print(f"{indent}  Number of fitting parameters: {_num_params(model)}")
   n_train = np.prod(train_inputs.shape[0])
   n_test = np.prod(test_inputs.shape[0])
-  print(f"{indent}  Number of training values: {n_train}")
-  print(f"{indent}  Number of testing values:  {n_test} (ratio: {n_test/(n_train+n_test):.2f})")
+  print(f"{indent}  Number of training values: {n_train} (# parameters/# train: {_num_params(model)/n_train:.4f})")
+  print(f"{indent}  Number of testing values:  {n_test} (# test/# train: {n_test/(n_train+n_test):.2f})")
   optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
 
   for epoch in range(kwargs['num_epochs']):
@@ -60,6 +62,7 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
   # Unscale predictions
   test_preds = scaler_targets.inverse_transform(test_preds)
+  train_preds = scaler_targets.inverse_transform(train_preds)
 
   return train_preds, test_preds, train_arvs, test_arvs
 
@@ -92,8 +95,9 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   # Solve: miso_h * (num_inputs + 2) + 1 = mimo_params / n_outputs
   miso_hidden_size = max(1, round((mimo_params / n_outputs - 1) / (num_inputs + 2)))
 
+  nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
   for i in range(len(output_names)):
-    model = _NeuralNetwork(train_inputs.shape[1], 1, hidden_size=miso_hidden_size).to(device)
+    model = nn_class(train_inputs.shape[1], 1, hidden_size=miso_hidden_size, activation=kwargs.get('activation', 'Tanh')).to(device)
     optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
     if i == 0:
       n_train = np.prod(train_inputs.shape[0])
@@ -136,12 +140,29 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   return train_preds, test_preds, train_arvs, test_arvs
 
 
-class _NeuralNetwork(torch.nn.Module):
+class _NeuralNetworkTwoLayer(torch.nn.Module):
 
   def __init__(self, num_inputs, num_outputs, activation="Tanh", hidden_size=32):
     super().__init__()
     activation_class = _get_activation(activation)
-    # Default is 
+    self.fc1 = torch.nn.Linear(num_inputs, hidden_size)
+    self.act1 = activation_class()
+    self.fc2 = torch.nn.Linear(hidden_size, hidden_size)
+    self.act2 = activation_class()
+    self.fc3 = torch.nn.Linear(hidden_size, num_outputs)
+
+  def forward(self, x):
+    x = self.act1(self.fc1(x))
+    x = self.act2(self.fc2(x))
+    x = self.fc3(x)
+    return x
+
+
+class _NeuralNetworkOneLayer(torch.nn.Module):
+
+  def __init__(self, num_inputs, num_outputs, activation="Tanh", hidden_size=32):
+    super().__init__()
+    activation_class = _get_activation(activation)
     self.network = torch.nn.Sequential(
       torch.nn.Linear(num_inputs, hidden_size),
       activation_class(), # Default will be to do torch.nn.Tanh()
@@ -251,6 +272,27 @@ def _get_dtype(dtype_name):
         return dtype_module
 
   raise ValueError(f"dtype {dtype_name}' not found in = {dtype_names}")
+
+
+def _get_nn_class(name):
+  classes = {
+    'NeuralNetworkOneLayer': _NeuralNetworkOneLayer,
+    'NeuralNetworkTwoLayer': _NeuralNetworkTwoLayer,
+  }
+  if name not in classes:
+    raise ValueError(f"nn_class '{name}' not in {list(classes.keys())}")
+  return classes[name]
+
+
+def plot_model(model, num_inputs, file_path='model_graph'):
+  """Render a computation graph of model to file_path.pdf using torchviz."""
+  from torchviz import make_dot
+
+  dummy_input = torch.zeros(1, num_inputs)
+  output = model(dummy_input)
+  dot = make_dot(output, params=dict(model.named_parameters()))
+  dot.render(file_path, format='pdf', cleanup=True)
+  print(f"Model graph written to: {file_path}.pdf")
 
 
 def _num_params(model):
