@@ -1,0 +1,9 @@
+# All paths are relative to run.py.
+base_config: ./configs/swerve/swerve.yaml
+
+data:
+  average: 1
+  sites: [10052]
+  
+run_desc: Run contains one job to test swerve, with gic inputs and b outputs at site 10052
+run_dir: ./data/results/swerve/test

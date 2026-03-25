@@ -1,0 +1,9 @@
+# All paths are relative to run.py.
+base_config: ./configs/swerve/swerve.yaml
+
+data:
+  average: 1
+  sites: [10052,10063,10076,10077,10079,10099,10107,10112,10113,10114,10115,10181,10182,10184,10185,10186,10187,10195,10220,10238,10249,10250,10255,10402,10428,10438,10587,10618,10619,10622,10659,10693,bradley,bullrun,eastpoint,gleason,johnsonville,montgomery,paradise3,pinhook,raccoonmountain,rutherford,shelby,southaven,sullivan,union,widowscreek]
+  
+run_desc: Run contains all jobs, with gic inputs and b outputs at all sites
+run_dir: ./data/results/swerve/1m
