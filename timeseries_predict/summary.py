@@ -96,17 +96,20 @@ def aggregate(run_dir):
   print("  Agregating results for all jobs.")
   desc_file = os.path.join(run_dir, 'description.txt')
   if not os.path.isfile(desc_file):
-    msg = f"Description file '{desc_file}' not found in '{run_dir}'. "
-    msg += "Aborting aggregation of postprocessing output."
-    raise FileNotFoundError(msg)
+    msg = f"   Description file '{desc_file}' not found in '{run_dir}'. Looking in parent directory."
+    desc_file = os.path.join(run_dir, '..', 'description.txt')
+    if not os.path.isfile(desc_file):
+      msg = f"   Description file '{desc_file}' not found in '{run_dir}' or its parent directory."
+      raise FileNotFoundError(msg)
 
   with open(desc_file, 'r') as f:
     desc_text = f.read().strip()
   if desc_text:
-    md = f"Description: {desc_text}"
+    desc_text = f"Description: {desc_text}"
   else:
-    md = "Description: (empty)"
+    desc_text = "Description: (empty)"
 
+  md = desc_text
   for subdir in sorted(os.listdir(run_dir)):
     subdir_path = os.path.join(run_dir, subdir)
     if os.path.isdir(subdir_path):
@@ -116,9 +119,9 @@ def aggregate(run_dir):
           lno_content = f.read()
         md += f"\n\n# {subdir}\n\n#{lno_content}"
 
-  print(md)
+  print(f"    {desc_text}")
 
   with open(os.path.join(run_dir, 'tables.md'), 'w') as f:
     f.write(md)
-    print(f"Wrote {os.path.join(run_dir, 'tables.md')}")
+    print(f"    Wrote {os.path.join(run_dir, 'tables.md')}")
 

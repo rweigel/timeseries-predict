@@ -8,7 +8,7 @@ arg = tsp.cli()
 
 if os.path.isdir(arg):
   # Update summary, stats, plot, and table without running the rest of the code.
-  #tsp.summary(arg)
+  tsp.summary(arg)
   tsp.aggregate(arg)
   sys.exit(0)
 
@@ -46,3 +46,6 @@ if __name__ == "__main__":
     print(f"Using {n_cpu} CPUs for parallel processing {n_cpu_needed} jobs")
     with multiprocessing.Pool(n_cpu) as p:
       p.starmap(tsp.job.run, job_list)
+
+  tsp.summary(conf['run_dir'])
+  tsp.aggregate(conf['run_dir'])

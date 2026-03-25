@@ -15,13 +15,13 @@ def stats(reps):
         if 'test*' in rep['models'][model]['metrics']:
           arvs[model]['test*'] = np.empty((len(reps), len(rep['outputs'])))
 
-      arvs[model]['train'][i,:] = rep['models'][model]['metrics']['train']
-      arvs[model]['test'][i,:] = rep['models'][model]['metrics']['test']
+      arvs[model]['train'][i, :] = rep['models'][model]['metrics']['train']
+      arvs[model]['test'][i, :] = rep['models'][model]['metrics']['test']
 
       if 'train*' in rep['models'][model]['metrics']:
-        arvs[model]['train*'][i,:] = rep['models'][model]['metrics']['train*']
+        arvs[model]['train*'][i, :] = rep['models'][model]['metrics']['train*']
       if 'test*' in rep['models'][model]['metrics']:
-        arvs[model]['test*'][i,:] = rep['models'][model]['metrics']['test*']
+        arvs[model]['test*'][i, :] = rep['models'][model]['metrics']['test*']
 
   stats = {}
   for i, output in enumerate(reps[0]['outputs']):

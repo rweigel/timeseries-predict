@@ -31,13 +31,21 @@ def train_and_test(job_dfs, conf):
         method_label = "lno"
         train_test_data = job_dfs[0]
 
+      if conf['lags'] is not None:
+        for p, max_lag in conf['lags'].items():
+          for lag in range(1, 4):
+            p_lag = f'{p}_{lag}'
+            train_test_data[p_lag] = train_test_data[p].shift(lag)
+            train_test_data = train_test_data.iloc[lag:].reset_index(drop=True)
+            conf['inputs'].append(p_lag)
+
       # Loop for repetitions
       results = []
-      for rep in range(conf['num_boot_reps']):
-        print(f"        Repetition {rep + 1}/{conf['num_boot_reps']}")
+      for rep in range(conf['n_reps']):
+        print(f"        Repetition {rep + 1}/{conf['n_reps']}")
+
         train_data = train_test_data.sample(frac=conf['train_fraction'], random_state=rep)
         test_data = train_test_data.drop(train_data.index)
-
         rep = _train_and_test_single_rep(train_data, test_data, removed_input=removed_input, **conf)
 
         result = {}
@@ -123,7 +131,8 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     from sklearn.linear_model import LinearRegression
 
     # Ordinary linear regression
-    print(f"{indent}Performing {len(outputs)}-output/{len(inputs)}-input linear regression")
+    _print_prolog(inputs, outputs, 'ols', removed_input, indent)
+
     print(f"{indent}  Number of fitting parameters: {len(inputs) + 1}")
     n_train = np.prod(train_df[inputs].shape[0])
     n_test = np.prod(test_df[inputs].shape[0])
@@ -155,59 +164,37 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
   from .nn import mimo, miso
 
   for model in models:
+
     if model not in ['nn_mimo', 'nn_miso', 'nn_mimo_resid', 'nn_miso_resid']:
       continue
 
-    train_inputs = train_df[inputs]
-    train_targets = train_df[outputs]
-    test_inputs = test_df[inputs]
-    test_targets = test_df[outputs]
-
     if model.endswith('_resid'):
       delta = ols_train_preds
-      train_targets = train_targets - delta
+      train_df[outputs] = train_df[outputs] - delta
 
     nn_args = [
-      train_inputs,
-      train_targets,
-      test_inputs,
-      test_targets,
+      train_df[inputs],
+      train_df[outputs],
+      test_df[inputs],
+      test_df[outputs],
       outputs,
       indent,
       kwargs
     ]
 
-    if removed_input is None:
-      removed_str = "all inputs"
-    else:
-      removed_str = f"'{removed_input}' input removed"
+    _print_prolog(inputs, outputs, model, removed_input, indent)
 
     if model.startswith('nn_mimo'):
-
-      msg = f"{indent}Training {len(outputs)}-output neural network with"
-
-      if model.endswith('_resid'):
-        print(f"{msg} {removed_str} on ols residuals")
-      else:
-        print(f"{msg} {removed_str}")
-
       train_preds, test_preds, train_arvs, test_arvs = mimo(*nn_args)
 
     if model.startswith('nn_miso'):
-      msg = f"{indent}Training {len(outputs)} single-output neural networks with"
-
-      if model.endswith('_resid'):
-        print(f"{msg} {removed_str} on ols residuals")
-      else:
-        print(f"{msg} {removed_str}")
-
       train_preds, test_preds, train_arvs, test_arvs = miso(*nn_args)
-
-    results[model]['metrics']['train'] = train_arvs[-1]
-    results[model]['metrics']['test'] = test_arvs[-1]
 
     results[model]['epoch_metrics']['train'] = train_arvs
     results[model]['epoch_metrics']['test'] = test_arvs
+
+    results[model]['metrics']['train'] = train_arvs[-1, :]
+    results[model]['metrics']['test'] = test_arvs[-1, :]
 
     if not model.endswith('_resid'):
       results[model]['predicted']['test'][outputs] = test_preds
@@ -217,8 +204,8 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       results[model]['predicted']['train'][outputs] = train_preds + ols_train_preds
       arvs_train_star = arv(train_df[outputs], train_preds + ols_train_preds)
       arvs_test_star = arv(test_df[outputs], test_preds + ols_test_preds)
-      results[model]['metrics']['train*'] = arvs_train_star[-1]
-      results[model]['metrics']['test*'] = arvs_test_star[-1]
+      results[model]['metrics']['train*'] = arvs_train_star
+      results[model]['metrics']['test*'] = arvs_test_star
       print(f"{indent}   OLS results")
       print(f"{indent} {14 * ' '}{ols_train_string}")
       print(f"{indent} {14 * ' '}{ols_test_string}")
@@ -227,6 +214,30 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       print_metrics(outputs, arvs_test_star, indent=25, type="test")
 
   return results
+
+
+def _print_prolog(inputs, outputs, model, removed_input, indent):
+
+  if removed_input is None:
+    removed_str = f"all {len(inputs)} input(s)."
+  else:
+    removed_str = f"'{removed_input}' input removed."
+
+  msg = ""
+  if model == 'ols':
+    msg = f"{indent}Performing {len(outputs)}-output linear regression with"
+  if model.startswith('nn_mimo'):
+    msg = f"{indent}Training {len(outputs)}-output neural network with"
+  if model.startswith('nn_miso'):
+    msg = f"{indent}Training {len(outputs)} single-output neural networks with"
+
+  if model.endswith('_resid'):
+    print(f"{msg} {removed_str} on ols residuals")
+  else:
+    print(f"{msg} {removed_str}")
+
+  print(f"{indent}  Inputs:  {inputs}")
+  print(f"{indent}  Outputs: {outputs}")
 
 
 def _save_results(results_dict, job, removed_input, run_dir, method, loo_idx):

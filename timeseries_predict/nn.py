@@ -18,8 +18,9 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   tensors = _prep_tensors(train_inputs, train_targets, test_inputs, test_targets, dtype, device)
   train_inputs, train_targets, test_inputs, test_targets, scaler_targets = tensors
 
-  train_arvs = []
-  test_arvs = []
+  train_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
+  test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
+
   # Multi-output neural network
   model = _NeuralNetwork(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size']).to(device)
   print(f"{indent}  Number of fitting parameters: {_num_params(model)}")
@@ -40,7 +41,7 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
                                         train_targets,
                                         device,
                                         kwargs['batch_size'])
-    train_arvs.append(train_arv)
+    train_arvs[epoch, :] = train_arv
 
     print_metrics(output_names, train_arv, type="train", dt=time.time() - start)
 
@@ -49,7 +50,7 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
       with torch.no_grad():
         test_arv = arv(test_targets.detach().cpu().numpy(), model(test_inputs).cpu().numpy())
       model.train()
-      test_arvs.append(test_arv)
+      test_arvs[epoch, :] = test_arv
       print_metrics(output_names, test_arv, type="test", indent=len(epoch_str))
 
   model.eval()
@@ -78,8 +79,8 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
   test_preds = {}
   train_preds = {}
-  train_arvs = []
-  test_arvs = []
+  train_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
+  test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
   start = time.time()
 
   # Compute number of model parameters for each single-output network is
@@ -108,7 +109,7 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
       epoch_str = f"{indent}    Epoch {epoch_str}"
       print(epoch_str, end='')
       train_arv, train_rmse = _train_single_epoch(model, optimizer, train_inputs, train_target, device, kwargs['batch_size'])
-      train_arvs.append(train_arv)
+      train_arvs[epoch, i] = train_arv[0]
 
       print_metrics(output_names[i], train_arv, type="train", dt=time.time() - start)
       if compute_test_arvs:
@@ -116,20 +117,13 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
         with torch.no_grad():
           test_arv = arv(test_targets[:, i:i+1].detach().cpu().numpy(), model(test_inputs).cpu().numpy())
         model.train()
-        test_arvs.append(test_arv)
+        test_arvs[epoch, i] = test_arv[0]
         print_metrics(output_names[i], test_arv, type="test", indent=len(epoch_str))
 
     model.eval()
     with torch.no_grad():
       train_preds[output_names[i]] = model(train_inputs).cpu().numpy()
       test_preds[output_names[i]] = model(test_inputs).cpu().numpy()
-
-  # arvs is in form
-  # [ out1_arv_epoch1, out1_arv_epoch2, ..., out2_arv_epoch1, out2_arv_epoch2, ... ]
-  # Convert to form of mimo
-  # [ [out1_arv_epoch1, out2_arv_epoch1, ...], [out1_arv_epoch2, out2_arv_epoch2, ...], ... ]
-  train_arvs = list(np.reshape(train_arvs, (-1, len(output_names))))
-  test_arvs = list(np.reshape(test_arvs, (-1, len(output_names))))
 
   # Combine outputs results
   train_preds = np.column_stack([train_preds[output] for output in output_names])

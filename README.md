@@ -53,7 +53,24 @@ timeseries-predict/data/results/{run_dir}/{job2}
 ...
 ```
 
-# Example
+# Examples
+
+##
+
+Run and postprocess
+```
+python run.py configs/demo/demo-0.yaml
+python run.py configs/demo/demo-1.yaml
+python run.py configs/demo/demo-2.yaml
+```
+
+If modifications have been made to postprocessing code, re-postprocess using
+
+```
+python run.py data/results/demo/demo-0
+```
+
+##
 
 From the directory `timeseries-predict/config/satellite-b`, execute
 
@@ -65,25 +82,12 @@ python data_plot.py   # Creates plots in data/raw/satellite-b/plots
 From the directory `timeseries-predict`, execute a run using
 
 ```
-python run.py configs/satellite-b/parallel-test.yaml
-python run.py configs/satellite-b/serial-test.yaml
+python run.py configs/satellite-b/test/test-serial.yaml
+python run.py configs/satellite-b/test/test-parallel.yaml
+python run.py configs/satellite-b/run-0.yaml
 ```
 
 # Development
-
-If any post-processing code changes, runs can be re-postprocessed.
-
-Re-postprocess all jobs from a run by passing the results directory:
-```
-python run.py data/results/satellite-b/parallel-test
-```
-
-Re-postprocess job with job from a run (will process only job results in subdir `cluster1`)
-```
-python run.py data/results/satellite-b/serial-test
-# Or
-python run.py data/results/satellite-b/serial-test/cluster1
-```
 
 To execute all demo test cases,
 

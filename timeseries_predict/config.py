@@ -37,7 +37,8 @@ def config(conf_file):
     'device': None,
     'num_epochs': 200,
     'batch_size': 256,
-    'num_boot_reps': 1
+    'n_reps': 1,
+    'lags': None
   }
 
   if 'base_dir' not in conf or conf['base_dir'] is None:
@@ -51,6 +52,13 @@ def config(conf_file):
   for key in defaults.keys():
     if key not in conf or conf[key] is None:
       conf[key] = defaults[key]
+
+  if conf['lags'] is not None and isinstance(conf['lags'], dict):
+    for key, value in conf['lags'].items():
+      if not isinstance(value, int):
+        raise ValueError(f"Lag value for '{key}' must be an integer, got {type(value)}")
+      if key not in conf['inputs']:
+        raise ValueError(f"Lag key '{key}' must be in inputs, got {conf['inputs']}")
 
   for key in ['inputs', 'outputs', 'models']:
     if isinstance(conf[key], str):

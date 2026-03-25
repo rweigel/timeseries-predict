@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 def arv(A, P):
+
     if isinstance(A, pd.DataFrame):
         A = A.to_numpy()
     if isinstance(P, pd.DataFrame):
@@ -22,4 +23,4 @@ def arv(A, P):
 
         arvs.append(_arv)
 
-    return arvs
+    return np.array(arvs)

@@ -27,7 +27,7 @@ run_desc: Same as results-1 but using new code structure and computing _resid mo
 device: null
 
 num_epochs: 1
-num_boot_reps: 1
+n_reps: 1
 
 models:
   - ols
@@ -39,7 +39,7 @@ models:
 inputs: [r, theta, phi, imfby, imfbz, vsw, nsw, ey, ey_avg]
 outputs: [bx, by, bz]
 
-# True => [None, **outputs]; null or no attribute => Only use all inputs
+# true => [None, **outputs]; null or no attribute => Only use all inputs
 removed_inputs:
   - null
 
@@ -48,10 +48,10 @@ dtype: float32
 train_fraction: 0.8
 
 # Neural network hyperparameters
-num_epochs: 50
-num_boot_reps: 1
+num_epochs: 100
+n_reps: 1
 batch_size: 256
-hidden_size: 32
+hidden_size: 16
 activation: Tanh
 optimizer: Adam
 optimizer_kwargs:
