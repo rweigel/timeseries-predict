@@ -18,8 +18,8 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   tensors = _prep_tensors(train_inputs, train_targets, test_inputs, test_targets, dtype, device)
   train_inputs, train_targets, test_inputs, test_targets, scaler_targets = tensors
 
-  train_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
-  test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
+  train_arvs = np.empty((kwargs['n_epochs'], len(output_names)))
+  test_arvs = np.empty((kwargs['n_epochs'], len(output_names)))
 
   # Multi-output neural network
   nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
@@ -32,9 +32,9 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   print(f"{indent}  Number of testing values:  {n_test} (# test/# train: {n_test/(n_train+n_test):.2f})")
   optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
 
-  for epoch in range(kwargs['num_epochs']):
+  for epoch in range(kwargs['n_epochs']):
     start = time.time()
-    epoch_str = f"{epoch + 1}/{kwargs['num_epochs']}".ljust(5)
+    epoch_str = f"{epoch + 1}/{kwargs['n_epochs']}".ljust(5)
     epoch_str = f"{indent}    Epoch {epoch_str}"
     print(epoch_str, end='')
     train_arv, train_rmse = _train_single_epoch(model,
@@ -82,8 +82,8 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
   test_preds = {}
   train_preds = {}
-  train_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
-  test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
+  train_arvs = np.empty((kwargs['n_epochs'], len(output_names)))
+  test_arvs = np.empty((kwargs['n_epochs'], len(output_names)))
   start = time.time()
 
   nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
@@ -99,9 +99,9 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
     print(f"{indent}  Training single-output neural network for output = '{output_names[i]}'")
     train_target = train_targets[:, i:i+1]
-    for epoch in range(kwargs['num_epochs']):
+    for epoch in range(kwargs['n_epochs']):
       start = time.time()
-      epoch_str = f"{epoch + 1}/{kwargs['num_epochs']}".ljust(5)
+      epoch_str = f"{epoch + 1}/{kwargs['n_epochs']}".ljust(5)
       epoch_str = f"{indent}    Epoch {epoch_str}"
       print(epoch_str, end='')
       train_arv, train_rmse = _train_single_epoch(model, optimizer, train_inputs, train_target, device, kwargs['batch_size'])

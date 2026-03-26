@@ -7,4 +7,4 @@ data:
     - cluster2
   n_years_max: 2
 parallel_jobs: true
-num_epochs: 2
+n_epochs: 2

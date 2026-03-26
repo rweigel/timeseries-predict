@@ -19,14 +19,6 @@ parallel_jobs: false
 base_dir: ./data/results/satellite-b
 run_desc: Same as results-1 but using new code structure and computing _resid models
 
-# device sets training parallelization using one of
-#   null
-#   cpu (default if device is null)
-#   gpu (Linux/Windows)
-#   mps (OS-X)
-device: null
-
-num_epochs: 1
 n_reps: 1
 
 models:
@@ -43,17 +35,23 @@ outputs: [bx, by, bz]
 removed_inputs:
   - null
 
-dtype: float32
-
 train_fraction: 0.8
 
 # Neural network hyperparameters
-nn_class: NeuralNetworkOneLayer
-num_epochs: 100
-n_reps: 1
-batch_size: 256
-hidden_size: 16
-activation: Tanh
-optimizer: Adam
-optimizer_kwargs:
-  lr: 0.01
+nn:
+  nn_class: NeuralNetworkOneLayer
+  dtype: float32
+  n_epochs: 100
+  n_reps: 1
+  batch_size: 256
+  hidden_size: 16
+  activation: Tanh
+  optimizer: Adam
+  optimizer_kwargs:
+    lr: 0.01
+  # device sets training parallelization using one of
+  #   null
+  #   cpu (default if device is null)
+  #   gpu (Linux/Windows)
+  #   mps (OS-X)
+  device: null

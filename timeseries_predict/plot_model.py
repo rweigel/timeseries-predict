@@ -5,6 +5,7 @@ def plot_model(model, input_names, output_names):
     3. A custom matplotlib connection diagram -> file_path_diagram_custom.png
   """
   import torch
+
   # Derive layer info from all Linear layers
   linear_layers = [m for m in model.modules() if isinstance(m, torch.nn.Linear)]
   layer_sizes = [linear_layers[0].in_features] + [l.out_features for l in linear_layers]
@@ -50,7 +51,7 @@ def _build_nn_equation(layer_sizes, input_names=None, output_names=None, activat
 
     w = r'w^{(' + str(l) + r')}_{' + in_var + out_var + r'}'
     b = r'b^{(' + str(l) + r')}_{' + out_var + r'}'
-    summ = r'\sum_{' + in_var + r'=1}^{' + str(n_in) + r'} ' + w + r'\,' + in_sym + r' + ' + b
+    summ = r'\sum\limits_{' + in_var + r'=1}^{' + str(n_in) + r'} ' + w + r'\,' + in_sym + r' + ' + b
 
     if is_out:
       out_sym = r'\hat{y}_{' + out_var + r'}'
@@ -63,6 +64,40 @@ def _build_nn_equation(layer_sizes, input_names=None, output_names=None, activat
   return parts
 
 
+def _build_param_block(layer_sizes, n_params):
+  """Return a single LaTeX array string with three aligned parameter lines:
+    #params = <symbolic>
+            = <numeric>
+            = <total>
+  The '=' signs are aligned via \\begin{array}{rl}.
+  """
+  n_layers = len(layer_sizes)
+  n_hidden = n_layers - 2
+
+  # Symbolic names
+  sym = [r'n_{\mathrm{in}}']
+  if n_hidden == 1:
+    sym.append(r'n_{\mathrm{h}}')
+  else:
+    for i in range(n_hidden):
+      sym.append(r'n_{\mathrm{h}_{' + str(i + 1) + r'}}')
+  sym.append(r'n_{\mathrm{out}}')
+
+  sym_terms = [sym[l] + r'(' + sym[l - 1] + r'+1)' for l in range(1, n_layers)]
+  num_terms = [str(layer_sizes[l]) + r'(' + str(layer_sizes[l - 1]) + r'+1)'
+               for l in range(1, n_layers)]
+
+  row1 = r'\#\,\mathrm{params}&= ' + ' + '.join(sym_terms)
+  row2 = r'&= ' + ' + '.join(num_terms)
+  row3 = r'&= ' + str(n_params)
+
+  return (r'\begin{array}{r@{\,}l}' +
+          row1 + r'\\' +
+          row2 + r'\\' +
+          row3 +
+          r'\end{array}')
+
+
 def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=None, n_params=None, file_path='model-diagram-standard.png'):
   """Draw a traditional neural network connection diagram using matplotlib.
   Bias nodes (+1) are shown for all layers except the output layer.
@@ -70,7 +105,10 @@ def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=
   N_EACH nodes, a vertical dots marker, then the last N_EACH nodes).
   A summation equation for the network is displayed to the right.
   """
+  import matplotlib
   import matplotlib.pyplot as plt
+  matplotlib.rcParams['text.usetex'] = True
+  matplotlib.rcParams['text.latex.preamble'] = r'\usepackage{amsmath}'
 
   DISPLAY_LIMIT = 16  # layers with more nodes than this use ellipsis
   N_EACH = 7          # nodes shown on each side of the ellipsis
@@ -211,6 +249,7 @@ def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=
     ax.text(x_eq, y_eq, r'$' + part + r'$', ha='left', va='center', fontsize=7, zorder=3)
 
   if n_params is not None:
-    ax.text(x_eq, top_y - n_parts * step, f'# parameters: {n_params}',
-            ha='left', va='center', fontsize=7, zorder=3)
+    param_block = _build_param_block(layer_sizes, n_params)
+    ax.text(x_eq, top_y - (n_parts + 0.5) * step, r'$' + param_block + r'$',
+            ha='left', va='top', fontsize=7, zorder=3)
 

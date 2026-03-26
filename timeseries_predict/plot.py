@@ -23,18 +23,18 @@ def plot(reps, plot_dir, file_base):
 
     return axs
 
-  def savefig(plt, file_name, format=["png"]):
+  def savefig(plt, file_name, format=["png"], dpi=300):
     if isinstance(format, str):
       format = [format]
     if len(format) == 1:
       format = format[0]
     else:
       for fmt in format:
-        savefig(plt, file_name, fmt)
+        savefig(plt, file_name, format=fmt, dpi=dpi)
       return
 
     file_path = os.path.join(plot_dir, f"{file_name}.{format}")
-    plt.savefig(file_path, bbox_inches="tight")
+    plt.savefig(file_path, bbox_inches="tight", dpi=dpi)
     print(f"        Wrote: {os.path.basename(file_path)}")
     plt.close()
 
@@ -127,13 +127,11 @@ def plot(reps, plot_dir, file_base):
     plt.tight_layout()
     savefig(plt, f"{model}-epoch-metrics-{file_base}rep_{rep_num}")
 
-  def _model_diagram(model, input_names, output_names, file_base):
+  def _model_diagram(model, model_name, input_names, output_names):
     from .plot_model import plot_model
     plot_model(model, input_names=reps[0]['inputs'], output_names=reps[0]['outputs'])
-    savefig(plt, "nn_miso-model" , format=["png", "svg"])
+    savefig(plt, f"{model_name}-model" , format=["png", "svg"])
 
-  model = reps[0]['models']['nn_miso']['model'][0]
-  _model_diagram(model, reps[0]['inputs'], reps[0]['outputs'], file_base)
 
   rep_num = 0 # Only plot results for the first repetition for now.
   # TODO: Plot average model results across all repetitions and
@@ -141,18 +139,24 @@ def plot(reps, plot_dir, file_base):
 
 
   outputs = reps[rep_num]['outputs']
-  models = list(reps[rep_num]['models'].keys())
+  model_names = list(reps[rep_num]['models'].keys())
 
   if file_base.startswith('lno'):
     file_base = ''
   else:
     file_base = f"{file_base}-"
 
-  for model in models:
+  for model_name in model_names:
+    if 'model' in reps[0]['models'][model_name]:
+      model = reps[0]['models'][model_name]['model']
+      if isinstance(model, list):
+        model = model[0]
+      _model_diagram(model, model_name, reps[0]['inputs'], reps[0]['outputs'])
+
     # Epoch metrics plot (if available)
-    if 'epoch_metrics' in reps[rep_num]['models'][model]:
-      epoch_metrics(reps, rep_num, model, file_base)
+    if 'epoch_metrics' in reps[rep_num]['models'][model_name]:
+      epoch_metrics(reps, rep_num, model_name, file_base)
 
     for cat in ['train', 'test']:
-      scatter(reps, rep_num, model, cat, file_base)
-      timeseries(reps, rep_num, model, cat, file_base)
+      scatter(reps, rep_num, model_name, cat, file_base)
+      timeseries(reps, rep_num, model_name, cat, file_base)

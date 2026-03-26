@@ -29,16 +29,23 @@ def config(conf_file):
   ]
 
   defaults = {
-    'lr': 0.001,
     'run_desc': '',
     'removed_inputs': None,
     'models': known_models,
     'train_fraction': 0.8,
-    'device': None,
-    'num_epochs': 200,
+    'n_epochs': 200,
     'batch_size': 256,
     'n_reps': 1,
-    'lags': None
+    'lags': None,
+    'nn': {
+      'device': None,
+      'dtype': 'float32',
+      'nn_class': 'NeuralNetworkOneLayer',
+      'hidden_size': 16,
+      'activation': 'Tanh',
+      'optimizer': 'Adam',
+      'lr': 0.001,
+    }
   }
 
   if 'base_dir' not in conf or conf['base_dir'] is None:

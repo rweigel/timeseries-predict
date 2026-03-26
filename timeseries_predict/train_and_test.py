@@ -186,7 +186,7 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       test_df[outputs],
       outputs,
       indent,
-      kwargs
+      kwargs['nn']
     ]
 
     _print_prolog(inputs, outputs, model, removed_input, indent)

@@ -1,14 +1,15 @@
 base_config: ./configs/satellite-b/base.yaml
 run_desc: Same as run-0-cluster, but use 2x hidden units.
-num_epochs: 100
 parallel_jobs: false
 data:
   satellites:
     - cluster1
 
-nn_class: NeuralNetworkTwoLayer
-hidden_size: 64
-activation: ReLU
+nn:
+  n_epochs: 100
+  nn_class: NeuralNetworkTwoLayer
+  hidden_size: 32
+  activation: ReLU
 
 models:
   - ols

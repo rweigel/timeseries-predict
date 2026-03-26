@@ -1,11 +1,12 @@
 base_config: ./configs/satellite-b/base.yaml
 run_desc: Run all satellites.
-num_epochs: 2
 parallel_jobs: false
 
-nn_class: NeuralNetworkOneLayer
-hidden_size: 32
-activation: ReLU
+nn:
+  n_epochs: 2
+  nn_class: NeuralNetworkOneLayer
+  hidden_size: 32
+  activation: ReLU
 
 models:
   - ols
