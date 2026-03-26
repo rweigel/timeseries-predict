@@ -192,10 +192,12 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     _print_prolog(inputs, outputs, model, removed_input, indent)
 
     if model.startswith('nn_mimo'):
-      train_preds, test_preds, train_arvs, test_arvs = mimo(*nn_args)
+      train_preds, test_preds, train_arvs, test_arvs, network = mimo(*nn_args)
 
     if model.startswith('nn_miso'):
-      train_preds, test_preds, train_arvs, test_arvs = miso(*nn_args)
+      train_preds, test_preds, train_arvs, test_arvs, network = miso(*nn_args)
+
+    results[model]['model'] = network
 
     results[model]['epoch_metrics']['train'] = train_arvs
     results[model]['epoch_metrics']['test'] = test_arvs

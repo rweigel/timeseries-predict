@@ -64,7 +64,7 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   test_preds = scaler_targets.inverse_transform(test_preds)
   train_preds = scaler_targets.inverse_transform(train_preds)
 
-  return train_preds, test_preds, train_arvs, test_arvs
+  return train_preds, test_preds, train_arvs, test_arvs, model
 
 
 def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, indent, kwargs):
@@ -86,18 +86,10 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   test_arvs = np.empty((kwargs['num_epochs'], len(output_names)))
   start = time.time()
 
-  # Compute number of model parameters for each single-output network is
-  # approximately 1/len(output_names) of that for the multi-output network
-  num_inputs = train_inputs.shape[1]
-  n_outputs = len(output_names)
-  h = kwargs['hidden_size']
-  mimo_params = h * (num_inputs + n_outputs + 1) + n_outputs
-  # Solve: miso_h * (num_inputs + 2) + 1 = mimo_params / n_outputs
-  miso_hidden_size = max(1, round((mimo_params / n_outputs - 1) / (num_inputs + 2)))
-
   nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
+  models = []
   for i in range(len(output_names)):
-    model = nn_class(train_inputs.shape[1], 1, hidden_size=miso_hidden_size, activation=kwargs.get('activation', 'Tanh')).to(device)
+    model = nn_class(train_inputs.shape[1], 1, hidden_size=kwargs['hidden_size'], activation=kwargs['activation']).to(device)
     optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
     if i == 0:
       n_train = np.prod(train_inputs.shape[0])
@@ -129,6 +121,8 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
       train_preds[output_names[i]] = model(train_inputs).cpu().numpy()
       test_preds[output_names[i]] = model(test_inputs).cpu().numpy()
 
+    models.append(model)
+
   # Combine outputs results
   train_preds = np.column_stack([train_preds[output] for output in output_names])
   test_preds = np.column_stack([test_preds[output] for output in output_names])
@@ -137,7 +131,7 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
   train_preds = scaler_targets.inverse_transform(train_preds)
   test_preds = scaler_targets.inverse_transform(test_preds)
 
-  return train_preds, test_preds, train_arvs, test_arvs
+  return train_preds, test_preds, train_arvs, test_arvs, models
 
 
 class _NeuralNetworkTwoLayer(torch.nn.Module):
@@ -282,17 +276,6 @@ def _get_nn_class(name):
   if name not in classes:
     raise ValueError(f"nn_class '{name}' not in {list(classes.keys())}")
   return classes[name]
-
-
-def plot_model(model, num_inputs, file_path='model_graph'):
-  """Render a computation graph of model to file_path.pdf using torchviz."""
-  from torchviz import make_dot
-
-  dummy_input = torch.zeros(1, num_inputs)
-  output = model(dummy_input)
-  dot = make_dot(output, params=dict(model.named_parameters()))
-  dot.render(file_path, format='pdf', cleanup=True)
-  print(f"Model graph written to: {file_path}.pdf")
 
 
 def _num_params(model):

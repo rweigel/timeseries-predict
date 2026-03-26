@@ -23,10 +23,17 @@ def plot(reps, plot_dir, file_base):
 
     return axs
 
-  def savefig(plt, file_name):
-    os.makedirs(plot_dir, exist_ok=True)
+  def savefig(plt, file_name, format=["png"]):
+    if isinstance(format, str):
+      format = [format]
+    if len(format) == 1:
+      format = format[0]
+    else:
+      for fmt in format:
+        savefig(plt, file_name, fmt)
+      return
 
-    file_path = os.path.join(plot_dir, f"{file_name}.png")
+    file_path = os.path.join(plot_dir, f"{file_name}.{format}")
     plt.savefig(file_path, bbox_inches="tight")
     print(f"        Wrote: {os.path.basename(file_path)}")
     plt.close()
@@ -120,6 +127,13 @@ def plot(reps, plot_dir, file_base):
     plt.tight_layout()
     savefig(plt, f"{model}-epoch-metrics-{file_base}rep_{rep_num}")
 
+  def _model_diagram(model, input_names, output_names, file_base):
+    from .plot_model import plot_model
+    plot_model(model, input_names=reps[0]['inputs'], output_names=reps[0]['outputs'])
+    savefig(plt, "nn_miso-model" , format=["png", "svg"])
+
+  model = reps[0]['models']['nn_miso']['model'][0]
+  _model_diagram(model, reps[0]['inputs'], reps[0]['outputs'], file_base)
 
   rep_num = 0 # Only plot results for the first repetition for now.
   # TODO: Plot average model results across all repetitions and
