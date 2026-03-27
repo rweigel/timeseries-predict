@@ -1,4 +1,7 @@
+import sys
+
 from numpy import average
+import os
 
 
 def job_list(conf):
@@ -37,7 +40,13 @@ def job_data(site, average, **config):
   import pandas as pd
 
   # read in csv
-  data_csv = pd.read_csv(config['data_directory'] + f"/{site}/{site}_gic_b.csv")
+  csv_name = config['data_directory'] + f"/{site}/{site}_gic_b.csv"
+  if not os.path.exists(csv_name): # reading in files if data_prep not run yet
+    job_script_dir = os.path.dirname(__file__)
+    sys.path.append(job_script_dir)
+    print(f"CSV file not found: {csv_name}. Running data prep script.")
+    import swerve_data_prep
+  data_csv = pd.read_csv(csv_name)
 
   # Create a time series with a datetime column and input/output columns
   df = pd.DataFrame({
