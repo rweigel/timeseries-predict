@@ -45,7 +45,8 @@ def job_data(site, average, **config):
     job_script_dir = os.path.dirname(__file__)
     sys.path.append(job_script_dir)
     print(f"CSV file not found: {csv_name}. Running data prep script.")
-    import swerve_data_prep
+    from swerve_data_prep import swerve_data_prep
+    swerve_data_prep(config['event'])
   data_csv = pd.read_csv(csv_name)
 
   # Create a time series with a datetime column and input/output columns
