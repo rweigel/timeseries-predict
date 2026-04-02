@@ -14,3 +14,6 @@ nn:
 models:
   - ols
   - nn_mimo
+  - nn_mimo_resid
+  - nn_miso
+  - nn_miso_resid

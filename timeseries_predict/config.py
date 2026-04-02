@@ -41,7 +41,7 @@ def config(conf_file):
       'device': None,
       'dtype': 'float32',
       'nn_class': 'NeuralNetworkOneLayer',
-      'hidden_size': 16,
+      'hidden_size': 32,
       'activation': 'Tanh',
       'optimizer': 'Adam',
       'lr': 0.001,

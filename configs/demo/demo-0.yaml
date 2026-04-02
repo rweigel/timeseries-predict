@@ -1,6 +1,5 @@
 # All paths are relative to run.py.
 base_config: ./configs/demo/base.yaml
-run_dir: demo-0
 run_desc: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
 
 data:

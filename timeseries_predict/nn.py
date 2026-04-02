@@ -23,7 +23,11 @@ def mimo(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
   # Multi-output neural network
   nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
-  model = nn_class(train_inputs.shape[1], train_targets.shape[1], hidden_size=kwargs['hidden_size'], activation=kwargs.get('activation', 'Tanh')).to(device)
+  nn_kwargs = {
+    "hidden_size": kwargs['hidden_size'],
+    "activation":  kwargs['activation']
+  }
+  model = nn_class(train_inputs.shape[1], train_targets.shape[1], **nn_kwargs).to(device)
 
   print(f"{indent}  Number of fitting parameters: {_num_params(model)}")
   n_train = np.prod(train_inputs.shape[0])
@@ -88,8 +92,12 @@ def miso(train_inputs, train_targets, test_inputs, test_targets, output_names, i
 
   nn_class = _get_nn_class(kwargs.get('nn_class', 'NeuralNetworkTwoLayer'))
   models = []
+  nn_kwargs = {
+    "hidden_size": kwargs['hidden_size'],
+    "activation":  kwargs['activation']
+  }
   for i in range(len(output_names)):
-    model = nn_class(train_inputs.shape[1], 1, hidden_size=kwargs['hidden_size'], activation=kwargs['activation']).to(device)
+    model = nn_class(train_inputs.shape[1], 1, **nn_kwargs).to(device)
     optimizer = _get_optimizer(model, kwargs['optimizer'], kwargs['optimizer_kwargs'])
     if i == 0:
       n_train = np.prod(train_inputs.shape[0])

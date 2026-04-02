@@ -66,7 +66,7 @@ def plot(reps, plot_dir, file_base):
 
       if i == 0:
         axs[i].set_title(f"{model} | {cat} data")
-      axs[i].set_ylabel('Predicted')
+      axs[i].set_ylabel(f'Predicted {output}')
       axs[i].grid(True)
       if i == len(outputs) - 1:
         axs[i].set_xlabel('Actual')

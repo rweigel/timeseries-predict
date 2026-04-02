@@ -1,7 +1,8 @@
 # All paths are relative to run.py.
 base_config: ./configs/demo/base.yaml
-run_dir: demo-2
 run_desc: Same as demo-1, but with parallel_jobs = true
+
+parallel_jobs: true
 
 data:
   noise_amplitude: 0.1
@@ -12,5 +13,3 @@ data:
   # datetime by Python YAML parser
   start: "2023-01-01"
   end: "2023-01-02"
-
-parallel_jobs: true

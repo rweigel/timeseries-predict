@@ -1,75 +1,2150 @@
 
-***
+****************************************************************************************************************
 Running command: python run.py configs/demo/demo-0.yaml
-***
-
-Reading: configs/demo/demo-0.yaml
+****************************************************************************************************************
+--------------------------------------------------------------------------------
+configs/demo/demo-0.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 1
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: False
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Run contains three jobs, each with different noise equal to (job index) * noise_amplitude'
+  run_dir: './data/results/demo/demo-0'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
 Getting job list by calling ./configs/demo/job_script.py:job_list(conf)
 Getting job list from ./configs/demo/job_script.py
-Job 1: name: noise-multiplier-0, Number of segments: 1
-  Writing job configuration to: ./data/results/demo/demo-0/noise-multiplier-0/config.json
+Job 1: name: 'noise-multiplier-0', Number of segments: 1
+  Writing job configuration to: ./data/results/demo/demo-0/noise-multiplier-0/config.yaml
 --------------------------------------------------------------------------------
 Starting job 'noise-multiplier-0' with 1 DataFrame
   Removed input: None
     Training using single DataFrame
-        Bootstrap repetition 1/2
-          Performing 1-output/1-input linear regression
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
             Number of fitting parameters: 2
-            Number of training values: 69120
-            Number of testing values:  17280 (ratio: 0.20)
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
                           | output1 ARV =   0.000 (train; 0.010 s)
                           | output1 ARV =   0.000 (test)
-        Bootstrap repetition 2/2
-          Performing 1-output/1-input linear regression
-            Number of fitting parameters: 2
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.037 (train; 0.380 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.214 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV = 36290614313933274280261320704.000 (train; 0.211 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 5213768721788441655771136.000 (train; 0.209 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.010 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 18693349601085130922718230740992.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
             Number of training values: 69120
             Number of testing values:  17280 (ratio: 0.20)
-                          | output1 ARV =   0.000 (train; 0.004 s)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV = 61918181777944684103739637760.000 (train; 0.250 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 14239984840287171293216768.000 (train; 0.214 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.048 (train; 0.218 s)
+                          | output1 ARV =   4.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.213 s)
+                          | output1 ARV =   3.998 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.010 s)
                           | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.001 (train)
+                          | output1 ARV =   0.999 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.049 (train; 0.209 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.246 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.048 (train; 0.205 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.206 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 22525334078024291009723105280.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.054 (train; 0.212 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.207 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.069 (train; 0.243 s)
+                          | output1 ARV =   3.993 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.208 s)
+                          | output1 ARV =   4.001 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.000 (train)
+                          | output1 ARV =   1.001 (test)
   Saved './data/results/demo/demo-0/noise-multiplier-0/lno/lno.pkl'
-
-  Creating tables and plots
-    Reading: ./data/results/demo/demo-0/noise-multiplier-0/config.json
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-0/noise-multiplier-0/config.yaml
     Looking for ./data/results/demo/demo-0/noise-multiplier-0/loo
     Looking for ./data/results/demo/demo-0/noise-multiplier-0/lno
     Processing dir: ./data/results/demo/demo-0/noise-multiplier-0/lno/
       Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
     Wrote ./data/results/demo/demo-0/noise-multiplier-0/lno.md
+  Finished table and plot generation.
 Finished job 'noise-multiplier-0'
 
 
-***
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Reading: ./data/results/demo/demo-0/noise-multiplier-0/lno.md
+  Wrote: ./data/results/demo/demo-0/tables.md
+
+****************************************************************************************************************
 Running command: python run.py data/results/demo/demo-0
-***
+****************************************************************************************************************
 
-
-    Processing job: noise-multiplier-0
-    Reading: data/results/demo/demo-0/noise-multiplier-0/config.json
+Processing job: noise-multiplier-0
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-0/noise-multiplier-0/config.yaml
     Looking for data/results/demo/demo-0/noise-multiplier-0/loo
     Looking for data/results/demo/demo-0/noise-multiplier-0/lno
     Processing dir: data/results/demo/demo-0/noise-multiplier-0/lno/
       Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
     Wrote data/results/demo/demo-0/noise-multiplier-0/lno.md
+  Finished table and plot generation.
 
-***
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Reading: data/results/demo/demo-0/noise-multiplier-0/lno.md
+  Wrote: data/results/demo/demo-0/tables.md
+
+****************************************************************************************************************
 Running command: python run.py data/results/demo/demo-0/noise-multiplier-0
-***
-
-    Reading: data/results/demo/demo-0/noise-multiplier-0/config.json
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-0/noise-multiplier-0/config.yaml
     Looking for data/results/demo/demo-0/noise-multiplier-0/loo
     Looking for data/results/demo/demo-0/noise-multiplier-0/lno
     Processing dir: data/results/demo/demo-0/noise-multiplier-0/lno/
       Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
     Wrote data/results/demo/demo-0/noise-multiplier-0/lno.md
+  Finished table and plot generation.
 
-***
-Running command: python run.py configs/satellite-b/parallel-test.yaml
-***
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Wrote: data/results/demo/demo-0/noise-multiplier-0/tables.md
 
-Reading: configs/satellite-b/parallel-test.yaml
+****************************************************************************************************************
+Running command: python run.py configs/demo/demo-1.yaml
+****************************************************************************************************************
+--------------------------------------------------------------------------------
+configs/demo/demo-1.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 3
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: False
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Run contains three jobs, each with different noise equal to (job index) * noise_amplitude'
+  run_dir: './data/results/demo/demo-1'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
+Getting job list by calling ./configs/demo/job_script.py:job_list(conf)
+Getting job list from ./configs/demo/job_script.py
+Job 1: name: 'noise-multiplier-0', Number of segments: 1
+Job 2: name: 'noise-multiplier-1', Number of segments: 1
+Job 3: name: 'noise-multiplier-2', Number of segments: 1
+  Writing job configuration to: ./data/results/demo/demo-1/noise-multiplier-0/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-0' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.065 (train; 0.291 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.215 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV = 58382149313435619682047492096.000 (train; 0.225 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 42277474776608452078731264.000 (train; 0.231 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 18699505290040852156966852624384.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV = 55297230351935643858684084224.000 (train; 0.265 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 6175830412375900452552704.000 (train; 0.216 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.030 (train; 0.212 s)
+                          | output1 ARV =   4.005 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.207 s)
+                          | output1 ARV =   3.998 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.003 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.001 (train)
+                          | output1 ARV =   0.999 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.029 (train; 0.201 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.248 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.047 (train; 0.209 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.203 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 22525334078024291009723105280.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.043 (train; 0.209 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.204 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.093 (train; 0.244 s)
+                          | output1 ARV =   4.004 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.211 s)
+                          | output1 ARV =   4.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.001 (train)
+                          | output1 ARV =   1.000 (test)
+  Saved './data/results/demo/demo-1/noise-multiplier-0/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-1/noise-multiplier-0/config.yaml
+    Looking for ./data/results/demo/demo-1/noise-multiplier-0/loo
+    Looking for ./data/results/demo/demo-1/noise-multiplier-0/lno
+    Processing dir: ./data/results/demo/demo-1/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-1/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-0'
+
+  Writing job configuration to: ./data/results/demo/demo-1/noise-multiplier-1/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-1' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.102 (train; 0.219 s)
+                          | output1 ARV =   0.021 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.292 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.136 (train; 0.208 s)
+                          | output1 ARV =   1.004 (test)
+              Epoch 2/2   | output1 ARV =   1.011 (train; 0.207 s)
+                          | output1 ARV =   1.015 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  49.926 (train)
+                          | output1 ARV =   0.020 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.275 (train; 0.215 s)
+                          | output1 ARV =   0.996 (test)
+              Epoch 2/2   | output1 ARV =   1.013 (train; 0.230 s)
+                          | output1 ARV =   0.987 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.170 (train; 0.260 s)
+                          | output1 ARV =   3.937 (test)
+              Epoch 2/2   | output1 ARV =   0.021 (train; 0.214 s)
+                          | output1 ARV =   3.930 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.010 (train)
+                          | output1 ARV =   0.992 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.020 (train; 0.003 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.063 (train; 0.216 s)
+                          | output1 ARV =   0.021 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.213 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.188 (train; 0.213 s)
+                          | output1 ARV =   0.989 (test)
+              Epoch 2/2   | output1 ARV =   1.012 (train; 0.261 s)
+                          | output1 ARV =   1.020 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.003 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  49.936 (train)
+                          | output1 ARV =   0.020 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.230 (train; 0.214 s)
+                          | output1 ARV =   0.999 (test)
+              Epoch 2/2   | output1 ARV =   1.011 (train; 0.209 s)
+                          | output1 ARV =   0.996 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.098 (train; 0.217 s)
+                          | output1 ARV =   3.952 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.216 s)
+                          | output1 ARV =   3.896 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.003 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.029 (train)
+                          | output1 ARV =   0.974 (test)
+  Saved './data/results/demo/demo-1/noise-multiplier-1/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-1/noise-multiplier-1/config.yaml
+    Looking for ./data/results/demo/demo-1/noise-multiplier-1/loo
+    Looking for ./data/results/demo/demo-1/noise-multiplier-1/lno
+    Processing dir: ./data/results/demo/demo-1/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-1/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-1'
+
+  Writing job configuration to: ./data/results/demo/demo-1/noise-multiplier-2/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-2' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.075 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.208 (train; 0.271 s)
+                          | output1 ARV =   0.077 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.216 s)
+                          | output1 ARV =   0.078 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.133 (train; 0.227 s)
+                          | output1 ARV =   0.990 (test)
+              Epoch 2/2   | output1 ARV =   1.013 (train; 0.281 s)
+                          | output1 ARV =   0.990 (test)
+             OLS results
+                          | output1 ARV =   0.075 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  13.546 (train)
+                          | output1 ARV =   0.077 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.112 (train; 0.219 s)
+                          | output1 ARV =   0.987 (test)
+              Epoch 2/2   | output1 ARV =   1.009 (train; 0.212 s)
+                          | output1 ARV =   1.021 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.122 (train; 0.208 s)
+                          | output1 ARV =   3.798 (test)
+              Epoch 2/2   | output1 ARV =   0.077 (train; 0.210 s)
+                          | output1 ARV =   3.796 (test)
+             OLS results
+                          | output1 ARV =   0.075 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   0.999 (train)
+                          | output1 ARV =   1.005 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.075 (train; 0.003 s)
+                          | output1 ARV =   0.075 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.125 (train; 0.252 s)
+                          | output1 ARV =   0.077 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.215 s)
+                          | output1 ARV =   0.075 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.331 (train; 0.226 s)
+                          | output1 ARV =   0.995 (test)
+              Epoch 2/2   | output1 ARV =   1.005 (train; 0.226 s)
+                          | output1 ARV =   0.990 (test)
+             OLS results
+                          | output1 ARV =   0.075 (train; 0.003 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  13.548 (train)
+                          | output1 ARV =   0.075 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.536 (train; 0.239 s)
+                          | output1 ARV =   1.011 (test)
+              Epoch 2/2   | output1 ARV =   1.006 (train; 0.262 s)
+                          | output1 ARV =   1.036 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.160 (train; 0.222 s)
+                          | output1 ARV =   3.693 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.225 s)
+                          | output1 ARV =   3.770 (test)
+             OLS results
+                          | output1 ARV =   0.075 (train; 0.003 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   0.999 (train)
+                          | output1 ARV =   1.003 (test)
+  Saved './data/results/demo/demo-1/noise-multiplier-2/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-1/noise-multiplier-2/config.yaml
+    Looking for ./data/results/demo/demo-1/noise-multiplier-2/loo
+    Looking for ./data/results/demo/demo-1/noise-multiplier-2/lno
+    Processing dir: ./data/results/demo/demo-1/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-1/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-2'
+
+
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Reading: ./data/results/demo/demo-1/noise-multiplier-0/lno.md
+  Reading: ./data/results/demo/demo-1/noise-multiplier-1/lno.md
+  Reading: ./data/results/demo/demo-1/noise-multiplier-2/lno.md
+  Wrote: ./data/results/demo/demo-1/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-1
+****************************************************************************************************************
+
+Processing job: noise-multiplier-0
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-0/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-0/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+
+Processing job: noise-multiplier-1
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-1/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-1/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-1/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+
+Processing job: noise-multiplier-2
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-2/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-2/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-2/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Reading: data/results/demo/demo-1/noise-multiplier-0/lno.md
+  Reading: data/results/demo/demo-1/noise-multiplier-1/lno.md
+  Reading: data/results/demo/demo-1/noise-multiplier-2/lno.md
+  Wrote: data/results/demo/demo-1/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-1/noise-multiplier-0
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-0/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-0/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Wrote: data/results/demo/demo-1/noise-multiplier-0/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-1/noise-multiplier-1
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-1/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-1/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-1/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Wrote: data/results/demo/demo-1/noise-multiplier-1/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-1/noise-multiplier-2
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-1/noise-multiplier-2/config.yaml
+    Looking for data/results/demo/demo-1/noise-multiplier-2/loo
+    Looking for data/results/demo/demo-1/noise-multiplier-2/lno
+    Processing dir: data/results/demo/demo-1/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-1/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Run contains three jobs, each with different noise equal to (job index) * noise_amplitude
+  Wrote: data/results/demo/demo-1/noise-multiplier-2/tables.md
+
+****************************************************************************************************************
+Running command: python run.py configs/demo/demo-2.yaml
+****************************************************************************************************************
+--------------------------------------------------------------------------------
+configs/demo/demo-2.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 3
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: True
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Same as demo-1, but with parallel_jobs = true'
+  run_dir: './data/results/demo/demo-2'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
+Getting job list by calling ./configs/demo/job_script.py:job_list(conf)
+Getting job list from ./configs/demo/job_script.py
+Job 1: name: 'noise-multiplier-0', Number of segments: 1
+Job 2: name: 'noise-multiplier-1', Number of segments: 1
+Job 3: name: 'noise-multiplier-2', Number of segments: 1
+# CPUs available for parallel processing: 16
+Using 3 CPUs for parallel processing 3 jobs
+--------------------------------------------------------------------------------
+configs/demo/demo-2.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 3
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: True
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Same as demo-1, but with parallel_jobs = true'
+  run_dir: './data/results/demo/demo-2'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
+  Writing job configuration to: ./data/results/demo/demo-2/noise-multiplier-0/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-0' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.039 (train; 0.322 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.247 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV = 53502702754246281459608322048.000 (train; 0.244 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 2833266839392050569281536.000 (train; 0.244 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 18693660478930367496267958845440.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV = 50644306268196596777855483904.000 (train; 0.289 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV = 2159394884473266125144064.000 (train; 0.243 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.048 (train; 0.245 s)
+                          | output1 ARV =   4.003 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.245 s)
+                          | output1 ARV =   4.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.001 (train)
+                          | output1 ARV =   1.000 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.031 (train; 0.238 s)
+                          | output1 ARV =   0.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.286 s)
+                          | output1 ARV =   0.000 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.027 (train; 0.241 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.241 s)
+                          | output1 ARV =   1.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV = 22525334078024295407769616384.000 (train)
+                          | output1 ARV =   0.000 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.065 (train; 0.244 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.244 s)
+                          | output1 ARV =   1.000 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.054 (train; 0.285 s)
+                          | output1 ARV =   3.996 (test)
+              Epoch 2/2   | output1 ARV =   0.000 (train; 0.241 s)
+                          | output1 ARV =   4.000 (test)
+             OLS results
+                          | output1 ARV =   0.000 (train; 0.004 s)
+                          | output1 ARV =   0.000 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.001 (train)
+                          | output1 ARV =   1.000 (test)
+  Saved './data/results/demo/demo-2/noise-multiplier-0/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-2/noise-multiplier-0/config.yaml
+    Looking for ./data/results/demo/demo-2/noise-multiplier-0/loo
+    Looking for ./data/results/demo/demo-2/noise-multiplier-0/lno
+    Processing dir: ./data/results/demo/demo-2/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-2/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-0'
+
+--------------------------------------------------------------------------------
+configs/demo/demo-2.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 3
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: True
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Same as demo-1, but with parallel_jobs = true'
+  run_dir: './data/results/demo/demo-2'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
+  Writing job configuration to: ./data/results/demo/demo-2/noise-multiplier-2/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-2' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.074 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.160 (train; 0.320 s)
+                          | output1 ARV =   0.077 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.245 s)
+                          | output1 ARV =   0.077 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.087 (train; 0.238 s)
+                          | output1 ARV =   1.030 (test)
+              Epoch 2/2   | output1 ARV =   1.010 (train; 0.237 s)
+                          | output1 ARV =   1.001 (test)
+             OLS results
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.074 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  13.434 (train)
+                          | output1 ARV =   0.075 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.081 (train; 0.288 s)
+                          | output1 ARV =   0.994 (test)
+              Epoch 2/2   | output1 ARV =   1.013 (train; 0.238 s)
+                          | output1 ARV =   1.046 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.118 (train; 0.238 s)
+                          | output1 ARV =   3.798 (test)
+              Epoch 2/2   | output1 ARV =   0.077 (train; 0.239 s)
+                          | output1 ARV =   3.732 (test)
+             OLS results
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.074 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.030 (train)
+                          | output1 ARV =   0.977 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.158 (train; 0.235 s)
+                          | output1 ARV =   0.077 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.289 s)
+                          | output1 ARV =   0.076 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.840 (train; 0.239 s)
+                          | output1 ARV =   0.991 (test)
+              Epoch 2/2   | output1 ARV =   1.009 (train; 0.237 s)
+                          | output1 ARV =   1.020 (test)
+             OLS results
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  13.221 (train)
+                          | output1 ARV =   0.076 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.155 (train; 0.241 s)
+                          | output1 ARV =   1.000 (test)
+              Epoch 2/2   | output1 ARV =   1.014 (train; 0.237 s)
+                          | output1 ARV =   0.961 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.191 (train; 0.286 s)
+                          | output1 ARV =   3.802 (test)
+              Epoch 2/2   | output1 ARV =   0.076 (train; 0.238 s)
+                          | output1 ARV =   3.729 (test)
+             OLS results
+                          | output1 ARV =   0.074 (train; 0.004 s)
+                          | output1 ARV =   0.075 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.020 (train)
+                          | output1 ARV =   0.981 (test)
+  Saved './data/results/demo/demo-2/noise-multiplier-2/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-2/noise-multiplier-2/config.yaml
+    Looking for ./data/results/demo/demo-2/noise-multiplier-2/loo
+    Looking for ./data/results/demo/demo-2/noise-multiplier-2/lno
+    Processing dir: ./data/results/demo/demo-2/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-2/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-2'
+
+--------------------------------------------------------------------------------
+configs/demo/demo-2.yaml:
+  job_script: './configs/demo/job_script.py'
+  data: 
+   noise_amplitude: 0.1
+   num_jobs: 3
+   cadence: '1s'
+   start: '2023-01-01'
+   end: '2023-01-02'
+  job: None
+  base_dir: './data/results/demo'
+  parallel_jobs: True
+  removed_inputs: [None]
+  inputs: ['input1']
+  outputs: ['output1']
+  n_reps: 2
+  train_fraction: 0.8
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  nn: 
+   device: None
+   n_epochs: 2
+   dtype: 'float32'
+   batch_size: 256
+   hidden_size: 32
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+  base_config: './configs/demo/base.yaml'
+  run_desc: 'Same as demo-1, but with parallel_jobs = true'
+  run_dir: './data/results/demo/demo-2'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
+  Writing job configuration to: ./data/results/demo/demo-2/noise-multiplier-1/config.yaml
+--------------------------------------------------------------------------------
+Starting job 'noise-multiplier-1' with 1 DataFrame
+  Removed input: None
+    Training using single DataFrame
+        Repetition 1/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.049 (train; 0.321 s)
+                          | output1 ARV =   0.021 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.244 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.189 (train; 0.240 s)
+                          | output1 ARV =   0.999 (test)
+              Epoch 2/2   | output1 ARV =   1.012 (train; 0.238 s)
+                          | output1 ARV =   1.020 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  49.794 (train)
+                          | output1 ARV =   0.020 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.209 (train; 0.286 s)
+                          | output1 ARV =   0.992 (test)
+              Epoch 2/2   | output1 ARV =   1.012 (train; 0.239 s)
+                          | output1 ARV =   1.010 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.112 (train; 0.242 s)
+                          | output1 ARV =   3.977 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.242 s)
+                          | output1 ARV =   3.959 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   0.993 (train)
+                          | output1 ARV =   1.008 (test)
+        Repetition 2/2
+          Performing 1-output linear regression with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 2
+            Number of training values: 69120 (# parameters/# train: 0.0000)
+            Number of testing values:  17280 (# test/# train: 0.20)
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   0.065 (train; 0.239 s)
+                          | output1 ARV =   0.020 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.284 s)
+                          | output1 ARV =   0.020 (test)
+          Training 1-output neural network with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of fitting parameters: 1153
+            Number of training values: 69120 (# parameters/# train: 0.0167)
+            Number of testing values:  17280 (# test/# train: 0.20)
+              Epoch 1/2   | output1 ARV =   1.162 (train; 0.244 s)
+                          | output1 ARV =   0.997 (test)
+              Epoch 2/2   | output1 ARV =   1.013 (train; 0.238 s)
+                          | output1 ARV =   0.999 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =  50.942 (train)
+                          | output1 ARV =   0.020 (test)
+          Training 1 single-output neural networks with all 1 input(s).
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   1.169 (train; 0.240 s)
+                          | output1 ARV =   1.015 (test)
+              Epoch 2/2   | output1 ARV =   1.012 (train; 0.240 s)
+                          | output1 ARV =   1.002 (test)
+          Training 1 single-output neural networks with all 1 input(s). on ols residuals
+            Inputs:  ['input1']
+            Outputs: ['output1']
+            Number of training values: 69120
+            Number of testing values:  17280 (ratio: 0.20)
+            Training single-output neural network for output = 'output1'
+              Epoch 1/2   | output1 ARV =   0.070 (train; 0.285 s)
+                          | output1 ARV =   3.935 (test)
+              Epoch 2/2   | output1 ARV =   0.020 (train; 0.239 s)
+                          | output1 ARV =   3.904 (test)
+             OLS results
+                          | output1 ARV =   0.020 (train; 0.004 s)
+                          | output1 ARV =   0.020 (test)
+             NN results when residuals are added back
+                          | output1 ARV =   1.019 (train)
+                          | output1 ARV =   0.982 (test)
+  Saved './data/results/demo/demo-2/noise-multiplier-1/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/demo/demo-2/noise-multiplier-1/config.yaml
+    Looking for ./data/results/demo/demo-2/noise-multiplier-1/loo
+    Looking for ./data/results/demo/demo-2/noise-multiplier-1/lno
+    Processing dir: ./data/results/demo/demo-2/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/demo/demo-2/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+Finished job 'noise-multiplier-1'
+
+
+Agregating results for all jobs.
+  Run description: Same as demo-1, but with parallel_jobs = true
+  Reading: ./data/results/demo/demo-2/noise-multiplier-0/lno.md
+  Reading: ./data/results/demo/demo-2/noise-multiplier-1/lno.md
+  Reading: ./data/results/demo/demo-2/noise-multiplier-2/lno.md
+  Wrote: ./data/results/demo/demo-2/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-2
+****************************************************************************************************************
+
+Processing job: noise-multiplier-0
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-0/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-0/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+
+Processing job: noise-multiplier-1
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-1/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-1/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-1/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+
+Processing job: noise-multiplier-2
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-2/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-2/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-2/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Same as demo-1, but with parallel_jobs = true
+  Reading: data/results/demo/demo-2/noise-multiplier-0/lno.md
+  Reading: data/results/demo/demo-2/noise-multiplier-1/lno.md
+  Reading: data/results/demo/demo-2/noise-multiplier-2/lno.md
+  Wrote: data/results/demo/demo-2/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-2/noise-multiplier-0
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-0/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-0/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-0/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-0/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-0/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Same as demo-1, but with parallel_jobs = true
+  Wrote: data/results/demo/demo-2/noise-multiplier-0/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-2/noise-multiplier-1
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-1/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-1/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-1/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-1/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Same as demo-1, but with parallel_jobs = true
+  Wrote: data/results/demo/demo-2/noise-multiplier-1/tables.md
+
+****************************************************************************************************************
+Running command: python run.py data/results/demo/demo-2/noise-multiplier-2
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/demo/demo-2/noise-multiplier-2/config.yaml
+    Looking for data/results/demo/demo-2/noise-multiplier-2/loo
+    Looking for data/results/demo/demo-2/noise-multiplier-2/lno
+    Processing dir: data/results/demo/demo-2/noise-multiplier-2/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/demo/demo-2/noise-multiplier-2/lno.md
+  Finished table and plot generation.
+
+Agregating results for all jobs.
+  Run description: Same as demo-1, but with parallel_jobs = true
+  Wrote: data/results/demo/demo-2/noise-multiplier-2/tables.md
+
+****************************************************************************************************************
+Running command: python run.py configs/satellite-b/test/serial-test.yaml
+****************************************************************************************************************
+--------------------------------------------------------------------------------
+configs/satellite-b/test/serial-test.yaml:
+  job_script: './configs/satellite-b/job_script.py'
+  data: 
+   data_directory: './data/raw/satellite-b/files'
+   n_years_max: 3
+   satellites: ['cluster1']
+   loo: False
+  job: None
+  parallel_jobs: False
+  base_dir: './data/results/satellite-b'
+  run_desc: 'Use parallel_jobs = false and do a single job for cluster1'
+  n_reps: 1
+  models: : [ols, nn_mimo, ..., nn_miso, nn_miso_resid] (5 elements)
+  inputs: : [r, theta, ..., ey, ey_avg] (9 elements)
+  outputs: ['bx', 'by', 'bz']
+  removed_inputs: [None]
+  train_fraction: 0.8
+  nn: 
+   nn_class: 'NeuralNetworkOneLayer'
+   dtype: 'float32'
+   n_epochs: 2
+   n_reps: 1
+   batch_size: 256
+   hidden_size: 16
+   activation: 'Tanh'
+   optimizer: 'Adam'
+   optimizer_kwargs: 
+    lr: 0.01
+   device: None
+  base_config: './configs/satellite-b/base.yaml'
+  run_dir: './data/results/satellite-b/test/serial-test'
+  n_epochs: 200
+  batch_size: 256
+  lags: None
+--------------------------------------------------------------------------------
 Getting job list by calling ./configs/satellite-b/job_script.py:job_list(conf)
 Getting job list from ./configs/satellite-b/job_script.py
   job_data(): Reading data files
@@ -77,535 +2152,281 @@ Getting job list from ./configs/satellite-b/job_script.py
     Reading: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
     Dropped 1/31191 rows with NaN/NaT values in: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
     Reading: ./data/raw/satellite-b/files/cluster1_2003_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2004_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2005_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2006_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2007_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2008_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2009_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2010_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2011_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2012_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2013_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2014_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2015_avg_300_omni.pkl
-  job_data(): Reading data files
-    Reading: ./data/raw/satellite-b/files/cluster2_2001_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2002_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2003_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2004_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2005_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2006_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2007_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2008_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2009_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2010_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2011_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2012_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2013_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2014_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster2_2015_avg_300_omni.pkl
-Job 1: name: cluster1, Number of segments: 1
-Job 2: name: cluster2, Number of segments: 1
-# CPUs available for parallel processing: 16
-Using 2 CPUs for parallel processing 2 jobs
-Reading: configs/satellite-b/parallel-test.yaml
-  Writing job description to: ./data/results/satellite-b/parallel-test/description.txt
-  Writing job configuration to: ./data/results/satellite-b/parallel-test/cluster1/config.json
+Job 1: name: 'cluster1', Number of segments: 1
+  Writing job configuration to: ./data/results/satellite-b/test/serial-test/cluster1/config.yaml
 --------------------------------------------------------------------------------
 Starting job 'cluster1' with 1 DataFrame
   Removed input: None
     Training using single DataFrame
-        Bootstrap repetition 1/2
-          Performing 3-output/9-input linear regression
+        Repetition 1/1
+          Performing 3-output linear regression with all 9 input(s).
+            Inputs:  ['r', 'theta', 'phi', 'imfby', 'imfbz', 'vsw', 'nsw', 'ey', 'ey_avg']
+            Outputs: ['bx', 'by', 'bz']
             Number of fitting parameters: 10
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-                          | bx ARV =   0.388 | by ARV =   0.947 | bz ARV =   0.823 (train; 0.098 s)
-                          | bx ARV =   0.391 | by ARV =   0.949 | bz ARV =   0.817 (test)
-          Training 3-output neural network with all inputs
-            Number of fitting parameters: 419
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   0.538 | by ARV =   4.178 | bz ARV =   1.671 (train; 1.923 s)
-                          | bx ARV =   0.376 | by ARV =   0.979 | bz ARV =   0.687 (test)
-              Epoch 2/2   | bx ARV =   0.370 | by ARV =   0.989 | bz ARV =   0.647 (train; 1.821 s)
-                          | bx ARV =   0.355 | by ARV =   0.964 | bz ARV =   0.629 (test)
-          Training 3-output neural network with all inputs on ols residuals
-            Number of fitting parameters: 419
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   2.073 | by ARV =   3.233 | bz ARV =   3.771 (train; 1.859 s)
-                          | bx ARV =   1.250 | by ARV =   0.975 | bz ARV =   0.789 (test)
-              Epoch 2/2   | bx ARV =   0.974 | by ARV =   1.039 | bz ARV =   0.763 (train; 1.807 s)
-                          | bx ARV =   1.057 | by ARV =   0.965 | bz ARV =   0.869 (test)
+            Number of training values: 99651 (# parameters/# train: 0.0001)
+            Number of testing values:  24913 (# test/# train: 0.20)
+                          | bx ARV =   0.316 | by ARV =   0.934 | bz ARV =   0.703 (train; 0.041 s)
+                          | bx ARV =   0.314 | by ARV =   0.929 | bz ARV =   0.694 (test)
+          Training 3-output neural network with all 9 input(s).
+            Inputs:  ['r', 'theta', 'phi', 'imfby', 'imfbz', 'vsw', 'nsw', 'ey', 'ey_avg']
+            Outputs: ['bx', 'by', 'bz']
+            Number of fitting parameters: 211
+            Number of training values: 99651 (# parameters/# train: 0.0021)
+            Number of testing values:  24913 (# test/# train: 0.20)
+              Epoch 1/2   | bx ARV =   1.039 | by ARV =   4.146 | bz ARV =   1.100 (train; 0.457 s)
+                          | bx ARV =   0.327 | by ARV =   1.008 | bz ARV =   0.703 (test)
+              Epoch 2/2   | bx ARV =   0.316 | by ARV =   0.978 | bz ARV =   0.700 (train; 0.267 s)
+                          | bx ARV =   0.312 | by ARV =   0.947 | bz ARV =   0.666 (test)
+          Training 3-output neural network with all 9 input(s). on ols residuals
+            Inputs:  ['r', 'theta', 'phi', 'imfby', 'imfbz', 'vsw', 'nsw', 'ey', 'ey_avg']
+            Outputs: ['bx', 'by', 'bz']
+            Number of fitting parameters: 211
+            Number of training values: 99651 (# parameters/# train: 0.0021)
+            Number of testing values:  24913 (# test/# train: 0.20)
+              Epoch 1/2   | bx ARV =   4.898 | by ARV =   4.646 | bz ARV =   3.887 (train; 0.313 s)
+                          | bx ARV =   0.980 | by ARV =   1.106 | bz ARV =   1.254 (test)
+              Epoch 2/2   | bx ARV =   1.060 | by ARV =   1.089 | bz ARV =   1.029 (train; 0.326 s)
+                          | bx ARV =   1.010 | by ARV =   0.995 | bz ARV =   1.248 (test)
              OLS results
-                          | bx ARV =   0.391 | by ARV =   0.949 | bz ARV =   0.817 (test)
+                          | bx ARV =   0.316 | by ARV =   0.934 | bz ARV =   0.703 (train; 0.041 s)
+                          | bx ARV =   0.314 | by ARV =   0.929 | bz ARV =   0.694 (test)
              NN results when residuals are added back
-                          | bx ARV =   0.342 | by ARV =   0.922 | bz ARV =   0.553 (test)
-          Training 3 single-output neural networks with all inputs
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
+                          | bx ARV =   3.150 | by ARV =   1.133 | bz ARV =   1.812 (train)
+                          | bx ARV =   0.316 | by ARV =   0.956 | bz ARV =   0.696 (test)
+          Training 3 single-output neural networks with all 9 input(s).
+            Inputs:  ['r', 'theta', 'phi', 'imfby', 'imfbz', 'vsw', 'nsw', 'ey', 'ey_avg']
+            Outputs: ['bx', 'by', 'bz']
+            Number of training values: 99651
+            Number of testing values:  24913 (ratio: 0.20)
             Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   0.395 (train; 1.757 s)
-                          | bx ARV =   0.373 (test)
-              Epoch 2/2   | bx ARV =   0.361 (train; 1.757 s)
-                          | bx ARV =   0.326 (test)
+              Epoch 1/2   | bx ARV =   4.295 (train; 0.277 s)
+                          | bx ARV =   0.997 (test)
+              Epoch 2/2   | bx ARV =   1.031 (train; 0.297 s)
+                          | bx ARV =   1.002 (test)
             Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   2.148 (train; 1.693 s)
-                          | by ARV =   0.966 (test)
-              Epoch 2/2   | by ARV =   0.938 (train; 1.698 s)
-                          | by ARV =   0.895 (test)
+              Epoch 1/2   | by ARV =   3.343 (train; 0.342 s)
+                          | by ARV =   1.036 (test)
+              Epoch 2/2   | by ARV =   1.028 (train; 0.283 s)
+                          | by ARV =   1.014 (test)
             Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   2.648 (train; 1.768 s)
-                          | bz ARV =   0.696 (test)
-              Epoch 2/2   | bz ARV =   0.605 (train; 1.769 s)
-                          | bz ARV =   0.586 (test)
-          Training 3 single-output neural networks with all inputs on ols residuals
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
+              Epoch 1/2   | bz ARV =   3.413 (train; 0.277 s)
+                          | bz ARV =   1.159 (test)
+              Epoch 2/2   | bz ARV =   1.018 (train; 0.329 s)
+                          | bz ARV =   1.136 (test)
+          Training 3 single-output neural networks with all 9 input(s). on ols residuals
+            Inputs:  ['r', 'theta', 'phi', 'imfby', 'imfbz', 'vsw', 'nsw', 'ey', 'ey_avg']
+            Outputs: ['bx', 'by', 'bz']
+            Number of training values: 99651
+            Number of testing values:  24913 (ratio: 0.20)
             Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   3.354 (train; 1.728 s)
-                          | bx ARV =   1.142 (test)
-              Epoch 2/2   | bx ARV =   0.868 (train; 1.765 s)
-                          | bx ARV =   1.054 (test)
+              Epoch 1/2   | bx ARV =   0.715 (train; 0.282 s)
+                          | bx ARV =   3.024 (test)
+              Epoch 2/2   | bx ARV =   0.328 (train; 0.282 s)
+                          | bx ARV =   3.008 (test)
             Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   3.961 (train; 1.737 s)
-                          | by ARV =   1.002 (test)
-              Epoch 2/2   | by ARV =   1.019 (train; 1.690 s)
-                          | by ARV =   0.993 (test)
+              Epoch 1/2   | by ARV =   1.410 (train; 0.319 s)
+                          | by ARV =   1.192 (test)
+              Epoch 2/2   | by ARV =   0.962 (train; 0.324 s)
+                          | by ARV =   1.212 (test)
             Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   7.031 (train; 1.730 s)
-                          | bz ARV =   0.950 (test)
-              Epoch 2/2   | bz ARV =   0.776 (train; 1.731 s)
-                          | bz ARV =   0.763 (test)
+              Epoch 1/2   | bz ARV =   0.887 (train; 0.287 s)
+                          | bz ARV =   2.479 (test)
+              Epoch 2/2   | bz ARV =   0.684 (train; 0.300 s)
+                          | bz ARV =   2.787 (test)
              OLS results
-                          | bx ARV =   0.391 | by ARV =   0.949 | bz ARV =   0.817 (test)
+                          | bx ARV =   0.316 | by ARV =   0.934 | bz ARV =   0.703 (train; 0.041 s)
+                          | bx ARV =   0.314 | by ARV =   0.929 | bz ARV =   0.694 (test)
              NN results when residuals are added back
-                          | bx ARV =   0.312 | by ARV =   0.911 | bz ARV =   0.904 (test)
-        Bootstrap repetition 2/2
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-                          | bx ARV =   0.389 | by ARV =   0.948 | bz ARV =   0.821 (train; 0.100 s)
-                          | bx ARV =   0.388 | by ARV =   0.946 | bz ARV =   0.826 (test)
-          Training 3-output neural network with all inputs
-            Number of fitting parameters: 419
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   0.836 | by ARV =   1.085 | bz ARV =   0.770 (train; 1.835 s)
-                          | bx ARV =   0.386 | by ARV =   0.922 | bz ARV =   0.545 (test)
-              Epoch 2/2   | bx ARV =   0.390 | by ARV =   0.955 | bz ARV =   0.562 (train; 1.832 s)
-                          | bx ARV =   0.368 | by ARV =   0.918 | bz ARV =   0.527 (test)
-          Training 3-output neural network with all inputs on ols residuals
-            Number of fitting parameters: 419
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   1.838 | by ARV =   1.270 | bz ARV =   1.368 (train; 1.918 s)
-                          | bx ARV =   1.004 | by ARV =   1.078 | bz ARV =   1.201 (test)
-              Epoch 2/2   | bx ARV =   0.988 | by ARV =   0.999 | bz ARV =   0.694 (train; 1.899 s)
-                          | bx ARV =   1.049 | by ARV =   1.207 | bz ARV =   0.850 (test)
-             OLS results
-                          | bx ARV =   0.388 | by ARV =   0.946 | bz ARV =   0.826 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.360 | by ARV =   1.050 | bz ARV =   0.520 (test)
-          Training 3 single-output neural networks with all inputs
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   0.443 (train; 1.683 s)
-                          | bx ARV =   0.361 (test)
-              Epoch 2/2   | bx ARV =   0.362 (train; 1.752 s)
-                          | bx ARV =   0.328 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   2.614 (train; 1.745 s)
-                          | by ARV =   0.925 (test)
-              Epoch 2/2   | by ARV =   0.940 (train; 1.783 s)
-                          | by ARV =   0.917 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   1.382 (train; 1.784 s)
-                          | bz ARV =   0.711 (test)
-              Epoch 2/2   | bz ARV =   0.574 (train; 1.780 s)
-                          | bz ARV =   0.528 (test)
-          Training 3 single-output neural networks with all inputs on ols residuals
-            Number of training values: 595366
-            Number of testing values:  148841 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   1.397 (train; 1.770 s)
-                          | bx ARV =   1.098 (test)
-              Epoch 2/2   | bx ARV =   0.972 (train; 1.729 s)
-                          | bx ARV =   1.212 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   1.299 (train; 1.759 s)
-                          | by ARV =   0.953 (test)
-              Epoch 2/2   | by ARV =   0.966 (train; 1.773 s)
-                          | by ARV =   0.936 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   1.052 (train; 1.771 s)
-                          | bz ARV =   1.280 (test)
-              Epoch 2/2   | bz ARV =   0.931 (train; 1.740 s)
-                          | bz ARV =   0.954 (test)
-             OLS results
-                          | bx ARV =   0.388 | by ARV =   0.946 | bz ARV =   0.826 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.366 | by ARV =   0.895 | bz ARV =   0.713 (test)
-  Saved './data/results/satellite-b/parallel-test/cluster1/lno/lno.pkl'
-
-  Creating tables and plots
-    Reading: ./data/results/satellite-b/parallel-test/cluster1/config.json
-    Looking for ./data/results/satellite-b/parallel-test/cluster1/loo
-    Looking for ./data/results/satellite-b/parallel-test/cluster1/lno
-    Processing dir: ./data/results/satellite-b/parallel-test/cluster1/lno/
+                          | bx ARV =   1.018 | by ARV =   1.011 | bz ARV =   1.184 (train)
+                          | bx ARV =   0.970 | by ARV =   1.007 | bz ARV =   1.136 (test)
+  Saved './data/results/satellite-b/test/serial-test/cluster1/lno/lno.pkl'
+  Starting table and plot generation.
+    Reading: ./data/results/satellite-b/test/serial-test/cluster1/config.yaml
+    Looking for ./data/results/satellite-b/test/serial-test/cluster1/loo
+    Looking for ./data/results/satellite-b/test/serial-test/cluster1/lno
+    Processing dir: ./data/results/satellite-b/test/serial-test/cluster1/lno/
       Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-epoch-metrics-lno-rep_0.png
-        Wrote: nn_mimo_resid-timeseries-lno-rep_0.png
-        Wrote: nn_mimo_resid-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso-timeseries-lno-rep_0.png
-        Wrote: nn_miso-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso_resid-timeseries-lno-rep_0.png
-        Wrote: nn_miso_resid-epoch-metrics-lno-rep_0.png
-    Wrote ./data/results/satellite-b/parallel-test/cluster1/lno.md
-Finished job 'cluster1'
-
-Reading: configs/satellite-b/parallel-test.yaml
-  Writing job configuration to: ./data/results/satellite-b/parallel-test/cluster2/config.json
---------------------------------------------------------------------------------
-Starting job 'cluster2' with 1 DataFrame
-  Removed input: None
-    Training using single DataFrame
-        Bootstrap repetition 1/2
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-                          | bx ARV =   0.390 | by ARV =   0.950 | bz ARV =   0.819 (train; 0.095 s)
-                          | bx ARV =   0.392 | by ARV =   0.950 | bz ARV =   0.818 (test)
-          Training 3-output neural network with all inputs
-            Number of fitting parameters: 419
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   1.251 | by ARV =   1.758 | bz ARV =   0.884 (train; 2.219 s)
-                          | bx ARV =   0.469 | by ARV =   1.077 | bz ARV =   0.719 (test)
-              Epoch 2/2   | bx ARV =   0.369 | by ARV =   0.976 | bz ARV =   0.670 (train; 2.126 s)
-                          | bx ARV =   0.319 | by ARV =   1.071 | bz ARV =   0.572 (test)
-          Training 3-output neural network with all inputs on ols residuals
-            Number of fitting parameters: 419
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   3.400 | by ARV =   2.094 | bz ARV =   1.965 (train; 2.138 s)
-                          | bx ARV =   1.051 | by ARV =   1.005 | bz ARV =   1.105 (test)
-              Epoch 2/2   | bx ARV =   0.941 | by ARV =   1.028 | bz ARV =   0.729 (train; 2.114 s)
-                          | bx ARV =   0.921 | by ARV =   0.982 | bz ARV =   0.881 (test)
-             OLS results
-                          | bx ARV =   0.392 | by ARV =   0.950 | bz ARV =   0.818 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.640 | by ARV =   0.974 | bz ARV =   0.537 (test)
-          Training 3 single-output neural networks with all inputs
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   0.952 (train; 2.041 s)
-                          | bx ARV =   0.386 (test)
-              Epoch 2/2   | bx ARV =   0.382 (train; 2.017 s)
-                          | bx ARV =   0.362 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   1.075 (train; 2.000 s)
-                          | by ARV =   0.928 (test)
-              Epoch 2/2   | by ARV =   0.943 (train; 2.050 s)
-                          | by ARV =   0.941 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   0.888 (train; 2.046 s)
-                          | bz ARV =   0.709 (test)
-              Epoch 2/2   | bz ARV =   0.624 (train; 2.024 s)
-                          | bz ARV =   0.550 (test)
-          Training 3 single-output neural networks with all inputs on ols residuals
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   1.701 (train; 1.968 s)
-                          | bx ARV =   1.142 (test)
-              Epoch 2/2   | bx ARV =   0.966 (train; 1.990 s)
-                          | bx ARV =   1.006 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   2.071 (train; 2.013 s)
-                          | by ARV =   1.024 (test)
-              Epoch 2/2   | by ARV =   1.007 (train; 2.010 s)
-                          | by ARV =   1.095 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   1.441 (train; 1.990 s)
-                          | bz ARV =   0.763 (test)
-              Epoch 2/2   | bz ARV =   0.699 (train; 2.011 s)
-                          | bz ARV =   0.744 (test)
-             OLS results
-                          | bx ARV =   0.392 | by ARV =   0.950 | bz ARV =   0.818 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.373 | by ARV =   0.966 | bz ARV =   0.589 (test)
-        Bootstrap repetition 2/2
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-                          | bx ARV =   0.390 | by ARV =   0.950 | bz ARV =   0.819 (train; 0.097 s)
-                          | bx ARV =   0.393 | by ARV =   0.951 | bz ARV =   0.819 (test)
-          Training 3-output neural network with all inputs
-            Number of fitting parameters: 419
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   1.032 | by ARV =   1.176 | bz ARV =   1.995 (train; 2.214 s)
-                          | bx ARV =   0.414 | by ARV =   0.925 | bz ARV =   0.749 (test)
-              Epoch 2/2   | bx ARV =   0.383 | by ARV =   0.973 | bz ARV =   0.631 (train; 2.105 s)
-                          | bx ARV =   0.401 | by ARV =   0.929 | bz ARV =   0.635 (test)
-          Training 3-output neural network with all inputs on ols residuals
-            Number of fitting parameters: 419
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-              Epoch 1/2   | bx ARV =   1.232 | by ARV =   1.258 | bz ARV =   1.147 (train; 2.112 s)
-                          | bx ARV =   1.243 | by ARV =   1.586 | bz ARV =   1.104 (test)
-              Epoch 2/2   | bx ARV =   0.986 | by ARV =   1.007 | bz ARV =   0.727 (train; 2.114 s)
-                          | bx ARV =   1.065 | by ARV =   0.976 | bz ARV =   0.758 (test)
-             OLS results
-                          | bx ARV =   0.393 | by ARV =   0.951 | bz ARV =   0.819 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.382 | by ARV =   0.916 | bz ARV =   0.574 (test)
-          Training 3 single-output neural networks with all inputs
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   0.439 (train; 2.057 s)
-                          | bx ARV =   0.375 (test)
-              Epoch 2/2   | bx ARV =   0.366 (train; 2.050 s)
-                          | bx ARV =   0.350 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   1.247 (train; 2.016 s)
-                          | by ARV =   0.941 (test)
-              Epoch 2/2   | by ARV =   0.966 (train; 2.026 s)
-                          | by ARV =   0.937 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   1.409 (train; 2.015 s)
-                          | bz ARV =   0.760 (test)
-              Epoch 2/2   | bz ARV =   0.697 (train; 2.038 s)
-                          | bz ARV =   0.588 (test)
-          Training 3 single-output neural networks with all inputs on ols residuals
-            Number of training values: 613987
-            Number of testing values:  153497 (ratio: 0.20)
-            Training single-output neural network for output = 'bx'
-              Epoch 1/2   | bx ARV =   2.586 (train; 2.026 s)
-                          | bx ARV =   0.988 (test)
-              Epoch 2/2   | bx ARV =   0.826 (train; 2.002 s)
-                          | bx ARV =   0.962 (test)
-            Training single-output neural network for output = 'by'
-              Epoch 1/2   | by ARV =   1.493 (train; 1.901 s)
-                          | by ARV =   1.131 (test)
-              Epoch 2/2   | by ARV =   0.979 (train; 1.911 s)
-                          | by ARV =   1.075 (test)
-            Training single-output neural network for output = 'bz'
-              Epoch 1/2   | bz ARV =   1.241 (train; 1.913 s)
-                          | bz ARV =   0.755 (test)
-              Epoch 2/2   | bz ARV =   0.706 (train; 1.896 s)
-                          | bz ARV =   0.816 (test)
-             OLS results
-                          | bx ARV =   0.393 | by ARV =   0.951 | bz ARV =   0.819 (test)
-             NN results when residuals are added back
-                          | bx ARV =   0.304 | by ARV =   0.947 | bz ARV =   0.541 (test)
-  Saved './data/results/satellite-b/parallel-test/cluster2/lno/lno.pkl'
-
-  Creating tables and plots
-    Reading: ./data/results/satellite-b/parallel-test/cluster2/config.json
-    Looking for ./data/results/satellite-b/parallel-test/cluster2/loo
-    Looking for ./data/results/satellite-b/parallel-test/cluster2/lno
-    Processing dir: ./data/results/satellite-b/parallel-test/cluster2/lno/
-      Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-epoch-metrics-lno-rep_0.png
-        Wrote: nn_mimo_resid-timeseries-lno-rep_0.png
-        Wrote: nn_mimo_resid-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso-timeseries-lno-rep_0.png
-        Wrote: nn_miso-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso_resid-timeseries-lno-rep_0.png
-        Wrote: nn_miso_resid-epoch-metrics-lno-rep_0.png
-    Wrote ./data/results/satellite-b/parallel-test/cluster2/lno.md
-Finished job 'cluster2'
-
-
-***
-Running command: python run.py data/results/satellite-b/parallel-test
-***
-
-
-    Processing job: cluster1
-    Reading: data/results/satellite-b/parallel-test/cluster1/config.json
-    Looking for data/results/satellite-b/parallel-test/cluster1/loo
-    Looking for data/results/satellite-b/parallel-test/cluster1/lno
-    Processing dir: data/results/satellite-b/parallel-test/cluster1/lno/
-      Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-epoch-metrics-lno-rep_0.png
-        Wrote: nn_mimo_resid-timeseries-lno-rep_0.png
-        Wrote: nn_mimo_resid-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso-timeseries-lno-rep_0.png
-        Wrote: nn_miso-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso_resid-timeseries-lno-rep_0.png
-        Wrote: nn_miso_resid-epoch-metrics-lno-rep_0.png
-    Wrote data/results/satellite-b/parallel-test/cluster1/lno.md
-
-    Processing job: cluster2
-    Reading: data/results/satellite-b/parallel-test/cluster2/config.json
-    Looking for data/results/satellite-b/parallel-test/cluster2/loo
-    Looking for data/results/satellite-b/parallel-test/cluster2/lno
-    Processing dir: data/results/satellite-b/parallel-test/cluster2/lno/
-      Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-epoch-metrics-lno-rep_0.png
-        Wrote: nn_mimo_resid-timeseries-lno-rep_0.png
-        Wrote: nn_mimo_resid-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso-timeseries-lno-rep_0.png
-        Wrote: nn_miso-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso_resid-timeseries-lno-rep_0.png
-        Wrote: nn_miso_resid-epoch-metrics-lno-rep_0.png
-    Wrote data/results/satellite-b/parallel-test/cluster2/lno.md
-
-***
-Running command: python run.py data/results/satellite-b/parallel-test/cluster1
-***
-
-    Reading: data/results/satellite-b/parallel-test/cluster1/config.json
-    Looking for data/results/satellite-b/parallel-test/cluster1/loo
-    Looking for data/results/satellite-b/parallel-test/cluster1/lno
-    Processing dir: data/results/satellite-b/parallel-test/cluster1/lno/
-      Reading: lno.pkl
-        Wrote: ols-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-timeseries-lno-rep_0.png
-        Wrote: nn_mimo-epoch-metrics-lno-rep_0.png
-        Wrote: nn_mimo_resid-timeseries-lno-rep_0.png
-        Wrote: nn_mimo_resid-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso-timeseries-lno-rep_0.png
-        Wrote: nn_miso-epoch-metrics-lno-rep_0.png
-        Wrote: nn_miso_resid-timeseries-lno-rep_0.png
-        Wrote: nn_miso_resid-epoch-metrics-lno-rep_0.png
-    Wrote data/results/satellite-b/parallel-test/cluster1/lno.md
-
-***
-Running command: python run.py configs/satellite-b/serial-test.yaml
-***
-
-Reading: configs/satellite-b/serial-test.yaml
-Getting job list by calling ./configs/satellite-b/job_script.py:job_list(conf)
-Getting job list from ./configs/satellite-b/job_script.py
-  job_data(): Reading data files
-    Reading: ./data/raw/satellite-b/files/cluster1_2001_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
-    Dropped 1/31191 rows with NaN/NaT values in: ./data/raw/satellite-b/files/cluster1_2002_avg_300_omni.pkl
-    Reading: ./data/raw/satellite-b/files/cluster1_2003_avg_300_omni.pkl
-Job 1: name: cluster1, Number of segments: 3
-  Writing job configuration to: ./data/results/satellite-b/serial-test/cluster1/config.json
---------------------------------------------------------------------------------
-Starting job 'cluster1' with 3 DataFrames
-  Removed input: None
-    Training with DataFrame 1/3 excluded
-        Bootstrap repetition 1/1
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 74154
-            Number of testing values:  18539 (ratio: 0.20)
-                          | bx ARV =   0.290 | by ARV =   0.933 | bz ARV =   0.702 (train; 0.013 s)
-                          | bx ARV =   0.292 | by ARV =   0.939 | bz ARV =   0.701 (test)
-  Saved './data/results/satellite-b/serial-test/cluster1/loo/None/loo_1.pkl'
-    Training with DataFrame 2/3 excluded
-        Bootstrap repetition 1/1
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 74699
-            Number of testing values:  18675 (ratio: 0.20)
-                          | bx ARV =   0.321 | by ARV =   0.929 | bz ARV =   0.705 (train; 0.012 s)
-                          | bx ARV =   0.315 | by ARV =   0.926 | bz ARV =   0.707 (test)
-  Saved './data/results/satellite-b/serial-test/cluster1/loo/None/loo_2.pkl'
-    Training with DataFrame 3/3 excluded
-        Bootstrap repetition 1/1
-          Performing 3-output/9-input linear regression
-            Number of fitting parameters: 10
-            Number of training values: 50449
-            Number of testing values:  12612 (ratio: 0.20)
-                          | bx ARV =   0.346 | by ARV =   0.928 | bz ARV =   0.677 (train; 0.010 s)
-                          | bx ARV =   0.355 | by ARV =   0.929 | bz ARV =   0.667 (test)
-  Saved './data/results/satellite-b/serial-test/cluster1/loo/None/loo_3.pkl'
-
-  Creating tables and plots
-    Reading: ./data/results/satellite-b/serial-test/cluster1/config.json
-    Looking for ./data/results/satellite-b/serial-test/cluster1/loo
-    Processing dir: ./data/results/satellite-b/serial-test/cluster1/loo/None
-      Reading: loo_1.pkl
-        Wrote: ols-timeseries-loo_1-rep_0.png
-      Reading: loo_2.pkl
-        Wrote: ols-timeseries-loo_2-rep_0.png
-      Reading: loo_3.pkl
-        Wrote: ols-timeseries-loo_3-rep_0.png
-    Looking for ./data/results/satellite-b/serial-test/cluster1/lno
-    Wrote ./data/results/satellite-b/serial-test/cluster1/loo_1.md
-    Wrote ./data/results/satellite-b/serial-test/cluster1/loo_2.md
-    Wrote ./data/results/satellite-b/serial-test/cluster1/loo_3.md
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote ./data/results/satellite-b/test/serial-test/cluster1/lno.md
+  Finished table and plot generation.
 Finished job 'cluster1'
 
 
-***
-Running command: python run.py data/results/satellite-b/serial-test
-***
+Agregating results for all jobs.
+  Run description: Use parallel_jobs = false and do a single job for cluster1
+  Reading: ./data/results/satellite-b/test/serial-test/cluster1/lno.md
+  Wrote: ./data/results/satellite-b/test/serial-test/tables.md
 
+****************************************************************************************************************
+Running command: python run.py data/results/satellite-b/test/serial-test
+****************************************************************************************************************
 
-    Processing job: cluster1
-    Reading: data/results/satellite-b/serial-test/cluster1/config.json
-    Looking for data/results/satellite-b/serial-test/cluster1/loo
-    Processing dir: data/results/satellite-b/serial-test/cluster1/loo/None
-      Reading: loo_1.pkl
-        Wrote: ols-timeseries-loo_1-rep_0.png
-      Reading: loo_2.pkl
-        Wrote: ols-timeseries-loo_2-rep_0.png
-      Reading: loo_3.pkl
-        Wrote: ols-timeseries-loo_3-rep_0.png
-    Looking for data/results/satellite-b/serial-test/cluster1/lno
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_3.md
+Processing job: cluster1
+  Starting table and plot generation.
+    Reading: data/results/satellite-b/test/serial-test/cluster1/config.yaml
+    Looking for data/results/satellite-b/test/serial-test/cluster1/loo
+    Looking for data/results/satellite-b/test/serial-test/cluster1/lno
+    Processing dir: data/results/satellite-b/test/serial-test/cluster1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+    Wrote data/results/satellite-b/test/serial-test/cluster1/lno.md
+  Finished table and plot generation.
 
-***
-Running command: python run.py data/results/satellite-b/serial-test/cluster1
-***
+Agregating results for all jobs.
+  Run description: Use parallel_jobs = false and do a single job for cluster1
+  Reading: data/results/satellite-b/test/serial-test/cluster1/lno.md
+  Wrote: data/results/satellite-b/test/serial-test/tables.md
 
-    Reading: data/results/satellite-b/serial-test/cluster1/config.json
-    Looking for data/results/satellite-b/serial-test/cluster1/loo
-    Processing dir: data/results/satellite-b/serial-test/cluster1/loo/None
-      Reading: loo_1.pkl
-        Wrote: ols-timeseries-loo_1-rep_0.png
-      Reading: loo_2.pkl
-        Wrote: ols-timeseries-loo_2-rep_0.png
-      Reading: loo_3.pkl
-        Wrote: ols-timeseries-loo_3-rep_0.png
-    Looking for data/results/satellite-b/serial-test/cluster1/lno
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_3.md
+****************************************************************************************************************
+Running command: python run.py data/results/satellite-b/test/serial-test/cluster1
+****************************************************************************************************************
+  Starting table and plot generation.
+    Reading: data/results/satellite-b/test/serial-test/cluster1/config.yaml
+    Looking for data/results/satellite-b/test/serial-test/cluster1/loo
+    Looking for data/results/satellite-b/test/serial-test/cluster1/lno
+    Processing dir: data/results/satellite-b/test/serial-test/cluster1/lno/
+      Reading: lno.pkl
+        Wrote: ols-scatter-train-rep_0.png
+        Wrote: ols-timeseries-train-rep_0.png
+        Wrote: ols-scatter-test-rep_0.png
+        Wrote: ols-timeseries-test-rep_0.png
+        Wrote: nn_mimo-model.png
+        Wrote: nn_mimo-model.svg
+        Wrote: nn_mimo-epoch-metrics-rep_0.png
+        Wrote: nn_mimo-scatter-train-rep_0.png
+        Wrote: nn_mimo-timeseries-train-rep_0.png
+        Wrote: nn_mimo-scatter-test-rep_0.png
+        Wrote: nn_mimo-timeseries-test-rep_0.png
+        Wrote: nn_mimo_resid-model.png
+        Wrote: nn_mimo_resid-model.svg
+        Wrote: nn_mimo_resid-epoch-metrics-rep_0.png
+        Wrote: nn_mimo_resid-scatter-train-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-train-rep_0.png
+        Wrote: nn_mimo_resid-scatter-test-rep_0.png
+        Wrote: nn_mimo_resid-timeseries-test-rep_0.png
+        Wrote: nn_miso-model.png
+        Wrote: nn_miso-model.svg
+        Wrote: nn_miso-epoch-metrics-rep_0.png
+        Wrote: nn_miso-scatter-train-rep_0.png
+        Wrote: nn_miso-timeseries-train-rep_0.png
+        Wrote: nn_miso-scatter-test-rep_0.png
+        Wrote: nn_miso-timeseries-test-rep_0.png
+        Wrote: nn_miso_resid-model.png
+        Wrote: nn_miso_resid-model.svg
+        Wrote: nn_miso_resid-epoch-metrics-rep_0.png
+        Wrote: nn_miso_resid-scatter-train-rep_0.png
+        Wrote: nn_miso_resid-timeseries-train-rep_0.png
+        Wrote: nn_miso_resid-scatter-test-rep_0.png
+        Wrote: nn_miso_resid-timeseries-test-rep_0.png
+> /Users/rweigel/git/timeseries-predict/timeseries_predict/table.py(73)table()
+-> print(f"    Wrote {table_file}")
+(Pdb) (Pdb)     Wrote data/results/satellite-b/test/serial-test/cluster1/lno.md
+  Finished table and plot generation.
 
-***
-Running command: python run.py data/results/satellite-b/serial-test
-***
+Agregating results for all jobs.
+  Run description: Use parallel_jobs = false and do a single job for cluster1
+  Wrote: data/results/satellite-b/test/serial-test/cluster1/tables.md
 
+****************************************************************************************************************
+Running command: python run.py configs/satellite-b/test/parallel-test.yaml
+****************************************************************************************************************
+Traceback (most recent call last):
+  File "/Users/rweigel/git/timeseries-predict/run.py", line 5, in <module>
+    import timeseries_predict as tsp
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/__init__.py", line 2, in <module>
+    from .summary import summary as summary
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/summary.py", line 7, in <module>
+    from .table import table
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/table.py", line 77
+    import pdb; pdb.set_trace() # TODO: Remove this debug statement
+IndentationError: expected an indented block
 
-    Processing job: cluster1
-    Reading: data/results/satellite-b/serial-test/cluster1/config.json
-    Looking for data/results/satellite-b/serial-test/cluster1/loo
-    Processing dir: data/results/satellite-b/serial-test/cluster1/loo/None
-      Reading: loo_1.pkl
-        Wrote: ols-timeseries-loo_1-rep_0.png
-      Reading: loo_2.pkl
-        Wrote: ols-timeseries-loo_2-rep_0.png
-      Reading: loo_3.pkl
-        Wrote: ols-timeseries-loo_3-rep_0.png
-    Looking for data/results/satellite-b/serial-test/cluster1/lno
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_1.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_2.md
-    Wrote data/results/satellite-b/serial-test/cluster1/loo_3.md
+****************************************************************************************************************
+Running command: python run.py data/results/satellite-b/test/parallel-test
+****************************************************************************************************************
+Traceback (most recent call last):
+  File "/Users/rweigel/git/timeseries-predict/run.py", line 5, in <module>
+    import timeseries_predict as tsp
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/__init__.py", line 2, in <module>
+    from .summary import summary as summary
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/summary.py", line 7, in <module>
+    from .table import table
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/table.py", line 77
+    import pdb; pdb.set_trace() # TODO: Remove this debug statement
+IndentationError: expected an indented block
+
+****************************************************************************************************************
+Running command: python run.py data/results/satellite-b/test/parallel-test/cluster1
+****************************************************************************************************************
+Traceback (most recent call last):
+  File "/Users/rweigel/git/timeseries-predict/run.py", line 5, in <module>
+    import timeseries_predict as tsp
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/__init__.py", line 2, in <module>
+    from .summary import summary as summary
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/summary.py", line 7, in <module>
+    from .table import table
+  File "/Users/rweigel/git/timeseries-predict/timeseries_predict/table.py", line 77
+    import pdb; pdb.set_trace() # TODO: Remove this debug statement
+IndentationError: expected an indented block

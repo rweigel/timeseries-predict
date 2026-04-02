@@ -1,11 +1,12 @@
 base_config: ./configs/satellite-b/base.yaml
 run_dir: test/serial-test
 run_desc: Use parallel_jobs = false and do a single job for cluster1
+parallel_jobs: false
+
 data:
   satellites:
     - cluster1
   n_years_max: 3
-parallel_jobs: false
-n_epochs: 2
-optimizer_kwargs:
-  lr: 0.01
+
+nn:
+  n_epochs: 2

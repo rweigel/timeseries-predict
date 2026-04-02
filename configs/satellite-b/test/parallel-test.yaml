@@ -1,10 +1,13 @@
 base_config: ./configs/satellite-b/base.yaml
 run_dir: test/parallel-test
 run_desc: Use parallel_jobs = true and do two jobs (one for each satellite)
+parallel_jobs: true
+
 data:
   satellites:
     - cluster1
     - cluster2
   n_years_max: 2
-parallel_jobs: true
-n_epochs: 2
+
+nn:
+  n_epochs: 2

@@ -38,8 +38,8 @@ if __name__ == "__main__":
     n_cpu_available = multiprocessing.cpu_count()
     print(f"# CPUs available for parallel processing: {n_cpu_available}")
     n_cpu_needed = len(job_list)
-    # Keep one CPU free for system processes
     if n_cpu_needed >= n_cpu_available:
+      # -1 => Keep one CPU free for system processes
       n_cpu = n_cpu_available - 1
     else:
       n_cpu = n_cpu_needed

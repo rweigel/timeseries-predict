@@ -36,7 +36,7 @@ def _print(msg, log):
   log.write(msg)
   log.flush()
 
-log_file = os.path.join(os.path.dirname(__file__), 'test.log')
+log_file = os.path.join(os.path.dirname(__file__), 'demo.log')
 
 kwargs = {
   "stdout": subprocess.PIPE,

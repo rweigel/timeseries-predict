@@ -64,9 +64,26 @@ def table(stats, directory, **kwargs):
       idx_zero_padded = str(loo_idx + 1).zfill(idx_width)
       file_name = f'loo_{idx_zero_padded}.md'
 
+    fig_str = ""
+    if n_loo == 1:
+      dir_figs = os.path.join(directory, 'lno', 'figures')
+      if os.path.isdir(dir_figs):
+        for model in stats[removed_input][loo_idx][output]:
+          # Get all files in dir_figs that start with model name
+          model_figs = sorted([f for f in os.listdir(dir_figs) if f.startswith(model) and f.endswith('.png')])
+          #print(f"Model figures: {model_figs}")
+          fig_str += "\n".join([f"![{os.path.basename(f)}]({os.path.join('lno', 'figures', f)})" for f in model_figs])
+          fig_str += "\n\n"
+      else:
+        # TODO
+        pass
+
     table_file = os.path.join(directory, file_name)
     with open(table_file, 'w') as f:
       f.write('# Training and Test Combined\n')
       table_all.to_markdown(f, index=False, floatfmt=".3f")
+      if fig_str:
+        f.write("\n\n")
+        f.write(fig_str)
 
     print(f"    Wrote {table_file}")
