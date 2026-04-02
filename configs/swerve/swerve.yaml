@@ -3,6 +3,7 @@ job_script: ./configs/swerve/job_script.py
 
 data:
   data_directory: ./data/raw/SWERVE
+  event: 2024-05-10
 
 inputs: [bx,by,bz]
 outputs: [gic]

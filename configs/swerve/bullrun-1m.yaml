@@ -1,9 +1,0 @@
-# All paths are relative to run.py.
-base_config: ./configs/swerve/bullrun.yaml
-
-data:
-  average: 1
-  sites: [bullrun]
-  
-run_desc: Run contains one job, with gic inputs and b outputs at Bull Run site
-run_dir: ./data/results/bullrun/1m
