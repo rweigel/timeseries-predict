@@ -1,7 +1,6 @@
 import os
 import sys
 
-import utilrsw
 import timeseries_predict as tsp
 
 arg = tsp.cli()
@@ -13,11 +12,6 @@ if os.path.isdir(arg):
   sys.exit(0)
 
 conf = tsp.config(arg)
-
-utilrsw.hline()
-print(f"{arg}:")
-utilrsw.print_dict(conf, indent=2)
-utilrsw.hline()
 
 if __name__ == "__main__":
 

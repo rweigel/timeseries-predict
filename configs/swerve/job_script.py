@@ -1,9 +1,3 @@
-import sys
-
-from numpy import average
-import os
-
-
 def job_list(conf):
   """
   Return a list of (job_dfs, job_conf) tuples, where job_dfs is a list of
@@ -18,61 +12,65 @@ def job_list(conf):
     job_conf = conf.copy()
     job_site = conf['data']['sites'][jidx]
     job_conf['job'] = f"gic_vs_b_{job_site}"
-    job_df = job_data(job_site,**job_conf['data'])
+    job_df = job_data(job_site, **job_conf['data'])
     jobs.append((job_df, job_conf))
 
   return jobs
 
-def job_data(site, average, **config):
-  """
-  Returns a data frame with averaged time series with a column named 'datetime'
-  with datetime values and columns for the input and output variables. The input
-  variable is named input1 and the output variables are named output1, output2, 
-  and output3.
 
-  input1 is measured GIC.
-  output1 is Bx.
-  output2 is By.
-  output3 is Bz.
-  """
+def job_data(site, **config):
+  import os
+  import sys
 
-  import numpy as np
+  job_script_dir = os.path.dirname(__file__)
+  sys.path.append(job_script_dir)
+  from swerve_data_prep import swerve_data_download
+
+  # Get file paths for GIC and B data for `site``, downloading them if needed
+  gic_file, b_file = swerve_data_download(config['event'], site)
+
+  gic, b = extract_gic_b(gic_file, b_file)
+  site_df = combine_gic_b(gic, b, config['average'])
+  return [site_df]
+
+
+def extract_gic_b(gic_file, b_file):
   import pandas as pd
 
-  # read in csv
-  csv_name = config['data_directory'] + f"/{site}/{site}_gic_b.csv"
-  if not os.path.exists(csv_name): # reading in files if data_prep not run yet
-    job_script_dir = os.path.dirname(__file__)
-    sys.path.append(job_script_dir)
-    print(f"CSV file not found: {csv_name}. Running data prep script.")
-    from swerve_data_prep import swerve_data_prep
-    swerve_data_prep(config['event'])
-  data_csv = pd.read_csv(csv_name)
+  # Load and extract modified data
 
-  # Create a time series with a datetime column and input/output columns
-  df = pd.DataFrame({
-    'datetime': pd.to_datetime(data_csv['datetime']),
-    'bx': data_csv['bx'].values,
-    'by': data_csv['by'].values,
-    'bz': data_csv['bz'].values,
-    'gic': data_csv['gic'].values
-  })
-  df.set_index('datetime', inplace=True)
-  df = df.resample(f'{average}min').mean()
-  df = df.reset_index().to_dict('list')
+  gic_data = pd.read_pickle(gic_file)['GIC']['measured']
+  sources = list(gic_data.keys())
+  if len(sources) > 1:
+    print(f"  Warning: More than one source found in GIC data: {sources}. Using the first one: {sources[0]}")
+  gic = gic_data[sources[0]]['modified']
 
-  return [pd.DataFrame(df)]
+  b_data = pd.read_pickle(b_file)['B']['measured']
+  sources = list(b_data.keys())
+  if len(sources) > 1:
+    print(f"  Warning: More than one source found in B data: {sources}. Using the first one: {sources[0]}")
+  b = b_data[sources[0]]['modified']
 
-if __name__ == "__main__":
-  # Test the job_list function
-  import yaml
+  return gic, b
 
-  conf = yaml.safe_load(open("./configs/swerve/swerve.yaml"))
-  job_list = job_list(conf)
 
-  for jidx, (job_dfs, job_conf) in enumerate(job_list):
-    print(f"Job {jidx+1}: name: {job_conf['job']}, Number of DataFrames: {len(job_dfs)}")
-    for sidx, df in enumerate(job_dfs):
-      print(f"  Segment {sidx+1}/{len(job_dfs)} first 5 rows:")
-      msg = df.head().to_string(index=False)
-      print(f"    {msg.replace(chr(10), chr(10)+'    ')}")
+def combine_gic_b(gic, b, average=None):
+  import pandas as pd
+
+  gic_df = pd.DataFrame(gic['data'][:, 0], columns=[gic['labels'][0]], index=gic['time'])
+  b_df   = pd.DataFrame(b['data'], columns=b['labels'], index=b['time'])
+
+  if average is not None:
+    print(f"  Averaging data to {average} frequency")
+    gic_df = gic_df.resample(average).mean()
+    b_df = b_df.resample(average).mean()
+
+  # 'inner' join to keep only timestamps present in both datasets
+  site_df = gic_df.join(b_df, how='inner').reset_index(names='datetime')
+
+  print(f"  Number of timestamps in GIC: {len(gic_df)}")
+  print(f"  Number of timestamps in B:   {len(b_df)}")
+  print(f"  Number of common timestamps: {len(site_df)}")
+
+  return site_df
+

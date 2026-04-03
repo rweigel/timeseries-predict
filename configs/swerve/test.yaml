@@ -1,0 +1,11 @@
+# All paths are relative to run.py.
+base_config: ./configs/swerve/base.yaml
+
+data:
+  average: 1min
+  sites: [bullrun, paradise3, union]
+
+run_desc: Run contains one job to test swerve, with gic inputs and b outputs at a single site
+
+nn:
+  n_epochs: 1000

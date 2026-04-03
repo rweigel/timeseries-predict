@@ -16,6 +16,10 @@ def train_and_test(job_dfs, conf):
     raise ValueError(f"len(job_dfs) = 0 for job '{conf['job']}'.")
 
   num_dfs = len(job_dfs)
+  for i, df in enumerate(job_dfs):
+    print(f"DataFrame {i + 1}/{num_dfs} with {len(df)} rows and columns: {list(df.columns)}")
+    print(job_dfs[i])
+    print("")
 
   for removed_input in conf['removed_inputs']:
     print(f"  Removed input: {removed_input}")
@@ -32,6 +36,7 @@ def train_and_test(job_dfs, conf):
         train_test_data = job_dfs[0]
 
       if conf['lags'] is not None:
+        # TODO: Verify that time differences in input data are constant and equal.
         for p, lag in conf['lags'].items():
           for lag in range(1, lag + 1):
             p_lag = f'{p}_lag_{lag}'
@@ -228,9 +233,9 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
 def _print_prolog(inputs, outputs, model, removed_input, indent):
 
   if removed_input is None:
-    removed_str = f"all {len(inputs)} input(s)."
+    removed_str = f"all {len(inputs)} input(s)"
   else:
-    removed_str = f"'{removed_input}' input removed."
+    removed_str = f"'{removed_input}' input removed"
 
   msg = ""
   if model == 'ols':

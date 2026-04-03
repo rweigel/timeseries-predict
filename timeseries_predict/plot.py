@@ -33,6 +33,9 @@ def plot(reps, plot_dir, file_base):
         savefig(plt, file_name, format=fmt, dpi=dpi)
       return
 
+    if not os.path.isdir(plot_dir):
+      os.makedirs(plot_dir, exist_ok=True)
+
     file_path = os.path.join(plot_dir, f"{file_name}.{format}")
     plt.savefig(file_path, bbox_inches="tight", dpi=dpi)
     print(f"        Wrote: {os.path.basename(file_path)}")

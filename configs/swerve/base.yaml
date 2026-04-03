@@ -1,13 +1,18 @@
 # All paths are relative to run.py.
 job_script: ./configs/swerve/job_script.py
 
+base_dir: ./data/results/swerve
+
 data:
   data_directory: ./data/raw/SWERVE
   event: 2024-05-10
 
-inputs: [bx,by,bz]
-outputs: [gic]
+inputs: [Bx, By, Bz]
+outputs: [GIC]
 
+models:
+  - ols
+  - nn_mimo
 
 # Neural network hyperparameters
 nn:
@@ -16,7 +21,7 @@ nn:
   num_reps: 1
   batch_size: 256
   hidden_size: 32
-  activation: Tanh
+  activation: ReLU
   optimizer: Adam
   optimizer_kwargs:
     lr: 0.01

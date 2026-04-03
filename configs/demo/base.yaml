@@ -35,7 +35,6 @@ nn:
   #   cpu (default if device is null)
   #   gpu (Linux/Windows)
   #   mps (OS-X)
-  device: null
   n_epochs: 2
   dtype: float32
   batch_size: 256

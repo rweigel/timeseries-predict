@@ -24,7 +24,6 @@ def run(combined_dfs, conf):
 
 
 def job_list(conf):
-  print(f"Getting job list from {conf['job_script']}")
   return job_function(conf['job_script'])(conf)
 
 

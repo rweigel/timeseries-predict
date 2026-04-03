@@ -70,9 +70,11 @@ def table(stats, directory, **kwargs):
       if os.path.isdir(dir_figs):
         for model in stats[removed_input][loo_idx][output]:
           # Get all files in dir_figs that start with model name
-          model_figs = sorted([f for f in os.listdir(dir_figs) if f.startswith(model) and f.endswith('.png')])
+          model_figs = [f for f in os.listdir(dir_figs) if f.startswith(model) and f.endswith('.png')]
+          model_figs = sorted(model_figs)
           #print(f"Model figures: {model_figs}")
-          fig_str += "\n".join([f"![{os.path.basename(f)}]({os.path.join('lno', 'figures', f)})" for f in model_figs])
+          base_dir = os.path.join(os.path.basename(directory), 'lno', 'figures')
+          fig_str += "\n".join([f"![{os.path.basename(f)}]({os.path.join(base_dir, f)})" for f in model_figs])
           fig_str += "\n\n"
       else:
         # TODO
@@ -84,6 +86,6 @@ def table(stats, directory, **kwargs):
       table_all.to_markdown(f, index=False, floatfmt=".3f")
       if fig_str:
         f.write("\n\n")
-        f.write(fig_str)
+        f.write(f"<details><summary>Figures</summary>\n\n{fig_str}</details>")
 
     print(f"    Wrote {table_file}")

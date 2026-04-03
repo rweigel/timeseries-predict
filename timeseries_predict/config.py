@@ -1,12 +1,13 @@
 def config(conf_file):
   import os
   import yaml
+  import copy
 
-  from collections.abc import Mapping
+  import utilrsw
 
   def deep_merge(base, override):
     for k, v in override.items():
-      if isinstance(v, Mapping) and isinstance(base.get(k), Mapping):
+      if isinstance(v, dict) and isinstance(base.get(k), dict):
         deep_merge(base[k], v)
       else:
         base[k] = v
@@ -14,11 +15,27 @@ def config(conf_file):
   with open(conf_file) as f:
     conf = yaml.safe_load(f)
 
+  utilrsw.hline()
+  print(f"Loaded configuration from {conf_file}:")
+  utilrsw.print_dict(conf, indent=2)
+  utilrsw.hline()
+
   if 'base_config' in conf:
     with open(conf['base_config']) as f:
       base_conf = yaml.safe_load(f)
+
+    utilrsw.hline()
+    print(f"Loaded base_config from {conf['base_config']}:")
+    utilrsw.print_dict(base_conf, indent=2)
+    utilrsw.hline()
+
     deep_merge(base_conf, conf)
     conf = base_conf
+
+    utilrsw.hline()
+    print("Merged configuration:")
+    utilrsw.print_dict(conf, indent=2)
+    utilrsw.hline()
 
   known_models = [
     'ols',
@@ -34,7 +51,6 @@ def config(conf_file):
     'models': known_models,
     'train_fraction': 0.8,
     'n_epochs': 200,
-    'batch_size': 256,
     'n_reps': 1,
     'lags': None,
     'nn': {
@@ -44,7 +60,9 @@ def config(conf_file):
       'hidden_size': 32,
       'activation': 'Tanh',
       'optimizer': 'Adam',
-      'lr': 0.001,
+      'optimizer_kwargs': {
+        'lr': 0.001
+      }
     }
   }
 
@@ -56,9 +74,14 @@ def config(conf_file):
 
   conf['run_dir'] = os.path.join(conf['base_dir'], conf['run_dir'])
 
-  for key in defaults.keys():
-    if key not in conf or conf[key] is None:
-      conf[key] = defaults[key]
+  conf_merged = copy.deepcopy(defaults)
+  deep_merge(conf_merged, conf)
+  conf = conf_merged
+
+  utilrsw.hline()
+  print("Configuration after merging with defaults:")
+  utilrsw.print_dict(conf, indent=2)
+  utilrsw.hline()
 
   if conf['lags'] is not None:
     if isinstance(conf['lags'], dict):
@@ -98,6 +121,11 @@ def config(conf_file):
   if removed_inputs is False:
     removed_inputs = [None]
   conf['removed_inputs'] = removed_inputs
+
+  utilrsw.hline()
+  print("Final configuration after normalizing inputs, outputs, models, and removed_inputs:")
+  utilrsw.print_dict(conf, indent=2)
+  utilrsw.hline()
 
   return conf
 
