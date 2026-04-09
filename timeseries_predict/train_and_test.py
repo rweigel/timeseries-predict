@@ -24,9 +24,9 @@ def train_and_test(job_dfs, conf):
   for removed_input in conf['removed_inputs']:
     print(f"  Removed input: {removed_input}")
     for i in range(num_dfs): # Loop over segments
-      if len(job_dfs) > 1:
+      if num_dfs > 1:
         # For leave-one-out, concatenate training job_dfs excluding the ith
-        print(f"    Training with DataFrame {i + 1}/{len(job_dfs)} excluded")
+        print(f"    Training with DataFrame {i + 1}/{num_dfs} excluded")
         method_label = "loo"
         train_test_dfs = [df for j, df in enumerate(job_dfs) if j != i]
         train_test_data = pandas.concat(train_test_dfs, ignore_index=True)
@@ -180,15 +180,17 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
     if model not in ['nn_mimo', 'nn_miso', 'nn_mimo_resid', 'nn_miso_resid']:
       continue
 
+    delta_train = 0.
+    delta_test = 0.
     if model.endswith('_resid'):
-      delta = ols_train_preds
-      train_df[outputs] = train_df[outputs] - delta
+      delta_train = ols_train_preds
+      delta_test = ols_test_preds
 
     nn_args = [
       train_df[inputs],
-      train_df[outputs],
+      train_df[outputs]-delta_train,
       test_df[inputs],
-      test_df[outputs],
+      test_df[outputs]-delta_test,
       outputs,
       indent,
       kwargs['nn']
@@ -214,12 +216,12 @@ def _train_and_test_single_rep(train_df, test_df, removed_input=None, **kwargs):
       results[model]['predicted']['test'][outputs] = test_preds
       results[model]['predicted']['train'][outputs] = train_preds
     else:
-      results[model]['predicted']['test'][outputs] = test_preds + ols_test_preds
-      results[model]['predicted']['train'][outputs] = train_preds + ols_train_preds
-      arvs_train_star = arv(train_df[outputs], train_preds + ols_train_preds)
-      arvs_test_star = arv(test_df[outputs], test_preds + ols_test_preds)
-      results[model]['metrics']['train*'] = arvs_train_star
+      results[model]['predicted']['test'][outputs] = test_preds + delta_test
+      results[model]['predicted']['train'][outputs] = train_preds + delta_train
+      arvs_test_star = arv(test_df[outputs], results[model]['predicted']['test'][outputs])
+      arvs_train_star = arv(train_df[outputs], results[model]['predicted']['train'][outputs])
       results[model]['metrics']['test*'] = arvs_test_star
+      results[model]['metrics']['train*'] = arvs_train_star
       print(f"{indent}   OLS results")
       print(f"{indent} {14 * ' '}{ols_train_string}")
       print(f"{indent} {14 * ' '}{ols_test_string}")

@@ -1,11 +1,14 @@
 base_config: ./configs/satellite-b/base.yaml
-run_desc: Same as run-0-cluster, but run all satellites.
+run_desc: Same as run-1-cluster, but run all satellites.
 parallel_jobs: true
+data:
+  satellites:
+    - cluster1
 
 nn:
   n_epochs: 100
-  nn_class: NeuralNetworkOneLayer
-  hidden_size: 128
+  nn_class: NeuralNetworkTwoLayer
+  hidden_size: 32
   activation: ReLU
 
 models:
@@ -14,3 +17,4 @@ models:
   - nn_mimo_resid
   - nn_miso
   - nn_miso_resid
+

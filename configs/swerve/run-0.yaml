@@ -1,0 +1,11 @@
+# All paths are relative to run.py.
+base_config: ./configs/swerve/base.yaml
+
+data:
+  average: 1min
+  sites: null
+
+run_desc: All sites, with 1-min. averaging.
+
+nn:
+  n_epochs: 500

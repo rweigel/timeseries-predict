@@ -7,7 +7,7 @@ data:
   data_directory: ./data/raw/SWERVE
   event: 2024-05-10
 
-inputs: [Bx, By, Bz]
+inputs: [B1, B2, B3]
 outputs: [GIC]
 
 models:

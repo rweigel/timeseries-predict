@@ -1,28 +1,50 @@
 import io
 import os
 import requests
+import functools
 
 import pandas as pd
 
-def swerve_data_download(event, site):
-    base_dir = os.path.dirname(os.path.realpath(__file__))
-    base_dir = os.path.join(base_dir, "..", "..", "data", "raw", "SWERVE")
+base = "https://raw.githubusercontent.com/lucywilkerson"
 
-    # base URL for raw file access
-    base = "https://raw.githubusercontent.com/lucywilkerson"
-    base_file_url = f"{base}/SWERVE-{event}/main/data_processed/sites"
+def siteid_lc(site):
+  return str(site).lower().replace(' ', '')
+
+
+def get_ids(event):
+    info_df = get_info(event)
+    gic_sids = info_df['gic_sid'].tolist()
+    for idx, gic_sid in enumerate(gic_sids):
+        gic_sids[idx] = siteid_lc(gic_sid)
+    return gic_sids
+
+
+@functools.lru_cache(maxsize=None)
+def get_info(event):
+
     base_info_url = f"{base}/SWERVE/main/info/{event}/nearest_b_sites.csv"
 
     # Get info to find the nearest B site for the requested GIC site
     response = requests.get(base_info_url)
     response.raise_for_status()
-    info_df = pd.read_csv(io.StringIO(response.text))
+    return pd.read_csv(io.StringIO(response.text))
 
-    gic_sid = str(site).lower().replace(' ', '')
+
+def swerve_data_download(event, site):
+
+    info_df = get_info(event)
+
+    base_dir = os.path.dirname(os.path.realpath(__file__))
+    base_dir = os.path.join(base_dir, "..", "..", "data", "raw", "SWERVE")
+
+    # base URL for raw file access
+    base_file_url = f"{base}/SWERVE-{event}/main/data_processed/sites"
+
+    gic_sid = siteid_lc(site)
 
     match = info_df[info_df['gic_sid'].str.lower().str.replace(' ', '') == gic_sid]
     if match.empty:
-        raise ValueError(f"Site '{site}' not found in {base_info_url}")
+        raise ValueError(f"Site '{site}' not found.")
 
     b_sid = match['nearest_b_sid'].values[0].lower().replace(' ', '')
 
@@ -42,6 +64,7 @@ def swerve_data_download(event, site):
         raise ValueError(f"Error downloading B file for site '{site}' from {b_url}: {e}")
 
     return gic_file, b_file
+
 
 def _download_file(url, dest_dir):
     file_name = os.path.join(dest_dir, url.split("/")[-1])

@@ -39,7 +39,19 @@ def job_function(job_script):
 
 def check(job_list):
 
+  import pandas
+
+  if len(job_list) == 0:
+    raise ValueError("No jobs returned by job_list function. Check job script and configuration.")
+
   for idx, (job_dfs, job_conf) in enumerate(job_list):
+
+    if not isinstance(job_dfs, list):
+      raise ValueError(f"Job {idx+1} ('{job_conf['job']}') returned job_dfs that is not a list. Check job script.")
+
+    if len(job_dfs) == 0:
+      raise ValueError(f"Job {idx+1} ('{job_conf['job']}') returned an empty list of DataFrames. Check job script.")
+
     print(f"Job {idx+1}: name: '{job_conf['job']}', Number of segments: {len(job_dfs)}")
 
     msg = f"Job '{job_conf['job']}' configuration is missing"
@@ -51,6 +63,10 @@ def check(job_list):
     # Validate that each job_df (segment) has required columns
     required_cols = set(job_conf['inputs'] + job_conf['outputs'] + ['datetime'])
     for df_idx, df in enumerate(job_dfs):
+
+      if not isinstance(df, pandas.DataFrame):
+        raise ValueError(f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} is not a pandas DataFrame. Check job script.")
+
       missing_cols = required_cols - set(df.columns)
       if missing_cols:
         msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} is missing columns {missing_cols}. "
@@ -62,7 +78,7 @@ def check(job_list):
       nan_counts = df[present_cols].isna().sum()
       nan_cols = nan_counts[nan_counts > 0]
       if not nan_cols.empty:
-        details = ', '.join(f"'{col}': {count}" for col, count in nan_cols.items())
-        msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} has NaN/NaT values in columns: {details}."
+        details = ', '.join(f"'{col}' column has {count} NaN/NaT values(s)" for col, count in nan_cols.items())
+        msg = f"Job {idx+1} ({job_conf['job']}), DataFrame {df_idx+1} has NaN/NaT values in columns: {details}."
         print(msg)
         raise ValueError(msg)
