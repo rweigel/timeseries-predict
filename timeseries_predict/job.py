@@ -1,6 +1,13 @@
 def run(combined_dfs, conf):
-  import timeseries_predict as tsp
+  import os
   import traceback
+
+  import timeseries_predict as tsp
+
+  error_fname = os.path.join(conf['run_dir'], conf['job'], "error.txt")
+  os.makedirs(os.path.dirname(error_fname), exist_ok=True)
+  if os.path.exists(error_fname):
+    os.remove(error_fname)
 
   try:
     tsp.train_and_test(combined_dfs, conf)
@@ -8,10 +15,6 @@ def run(combined_dfs, conf):
     import os
     tb = traceback.format_exc()
     try:
-      error_fname = os.path.join(conf['run_dir'], conf['job'], "error.txt")
-      os.makedirs(os.path.dirname(error_fname), exist_ok=True)
-      if os.path.exists(error_fname):
-        os.remove(error_fname)
       emsg = f"Error in job {conf['job']}: {str(e)}\n"
       print(emsg)
       print(tb)
@@ -69,8 +72,8 @@ def check(job_list):
 
       missing_cols = required_cols - set(df.columns)
       if missing_cols:
-        msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} is missing columns {missing_cols}. "
-        msg += "Check configuration or job script."
+        msg = f"Job {idx+1} ('{job_conf['job']}'), DataFrame {df_idx+1} is missing column(s) {missing_cols}. "
+        msg += f"Check configuration or job script. DataFrame {df_idx+1} columns: {list(df.columns)}"
         raise ValueError(msg)
 
       # Check for NaN/NaT values in required columns

@@ -1,5 +1,5 @@
 base_config: ./configs/satellite-b/base.yaml
-run_desc: Run only cluster1.
+run_desc: Same as run-0 but run only cluster1 satellite.
 parallel_jobs: false
 data:
   satellites:

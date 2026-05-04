@@ -1,4 +1,4 @@
-def plot_model(model, input_names, output_names):
+def plot_model(model, input_names, output_names, column_info):
   """Render three plots:
     1. A torchviz computation graph      -> file_path.pdf
     2. A visualtorch layered diagram     -> file_path_diagram.png
@@ -21,84 +21,24 @@ def plot_model(model, input_names, output_names):
   # Count trainable parameters
   n_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-  _plot_standard(layer_sizes, input_names, output_names,
-                 activation=activation_name,
-                 n_params=n_params)
-
-
-def _build_nn_equation(layer_sizes, input_names=None, output_names=None, activation=None):
-  """Build a LaTeX summation equation string describing the network's forward pass."""
-  idx_vars = ['i', 'j', 'k', 'm', 'n', 'p', 'q', 'r']
-  n_layers = len(layer_sizes)
-  n_hidden = n_layers - 2
-  parts = []
-
-  act_str = r'\mathrm{' + activation + r'}' if activation else 'f'
-
-  for l in range(1, n_layers):
-    in_var  = idx_vars[l - 1]
-    out_var = idx_vars[l]
-    n_in    = layer_sizes[l - 1]
-    is_out  = (l == n_layers - 1)
-
-    # Input symbol for this layer
-    if l == 1:
-      in_sym = r'x_{' + in_var + r'}'
-    elif n_hidden == 1:
-      in_sym = r'h_{' + in_var + r'}'
-    else:
-      in_sym = r'h^{(' + str(l - 1) + r')}_{' + in_var + r'}'
-
-    w = r'w^{(' + str(l) + r')}_{' + in_var + out_var + r'}'
-    b = r'b^{(' + str(l) + r')}_{' + out_var + r'}'
-    summ = r'\sum\limits_{' + in_var + r'=1}^{' + str(n_in) + r'} ' + w + r'\,' + in_sym + r' + ' + b
-
-    if is_out:
-      out_sym = r'\hat{y}_{' + out_var + r'}'
-      parts.append(out_sym + r' = ' + summ)
-    else:
-      out_sym = (r'h_{' + out_var + r'}' if n_hidden == 1
-                 else r'h^{(' + str(l) + r')}_{' + out_var + r'}')
-      parts.append(out_sym + r' = ' + act_str + r'\!\left(' + summ + r'\right)')
-
-  return parts
-
-
-def _build_param_block(layer_sizes, n_params):
-  """Return a single LaTeX array string with three aligned parameter lines:
-    #params = <symbolic>
-            = <numeric>
-            = <total>
-  The '=' signs are aligned via \\begin{array}{rl}.
-  """
-  n_layers = len(layer_sizes)
-  n_hidden = n_layers - 2
-
-  # Symbolic names
-  sym = [r'n_{\mathrm{in}}']
-  if n_hidden == 1:
-    sym.append(r'n_{\mathrm{h}}')
+  if column_info is None:
+    input_labels = input_names
+    output_labels = output_names
   else:
-    for i in range(n_hidden):
-      sym.append(r'n_{\mathrm{h}_{' + str(i + 1) + r'}}')
-  sym.append(r'n_{\mathrm{out}}')
+    # TODO: Account for fact that latex may cause plot to fail. In this case,
+    #       fall back to 'label', then 'id'.
+    input_labels = []
+    for input_name in input_names:
+      input_labels.append(column_info.get(input_name, {}).get('latex', input_name) if column_info else input_name)
+    output_labels = []
+    for output_name in output_names:
+      output_labels.append(column_info.get(output_name, {}).get('latex', output_name) if column_info else output_name)
 
-  sym_terms = [sym[l] + r'(' + sym[l - 1] + r'+1)' for l in range(1, n_layers)]
-  num_terms = [str(layer_sizes[l]) + r'(' + str(layer_sizes[l - 1]) + r'+1)'
-               for l in range(1, n_layers)]
-
-  row1 = r'\#\,\mathrm{params}&= ' + ' + '.join(sym_terms)
-  row2 = r'&= ' + ' + '.join(num_terms)
-  row3 = r'&= ' + str(n_params)
-
-  return (r'\begin{array}{r@{\,}l}' +
-          row1 + r'\\' +
-          row2 + r'\\' +
-          row3 +
-          r'\end{array}')
+  _plot_standard(layer_sizes, input_labels, output_labels, activation_name, n_params)
 
 
-def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=None, n_params=None, file_path='model-diagram-standard.png'):
+
+def _plot_standard(layer_sizes, input_names, output_names, activation, n_params, file_path='model-diagram-standard.png'):
   """Draw a traditional neural network connection diagram using matplotlib.
   Bias nodes (+1) are shown for all layers except the output layer.
   Layers with more than DISPLAY_LIMIT nodes are shown with an ellipsis (first
@@ -235,7 +175,7 @@ def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=
   ax.set_ylim(-0.5, max_eff + 1.5)
 
   # Equation in summation form: placed to the right of the output layer
-  parts = _build_nn_equation(layer_sizes, input_names=input_names, output_names=output_names, activation=activation)
+  parts = _build_nn_equation(layer_sizes, input_names, output_names, activation)
   n_parts = len(parts)
   x_eq = (n_layers - 1) * x_spacing + node_radius + 0.7
 
@@ -253,3 +193,74 @@ def _plot_standard(layer_sizes, input_names=None, output_names=None, activation=
     ax.text(x_eq, top_y - (n_parts + 0.5) * step, r'$' + param_block + r'$',
             ha='left', va='top', fontsize=7, zorder=3)
 
+
+def _build_nn_equation(layer_sizes, input_names, output_names, activation):
+  """Build a LaTeX summation equation string describing the network's forward pass."""
+  idx_vars = ['i', 'j', 'k', 'm', 'n', 'p', 'q', 'r']
+  n_layers = len(layer_sizes)
+  n_hidden = n_layers - 2
+  parts = []
+
+  act_str = r'\mathrm{' + activation + r'}' if activation else 'f'
+
+  for l in range(1, n_layers):
+    in_var  = idx_vars[l - 1]
+    out_var = idx_vars[l]
+    n_in    = layer_sizes[l - 1]
+    is_out  = (l == n_layers - 1)
+
+    # Input symbol for this layer
+    if l == 1:
+      in_sym = r'x_{' + in_var + r'}'
+    elif n_hidden == 1:
+      in_sym = r'h_{' + in_var + r'}'
+    else:
+      in_sym = r'h^{(' + str(l - 1) + r')}_{' + in_var + r'}'
+
+    w = r'w^{(' + str(l) + r')}_{' + in_var + out_var + r'}'
+    b = r'b^{(' + str(l) + r')}_{' + out_var + r'}'
+    summ = r'\sum\limits_{' + in_var + r'=1}^{' + str(n_in) + r'} ' + w + r'\,' + in_sym + r' + ' + b
+
+    if is_out:
+      out_sym = r'\hat{y}_{' + out_var + r'}'
+      parts.append(out_sym + r' = ' + summ)
+    else:
+      out_sym = (r'h_{' + out_var + r'}' if n_hidden == 1
+                 else r'h^{(' + str(l) + r')}_{' + out_var + r'}')
+      parts.append(out_sym + r' = ' + act_str + r'\!\left(' + summ + r'\right)')
+
+  return parts
+
+
+def _build_param_block(layer_sizes, n_params):
+  """Return a single LaTeX array string with three aligned parameter lines:
+    #params = <symbolic>
+            = <numeric>
+            = <total>
+  The '=' signs are aligned via \\begin{array}{rl}.
+  """
+  n_layers = len(layer_sizes)
+  n_hidden = n_layers - 2
+
+  # Symbolic names
+  sym = [r'n_{\mathrm{in}}']
+  if n_hidden == 1:
+    sym.append(r'n_{\mathrm{h}}')
+  else:
+    for i in range(n_hidden):
+      sym.append(r'n_{\mathrm{h}_{' + str(i + 1) + r'}}')
+  sym.append(r'n_{\mathrm{out}}')
+
+  sym_terms = [sym[l] + r'(' + sym[l - 1] + r'+1)' for l in range(1, n_layers)]
+  num_terms = [str(layer_sizes[l]) + r'(' + str(layer_sizes[l - 1]) + r'+1)'
+               for l in range(1, n_layers)]
+
+  row1 = r'\#\,\mathrm{params}&= ' + ' + '.join(sym_terms)
+  row2 = r'&= ' + ' + '.join(num_terms)
+  row3 = r'&= ' + str(n_params)
+
+  return (r'\begin{array}{r@{\,}l}' +
+          row1 + r'\\' +
+          row2 + r'\\' +
+          row3 +
+          r'\end{array}')

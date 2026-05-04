@@ -4,9 +4,21 @@ parallel_jobs: false
 data:
   satellites:
     - cluster1
-  n_years_max: 3
+  n_years_max: 1
 
 lags: 0
+
+inputs:
+ - r[km]
+ - theta[deg]
+ - phi[deg]
+ - imfby[nT]
+ - imfbz[nT]
+ - vsw[km/s]
+ - nsw[1/cm^3]
+ - ey[mV/m]
+ - <ey>[mV/m]
+ - <symh*>[nT]
 
 models:
   - ols
@@ -14,8 +26,7 @@ models:
   - nn_mimo_resid
 
 nn:
-  n_epochs: 50
+  n_epochs: 2
   nn_class: NeuralNetworkOneLayer
   hidden_size: 32
   activation: ReLU
-

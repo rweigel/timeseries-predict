@@ -1,0 +1,28 @@
+base_config: ./configs/satellite-b/base.yaml
+run_desc: Same as run-1, but with <symh*>
+parallel_jobs: true
+
+nn:
+  n_epochs: 100
+  nn_class: NeuralNetworkTwoLayer
+  hidden_size: 32
+  activation: ReLU
+
+inputs:
+  - r[km]
+  - theta[deg]
+  - phi[deg]
+  - imfby[nT]
+  - imfbz[nT]
+  - vsw[km/s]
+  - nsw[1/cm^3]
+  - ey[mV/m]
+  - <ey>[mV/m]
+  - <symh*>[nT]
+
+models:
+  - ols
+  - nn_mimo
+  - nn_mimo_resid
+  - nn_miso
+  - nn_miso_resid

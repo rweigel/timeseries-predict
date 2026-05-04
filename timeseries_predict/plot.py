@@ -132,7 +132,7 @@ def plot(reps, plot_dir, file_base):
 
   def _model_diagram(model, model_name, input_names, output_names):
     from .plot_model import plot_model
-    plot_model(model, input_names=reps[0]['inputs'], output_names=reps[0]['outputs'])
+    plot_model(model, reps[0]['inputs'], reps[0]['outputs'], reps[0].get('column_info', None))
     savefig(plt, f"{model_name}-model" , format=["png", "svg"])
 
 

@@ -28,8 +28,21 @@ models:
   - nn_miso
   - nn_miso_resid
 
-inputs: [r, theta, phi, imfby, imfbz, vsw, nsw, ey, ey_avg]
-outputs: [bx, by, bz]
+inputs:
+ - r[km]
+ - theta[deg]
+ - phi[deg]
+ - imfby[nT]
+ - imfbz[nT]
+ - vsw[km/s]
+ - nsw[1/cm^3]
+ - ey[mV/m]
+ - <ey>[mV/m]
+
+outputs:
+  - bx[nT]
+  - by[nT]
+  - bz[nT]
 
 # true => [None, **outputs]; null or no attribute => Only use all inputs
 removed_inputs:

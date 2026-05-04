@@ -21,6 +21,8 @@ def train_and_test(job_dfs, conf):
     print(job_dfs[i])
     print("")
 
+  column_info = job_dfs[0].attrs.get('column_info', None)
+
   for removed_input in conf['removed_inputs']:
     print(f"  Removed input: {removed_input}")
     for i in range(num_dfs): # Loop over segments
@@ -70,6 +72,7 @@ def train_and_test(job_dfs, conf):
           'test': test_data
         }
         result['models'] = {**rep}
+        result['column_info'] = column_info
         results.append(result)
 
         #if method_label == 'loo':

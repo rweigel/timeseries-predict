@@ -1,9 +1,6 @@
 base_config: ./configs/satellite-b/base.yaml
-run_desc: Same as run-1-cluster, but run all satellites.
+run_desc: Same as run-0, but use two-layer NN.
 parallel_jobs: true
-data:
-  satellites:
-    - cluster1
 
 nn:
   n_epochs: 100

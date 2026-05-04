@@ -1,5 +1,5 @@
 base_config: ./configs/satellite-b/base.yaml
-run_desc: Same as run-0-cluster, but run all satellites.
+run_desc: One layer NN; all satellites.
 parallel_jobs: true
 
 nn:
